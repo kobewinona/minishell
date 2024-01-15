@@ -65,11 +65,8 @@ typedef struct s_redir
 // functions
 // -src
 
-void	exec_cmd(t_cmd *cmd);
 void	handle_exit(int is_on_error);
 
-// -src/commands
-
-//int		echo(char *args);
+// -utils
 
 #endif
