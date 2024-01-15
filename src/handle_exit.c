@@ -12,10 +12,12 @@
 
 #include "minishell.h"
 
-void	handle_exit(int is_on_error)
+void	handle_exit(int is_on_failure)
 {
-	if (is_on_error == false)
-		exit(EXIT_SUCCESS);
-	perror(NULL);
-	exit(EXIT_FAILURE);
+	if (is_on_failure)
+	{
+		perror(NULL);
+		exit(EXIT_FAILURE);
+	}
+	exit(EXIT_SUCCESS);
 }

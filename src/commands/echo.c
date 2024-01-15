@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-//int	echo(char *args)
-//{
-//
-//}
+int	echo(char **argv)
+{
+	printf("executing echo...\n");
+	return (SUCCESS);
+}
