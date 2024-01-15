@@ -19,9 +19,9 @@ ctrl-C, ctrl-D and ctrl-\
 ```C
 typedef enum {
     CMD_EXEC,  // An executable command
-    CMD_PIPE,  // A pipe between two commands
+    CMD_PIPE,  // A pipe between two int_cmds
     CMD_REDIR, // A command with redirection
-    CMD_SEQ,   // A sequence of commands
+    CMD_SEQ,   // A sequence of int_cmds
     // Add other command types as needed
 } cmd_type;
 
@@ -29,10 +29,10 @@ typedef struct cmd {
     cmd_type type; // Type of command
 
     union {
-        struct exec_cmd *exec; // For executable commands
+        struct exec_cmd *exec; // For executable int_cmds
         struct pipe_cmd *pipe; // For pipes
         struct redir_cmd *redir; // For redirections
-        struct seq_cmd *seq; // For sequences of commands
+        struct seq_cmd *seq; // For sequences of int_cmds
         // Add other command-specific structures as needed
     };
 } cmd;
@@ -195,7 +195,7 @@ void runcmd(struct cmd *cmd) {
         break;
 
     case CMD_SEQ:
-        // Handle sequence of commands
+        // Handle sequence of int_cmds
         seq_cmd(cmd->seq); // Assume seq_cmd is a function to execute seq_cmd
         break;
 

@@ -12,8 +12,23 @@
 
 #include "minishell.h"
 
-int	echo(char **argv)
+void	echo(char **argv)
 {
-	printf("executing echo...\n");
-	return (SUCCESS);
+	int	is_with_n_flag;
+	int	i;
+
+	i = 1;
+	is_with_n_flag = ft_strncmp(argv[i], "-n", 2) == 0;
+	if (is_with_n_flag == true)
+		i = 2;
+	while (argv[i] != NULL)
+	{
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		i++;
+		if (argv[i] != NULL)
+			ft_putchar_fd(' ', STDOUT_FILENO);
+	}
+	if (is_with_n_flag == false)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	handle_exit(false);
 }

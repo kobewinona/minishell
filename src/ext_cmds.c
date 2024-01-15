@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pathcmds.c                                         :+:      :+:    :+:   */
+/*   ext_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/15 11:56:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/15 11:56:08 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/15 12:32:32 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/15 12:32:33 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 }
 
 // TODO handle what if cmd is not found in builtins
-void	exec_path_cmd(char **argv)
+void	exec_ext_cmd(char **argv)
 {
-	char	*env_path;
-	char	*cmd_dir;
-	char	*cmd_path;
+	extern char	**environ;
+	char		*env_path;
+	char		*cmd_dir;
+	char		*cmd_path;
 
 	env_path = ft_strdup(getenv("PATH"));
 	if (!env_path)
@@ -54,7 +55,7 @@ void	exec_path_cmd(char **argv)
 			handle_exit(cleanup(true, &env_path, NULL));
 		if (access(cmd_path, X_OK) == 0)
 		{
-			execve(cmd_path, argv, NULL);
+			execve(cmd_path, argv, environ);
 			handle_exit(cleanup(false, &env_path, &cmd_path));
 		}
 		free(cmd_path);

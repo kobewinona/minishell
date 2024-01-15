@@ -15,14 +15,16 @@
 # include "../libs/libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
+# include <sys/stat.h>
 # include <stdbool.h>
 # include <string.h>
 
+// magic numbers
 # define SUCCESS 1
 # define ERROR 2
 
 // types
-
 typedef enum e_cmd_type
 {
 	EXEC,
@@ -31,7 +33,6 @@ typedef enum e_cmd_type
 }	t_cmd_type;
 
 // structs
-
 typedef struct s_cmd
 {
 	t_cmd_type	type;
@@ -64,16 +65,14 @@ typedef struct s_redir
 
 // functions
 // -src
+void	exec(t_exec *exec_cmd);
+void	exec_ext_cmd(char **argv);
 
-void	exec_cmd(char **argv);
-
-// -src/commands
-
-void	exec_path_cmd(char **argv);
-int		echo(char **argv);
+// -src/int_cmds
+void	echo(char **argv);
+void	cd(char **argv);
 
 // -utils
-
 void	handle_exit(int is_on_failure);
 
 #endif

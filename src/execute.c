@@ -12,10 +12,13 @@
 
 #include "minishell.h"
 
-void	exec_cmd(char **argv)
+void	exec(t_exec *exec_cmd)
 {
-	if (ft_strncmp(argv[0], "echo", ft_strlen("echo")) == 0)
-		echo(argv);
-	else
-		exec_path_cmd(argv);
+	if (ft_strncmp(exec_cmd->argv[0], "cd", 2) != 0)
+	{
+		if (ft_strncmp(exec_cmd->argv[0], "echo", 4) == 0)
+			echo(exec_cmd->argv);
+		else
+			exec_ext_cmd(exec_cmd->argv);
+	}
 }
