@@ -1,16 +1,15 @@
 .PHONY: all clean fclean re
-MACHINE			:= $(shell uname -m)
-
 NAME			= minishell
 
 CC				= gcc
 CFLAGS			= -g -Wall -Wextra -Werror -MMD
 RM				= rm -rf
 INCLUDES		= ./includes
-LIBFT			= -lft-$(MACHINE)
+LIBFT			= -lft
 
 SRCS_DIR		= ./src
 UTILS_DIR		= ./utils
+LIBFT_DIR		= ./libs/libft
 LIBS_DIR		= ./libs
 OBJS_DIR		= ./obj
 
@@ -18,12 +17,12 @@ rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(sub
 SRCS			= $(call rwildcard, $(SRCS_DIR)/, *.c) $(call rwildcard, $(UTILS_DIR)/, *.c)
 OBJS 			= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 DEPS 			= $(OBJS:.o=.d)
-LIBS			= -L$(LIBS_DIR) $(LIBFT) -lreadline
+LIBS			= -L$(LIBFT_DIR) $(LIBFT) -lreadline
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES)
 
-all: $(NAME)
+all: lib $(NAME)
 	
 $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -31,10 +30,14 @@ $(OBJS_DIR)/%.o: %.c
 
 -include $(DEPS)
 
+lib:
+	$(MAKE) -C $(LIBFT_DIR)
+
 clean:
 	$(RM) $(OBJS_DIR) $(DEPS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME) $(ASAN_NAME)
+	$(RM) $(NAME)
 
 re: fclean all

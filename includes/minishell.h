@@ -12,11 +12,16 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include "libft.h"
+# include "../libs/libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>
 # include <string.h>
+
+# define SUCCESS 1
+# define ERROR 2
+
+// types
 
 typedef enum e_cmd_type
 {
@@ -24,6 +29,8 @@ typedef enum e_cmd_type
 	PIPE,
 	REDIR,
 }	t_cmd_type;
+
+// structs
 
 typedef struct s_cmd
 {
@@ -54,5 +61,15 @@ typedef struct s_redir
 	int		mode;
 	int		fd;
 }	t_redir;
+
+// functions
+// -src
+
+void	exec_cmd(t_cmd *cmd);
+void	handle_exit(int is_on_error);
+
+// -src/commands
+
+//int		echo(char *args);
 
 #endif
