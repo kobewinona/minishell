@@ -12,11 +12,9 @@
 
 #include "minishell.h"
 
-void	cd(char **argv)
+// TODO fix handling absolute paths
+void	cd(char *path)
 {
-	char	*path;
-
-	path = argv[1];
 	if (!path)
 		return ;
 	else if (ft_strncmp(path, "/", 1) == 0)

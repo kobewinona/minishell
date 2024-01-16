@@ -20,11 +20,20 @@
 # include <stdbool.h>
 # include <string.h>
 
+// @ int_cmds = internal commands implemented in this project
+// @ ext_cmds = external builtin commands
+
 // magic numbers
+# define ERROR -1
 
 // command names
 # define ECHO "echo"
+# define CD "cd"
 # define PWD "pwd"
+# define EXPORT "export"
+# define UNSET "unset"
+# define ENV "env"
+# define EXIT "exit"
 
 // types
 typedef enum e_cmd_type
@@ -68,14 +77,20 @@ typedef struct s_redir
 // functions
 // -src
 void	run_cmd(t_cmd *cmd);
-void	exec_ext_cmd(char **argv);
-void	handle_exec(t_exec *exec);
+void	handle_ext_cmd(char **argv);
+void	handle_cd(const char *input);
+void	handle_exec(t_exec *exec_params);
 void	handle_pipe(t_pipe *pipe_params);
+void	handle_redir(t_redir *redir_params);
+
+// constructors
+t_cmd	*construct_exec_cmd(char **argv);
+t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
 
 // -src/int_cmds
 void	echo(char **argv);
-void	cd(char **argv);
-void	pwd(char **argv);
+void	cd(char *path);
+void	pwd(void);
 
 // -utils
 void	handle_exit(int is_on_failure);

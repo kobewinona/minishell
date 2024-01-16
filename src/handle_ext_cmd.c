@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ext_cmds.c                                         :+:      :+:    :+:   */
+/*   handle_ext_cmd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/15 12:32:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/15 12:32:33 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 23:49:12 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 23:49:13 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 	return (cmd_path);
 }
 
-// TODO handle what if cmd is not found in builtins
-void	exec_ext_cmd(char **argv)
+void	handle_ext_cmd(char **argv)
 {
 	extern char	**environ;
 	char		*env_path;

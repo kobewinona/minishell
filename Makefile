@@ -23,7 +23,7 @@ LIBS			= -L$(LIBFT_DIR) $(LIBFT) -lreadline
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES)
 
-all: lib $(NAME)
+all: libft $(NAME)
 	
 $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -31,7 +31,7 @@ $(OBJS_DIR)/%.o: %.c
 
 -include $(DEPS)
 
-lib:
+libft:
 	$(MAKE) -C $(LIBFT_DIR)
 
 clean:

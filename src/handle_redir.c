@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 22:20:13 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void)
+void	handle_redir(t_redir *redir_params)
 {
-	char	*curr_dir;
-
-	curr_dir = NULL;
-	curr_dir = getcwd(curr_dir, 0);
-	if (!curr_dir)
-		handle_exit(EXIT_FAILURE);
-	ft_putstr_fd(curr_dir, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(curr_dir);
+	(void)redir_params;
 	handle_exit(EXIT_SUCCESS);
 }
