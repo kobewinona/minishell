@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-static int	cleanup(int ret_val, char **env_path, char **cmd_path)
+static int	cleanup(int exit_status, char **env_path, char **cmd_path)
 {
 	if (*env_path)
 		free(*env_path);
 	if (*cmd_path)
 		free(*cmd_path);
-	return (ret_val);
+	return (exit_status);
 }
 
 static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
@@ -46,20 +46,21 @@ void	exec_ext_cmd(char **argv)
 
 	env_path = ft_strdup(getenv("PATH"));
 	if (!env_path)
-		handle_exit(true);
+		handle_exit(EXIT_FAILURE);
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
 		cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
 		if (!cmd_path)
-			handle_exit(cleanup(true, &env_path, NULL));
+			handle_exit(cleanup(EXIT_FAILURE, &env_path, NULL));
 		if (access(cmd_path, X_OK) == 0)
 		{
 			execve(cmd_path, argv, environ);
-			handle_exit(cleanup(false, &env_path, &cmd_path));
+			handle_exit(cleanup(EXIT_FAILURE, &env_path, &cmd_path));
 		}
 		free(cmd_path);
 		cmd_dir = ft_strtok(NULL, ":");
 	}
 	free(env_path);
+	handle_exit(EXIT_SUCCESS);
 }
