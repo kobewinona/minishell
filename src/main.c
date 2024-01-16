@@ -81,7 +81,7 @@ static t_cmd	*parse_cmd(char *input)
 	pipe_cmd2 = NULL;
 	exec_cmd1 = construct_exec_cmd(ft_split(ft_strtok(input, "|"), ' '));
 	exec_cmd2 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
-//	exec_cmd3 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
+	exec_cmd3 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
 	if (exec_cmd1 && exec_cmd2)
 		pipe_cmd1 = construct_pipe_cmd(exec_cmd1, exec_cmd2);
 	if (pipe_cmd1 && exec_cmd3)

@@ -26,13 +26,13 @@ static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 	char	*temp;
 	char	*cmd_path;
 
+	temp = NULL;
+	cmd_path = NULL;
 	temp = ft_strjoin(cmd_dir, "/");
 	if (!temp)
 		return (NULL);
 	cmd_path = ft_strjoin(temp, cmd_name);
 	free(temp);
-	if (!cmd_path)
-		return (NULL);
 	return (cmd_path);
 }
 
@@ -44,6 +44,8 @@ void	exec_ext_cmd(char **argv)
 	char		*cmd_dir;
 	char		*cmd_path;
 
+	env_path = NULL;
+	cmd_path = NULL;
 	env_path = ft_strdup(getenv("PATH"));
 	if (!env_path)
 		handle_exit(EXIT_FAILURE);
@@ -61,6 +63,5 @@ void	exec_ext_cmd(char **argv)
 		free(cmd_path);
 		cmd_dir = ft_strtok(NULL, ":");
 	}
-	free(env_path);
-	handle_exit(EXIT_SUCCESS);
+	handle_exit(cleanup(EXIT_FAILURE, &env_path, &cmd_path));
 }

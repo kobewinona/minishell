@@ -21,8 +21,10 @@
 # include <string.h>
 
 // magic numbers
-# define SUCCESS 1
-# define ERROR 2
+
+// command names
+# define ECHO "echo"
+# define PWD "pwd"
 
 // types
 typedef enum e_cmd_type
@@ -73,6 +75,7 @@ void	handle_pipe(t_pipe *pipe_params);
 // -src/int_cmds
 void	echo(char **argv);
 void	cd(char **argv);
+void	pwd(char **argv);
 
 // -utils
 void	handle_exit(int is_on_failure);
