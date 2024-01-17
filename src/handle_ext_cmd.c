@@ -12,15 +12,6 @@
 
 #include "minishell.h"
 
-static int	cleanup(int exit_status, char **env_path, char **cmd_path)
-{
-	if (*env_path)
-		free(*env_path);
-	if (*cmd_path)
-		free(*cmd_path);
-	return (exit_status);
-}
-
 static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 {
 	char	*temp;
@@ -36,31 +27,40 @@ static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 	return (cmd_path);
 }
 
-void	handle_ext_cmd(char **argv)
+static void	exec_ext_cmd(char *cmd_dir, char **env_path, char **argv)
 {
 	extern char	**environ;
-	char		*env_path;
-	char		*cmd_dir;
 	char		*cmd_path;
 
-	env_path = NULL;
 	cmd_path = NULL;
+	cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
+	if (!cmd_path)
+		handle_error(ERROR, argv[0], argv[1], true);
+	if (access(cmd_path, X_OK) == 0)
+	{
+		free(*env_path);
+		execve(cmd_path, argv, environ);
+		handle_error(ERROR, argv[0], argv[1], false);
+	}
+	free(cmd_path);
+	cmd_path = NULL;
+}
+
+void	handle_ext_cmd(char **argv)
+{
+	char		*env_path;
+	char		*cmd_dir;
+
+	env_path = NULL;
 	env_path = ft_strdup(getenv("PATH"));
 	if (!env_path)
-		handle_exit(EXIT_FAILURE);
+		handle_error(ERROR, argv[0], MALLOC, true);
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
-		cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
-		if (!cmd_path)
-			handle_exit(cleanup(EXIT_FAILURE, &env_path, NULL));
-		if (access(cmd_path, X_OK) == 0)
-		{
-			execve(cmd_path, argv, environ);
-			handle_exit(cleanup(EXIT_FAILURE, &env_path, &cmd_path));
-		}
-		free(cmd_path);
+		exec_ext_cmd(cmd_dir, &env_path, argv);
 		cmd_dir = ft_strtok(NULL, ":");
 	}
-	handle_exit(cleanup(EXIT_FAILURE, &env_path, &cmd_path));
+	free(env_path);
+	handle_error(ERROR, argv[0], CMD_NOT_FOUND, true);
 }

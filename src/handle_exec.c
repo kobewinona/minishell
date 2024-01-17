@@ -20,26 +20,29 @@ t_cmd	*construct_exec_cmd(char **argv)
 		return (NULL);
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		handle_exit(EXIT_FAILURE);
+		handle_error(ERROR, argv[0], MALLOC, true);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->exec = (t_exec *)malloc(sizeof(t_exec));
 	if (!cmd->exec)
 	{
 		free(cmd);
-		handle_exit(EXIT_FAILURE);
+		handle_error(ERROR, argv[0], MALLOC, true);
 	}
 	ft_memset(cmd->exec, 0, sizeof(t_cmd));
-	cmd->type = EXEC;
+	cmd->type = EXEC_CMD;
 	cmd->exec->argv = argv;
 	return (cmd);
 }
 
 void	handle_exec(t_exec *exec_params)
 {
-	if (!ft_strncmp(exec_params->argv[0], ECHO, ft_strlen(ECHO)))
-		echo(exec_params->argv);
-	else if (!ft_strncmp(exec_params->argv[0], PWD, ft_strlen(PWD)))
-		pwd();
-	else
-		handle_ext_cmd(exec_params->argv);
+	if (ft_strncmp(exec_params->argv[0], CD, ft_strlen(CD)))
+	{
+		if (!ft_strncmp(exec_params->argv[0], ECHO, ft_strlen(ECHO)))
+			echo(exec_params->argv);
+		else if (!ft_strncmp(exec_params->argv[0], PWD, ft_strlen(PWD)))
+			pwd();
+		else
+			handle_ext_cmd(exec_params->argv);
+	}
 }

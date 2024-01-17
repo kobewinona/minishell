@@ -20,9 +20,13 @@
 # include <sys/stat.h>
 # include <stdbool.h>
 # include <string.h>
+# include <errno.h>
 
 // @ int_cmds = internal commands implemented in this project
 // @ ext_cmds = external builtin commands
+
+# define NAME "minishell"
+# define PROMPT "minishell> "
 
 // magic numbers
 # define ERROR -1
@@ -37,12 +41,23 @@
 # define ENV "env"
 # define EXIT "exit"
 
+// system calls and functions names
+# define FORK "fork"
+# define DUP "dup"
+# define DUP2 "dup2"
+# define OPEN "open"
+# define PIPE "pipe"
+# define MALLOC "malloc"
+
+// error messages
+# define CMD_NOT_FOUND "Command not found\n"
+
 // types
 typedef enum e_cmd_type
 {
-	EXEC,
-	PIPE,
-	REDIR,
+	EXEC_CMD,
+	PIPE_CMD,
+	REDIR_CMD,
 }	t_cmd_type;
 
 typedef enum e_redir_type
@@ -92,7 +107,6 @@ void	handle_cd(const char *input);
 void	handle_exec(t_exec *exec_params);
 void	handle_pipe(t_pipe *pipe_params);
 void	handle_redir(t_redir *redir_params);
-void	handle_exit(int exit_status);
 
 // constructors
 t_cmd	*construct_exec_cmd(char **argv);
@@ -106,9 +120,6 @@ void	cd(char *path);
 void	pwd(void);
 
 // -utils
-// -utils/sys_calls
-int		chdir1(const char *path); // same as chdir but with perror on error
-pid_t	fork1(void); // same as fork but exits on error
-int		dup3(int new_fd, int old_fd); // same as dup2 but exits on error
+int		handle_error(int res, char *cmd, char *context, int is_on_exit);
 
 #endif

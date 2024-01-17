@@ -30,5 +30,5 @@ void	echo(char **argv)
 	}
 	if (is_with_n_flag == false)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	handle_exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
