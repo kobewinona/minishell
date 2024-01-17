@@ -12,20 +12,29 @@
 
 #include "minishell.h"
 
-// TODO fix handling absolute paths
+static char	*get_home_path(void)
+{
+	char	*home_path;
+
+	home_path = NULL;
+	home_path = getenv("HOME");
+	if (!home_path)
+	{
+		ft_putstr_fd(
+			"cd: ~: The environment variable HOME is not set\n",
+			STDERR_FILENO);
+	}
+	return (home_path);
+}
+
 void	cd(char *path)
 {
-	if (!path)
-		return ;
-	else if (ft_strncmp(path, "/", 1) == 0)
-		ft_putstr_fd("cd: /: No such file or directory\n", STDERR_FILENO);
-	else if (ft_strncmp(path, "~", 1) == 0)
-		ft_putstr_fd("cd: ~: No such file or directory\n", STDERR_FILENO);
+	if (!path || ft_strncmp(path, "~", 1) == 0)
+		chdir1(get_home_path());
 	else if (ft_strncmp(path, "-", 1) == 0)
-		ft_putstr_fd("cd: -: No such file or directory\n", STDERR_FILENO);
+		return (ft_putstr_fd(
+				"cd: -: No such file or directory\n",
+				STDERR_FILENO));
 	else
-	{
-		if (chdir(path) != 0)
-			perror(NULL);
-	}
+		chdir1(path);
 }

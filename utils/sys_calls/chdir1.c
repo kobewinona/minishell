@@ -1,39 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_cd.c                                        :+:      :+:    :+:   */
+/*   chdir1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 23:53:56 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 23:53:57 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/17 13:31:42 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/17 13:31:43 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	cleanup(char ***argv)
+int	chdir1(const char *path)
 {
-	int	i;
+	int	res;
 
-	i = 0;
-	while ((*argv)[i])
-	{
-		free((*argv)[i]);
-		i++;
-	}
-	free((*argv));
-}
-
-void	handle_cd(const char *input)
-{
-	char	**argv;
-
-	argv = NULL;
-	argv = ft_split(input, ' ');
-	if (!argv)
-		return ;
-	if (argv[0] && ft_strncmp(argv[0], CD, ft_strlen(CD)) == 0)
-		cd(argv[1]);
-	cleanup(&argv);
+	res = chdir(path);
+	if (res != 0)
+		perror(NULL);
+	return (res);
 }

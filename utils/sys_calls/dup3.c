@@ -1,39 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_cd.c                                        :+:      :+:    :+:   */
+/*   dup3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 23:53:56 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 23:53:57 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/17 12:27:53 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/17 12:27:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	cleanup(char ***argv)
+int	dup3(int fd1, int fd2)
 {
-	int	i;
+	int	res;
 
-	i = 0;
-	while ((*argv)[i])
-	{
-		free((*argv)[i]);
-		i++;
-	}
-	free((*argv));
-}
-
-void	handle_cd(const char *input)
-{
-	char	**argv;
-
-	argv = NULL;
-	argv = ft_split(input, ' ');
-	if (!argv)
-		return ;
-	if (argv[0] && ft_strncmp(argv[0], CD, ft_strlen(CD)) == 0)
-		cd(argv[1]);
-	cleanup(&argv);
+	res = dup2(fd1, fd2);
+	if (res == ERROR)
+		handle_exit(EXIT_SUCCESS);
+	return (res);
 }

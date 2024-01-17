@@ -21,11 +21,11 @@ void	echo(char **argv)
 	is_with_n_flag = ft_strncmp(argv[i], "-n", 2) == 0;
 	if (is_with_n_flag == true)
 		i = 2;
-	while (argv[i] != NULL)
+	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);
 		i++;
-		if (argv[i] != NULL)
+		if (argv[i])
 			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (is_with_n_flag == false)

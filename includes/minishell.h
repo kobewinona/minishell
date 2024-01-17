@@ -82,6 +82,7 @@ void	handle_cd(const char *input);
 void	handle_exec(t_exec *exec_params);
 void	handle_pipe(t_pipe *pipe_params);
 void	handle_redir(t_redir *redir_params);
+void	handle_exit(int exit_status);
 
 // constructors
 t_cmd	*construct_exec_cmd(char **argv);
@@ -93,6 +94,9 @@ void	cd(char *path);
 void	pwd(void);
 
 // -utils
-void	handle_exit(int is_on_failure);
+// -utils/sys_calls
+int		chdir1(const char *path); // same as chdir but with perror on error
+pid_t	fork1(void); // same as fork but exits on error
+int		dup3(int fd1, int fd2); // same as dup2 but exits on error
 
 #endif

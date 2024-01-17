@@ -38,23 +38,17 @@ t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2)
 void	handle_pipe(t_pipe *pipe_params)
 {
 	int	fd[2];
-	int	pid;
 
 	if (pipe(fd) == ERROR)
 		handle_exit(EXIT_FAILURE);
-	pid = fork();
-	if (pid == ERROR)
-		handle_exit(EXIT_FAILURE);
-	if (pid == 0)
+	if (fork1() == 0)
 	{
-		if (dup2(fd[1], STDOUT_FILENO) == ERROR)
-			handle_exit(EXIT_FAILURE);
+		dup3(fd[1], STDOUT_FILENO);
 		close(fd[0]);
 		run_cmd(pipe_params->from);
 	}
-	waitpid(pid, NULL, 0);
-	if (dup2(fd[0], STDIN_FILENO) == ERROR)
-		handle_exit(EXIT_FAILURE);
+	wait(NULL);
+	dup3(fd[0], STDIN_FILENO);
 	close(fd[1]);
 	run_cmd(pipe_params->to);
 }
