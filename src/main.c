@@ -21,7 +21,7 @@ void	run_cmd(t_cmd *cmd)
 	else if (cmd->type == REDIR_CMD)
 		handle_redir(cmd->redir);
 	else
-		handle_error(ERROR, NULL, NULL, true);
+		handle_err(ERROR, NULL, NULL, true);
 }
 
 static t_cmd	*parse_cmd(char *input)
@@ -39,9 +39,9 @@ static t_cmd	*parse_cmd(char *input)
 //	redir_cmd1 = construct_redir_cmd(REDIR_STD_IN, exec_cmd1,
 //			ft_split(ft_strtok(NULL, ">"), ' ')[0], O_RDONLY);
 //	printf("redir1 is created\n");
-	exec_cmd2 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
+//	exec_cmd2 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
 //	printf("exec_cmd2 cmd name: %s\n", exec_cmd2->exec->argv[0]);
-	pipe_cmd1 = construct_pipe_cmd(exec_cmd1, exec_cmd2);
+//	pipe_cmd1 = construct_pipe_cmd(exec_cmd1, exec_cmd2);
 //	printf("pipe1 is created\n");
 //	exec_cmd3 = construct_exec_cmd(ft_split(ft_strtok(NULL, ">"), ' '));
 //	printf("exec_cmd3 cmd name: %s\n", exec_cmd3->exec->argv[0]);
@@ -51,7 +51,7 @@ static t_cmd	*parse_cmd(char *input)
 //			ft_split(ft_strtok(NULL, ">"), ' ')[0],
 //			O_WRONLY | O_CREAT | O_TRUNC);
 //	printf("redir2 is created\n");
-	return (pipe_cmd1);
+	return (exec_cmd1);
 }
 
 int	main(void)
@@ -66,7 +66,7 @@ int	main(void)
 		if (*input)
 			add_history(input);
 		handle_cd(input);
-		if (handle_error(fork(), FORK, NULL, false) == 0)
+		if (handle_err(fork(), FORK, NULL, false) == 0)
 			run_cmd(parse_cmd(input));
 		free(input);
 		wait(NULL);

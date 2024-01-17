@@ -47,6 +47,7 @@
 # define DUP2 "dup2"
 # define OPEN "open"
 # define PIPE "pipe"
+# define GETENV "getenv"
 # define MALLOC "malloc"
 
 // error messages
@@ -107,6 +108,7 @@ void	handle_cd(const char *input);
 void	handle_exec(t_exec *exec_params);
 void	handle_pipe(t_pipe *pipe_params);
 void	handle_redir(t_redir *redir_params);
+int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
 
 // constructors
 t_cmd	*construct_exec_cmd(char **argv);
@@ -118,8 +120,5 @@ t_cmd	*construct_redir_cmd(
 void	echo(char **argv);
 void	cd(char *path);
 void	pwd(void);
-
-// -utils
-int		handle_error(int res, char *cmd, char *context, int is_on_exit);
 
 #endif

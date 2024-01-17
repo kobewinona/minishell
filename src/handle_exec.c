@@ -20,13 +20,13 @@ t_cmd	*construct_exec_cmd(char **argv)
 		return (NULL);
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		handle_error(ERROR, argv[0], MALLOC, true);
+		handle_err(ERROR, argv[0], MALLOC, true);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->exec = (t_exec *)malloc(sizeof(t_exec));
 	if (!cmd->exec)
 	{
 		free(cmd);
-		handle_error(ERROR, argv[0], MALLOC, true);
+		handle_err(ERROR, argv[0], MALLOC, true);
 	}
 	ft_memset(cmd->exec, 0, sizeof(t_cmd));
 	cmd->type = EXEC_CMD;

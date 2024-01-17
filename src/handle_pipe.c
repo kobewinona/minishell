@@ -18,15 +18,15 @@ t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2)
 
 	if (!cmd1 || !cmd2)
 		return (NULL);
-	cmd = (t_cmd *)malloc((sizeof(t_cmd)));
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		handle_error(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, NULL, MALLOC, true);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->pipe = (t_pipe *)malloc(sizeof(t_pipe));
 	if (!cmd->pipe)
 	{
 		free(cmd);
-		handle_error(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, NULL, MALLOC, true);
 	}
 	ft_memset(cmd->pipe, 0, sizeof(t_cmd));
 	cmd->type = PIPE_CMD;
@@ -39,15 +39,15 @@ void	handle_pipe(t_pipe *pipe_params)
 {
 	int	fd[2];
 
-	handle_error(pipe(fd), PIPE, NULL, true);
-	if (handle_error(fork(), FORK, NULL, true) == 0)
+	handle_err(pipe(fd), PIPE, NULL, true);
+	if (handle_err(fork(), FORK, NULL, true) == 0)
 	{
-		handle_error(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
+		handle_err(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
 		close(fd[0]);
 		run_cmd(pipe_params->from);
 	}
 	wait(NULL);
-	handle_error(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
+	handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
 	close(fd[1]);
 	run_cmd(pipe_params->to);
 }
