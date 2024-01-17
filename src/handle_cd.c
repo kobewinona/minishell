@@ -12,22 +12,10 @@
 
 #include "minishell.h"
 
-static void	cleanup(char ***argv)
-{
-	int	i;
-
-	i = 0;
-	while ((*argv)[i])
-	{
-		free((*argv)[i]);
-		i++;
-	}
-	free((*argv));
-}
-
 void	handle_cd(const char *input)
 {
 	char	**argv;
+	int		i;
 
 	argv = NULL;
 	argv = ft_split(input, ' ');
@@ -35,5 +23,11 @@ void	handle_cd(const char *input)
 		return ;
 	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
 		cd(argv[1]);
-	cleanup(&argv);
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
 }
