@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-int	dup3(int fd1, int fd2)
+int	dup3(int new_fd, int old_fd)
 {
 	int	res;
 
-	res = dup2(fd1, fd2);
+	res = dup2(new_fd, old_fd);
 	if (res == ERROR)
 		handle_exit(EXIT_SUCCESS);
 	return (res);

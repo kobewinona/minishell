@@ -29,9 +29,9 @@ static char	*get_home_path(void)
 
 void	cd(char *path)
 {
-	if (!path || ft_strncmp(path, "~", 1) == 0)
+	if (!path || !ft_strncmp(path, "~", 1))
 		chdir1(get_home_path());
-	else if (ft_strncmp(path, "-", 1) == 0)
+	else if (!ft_strncmp(path, "-", 1))
 		return (ft_putstr_fd(
 				"cd: -: No such file or directory\n",
 				STDERR_FILENO));

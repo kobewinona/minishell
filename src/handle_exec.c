@@ -36,9 +36,9 @@ t_cmd	*construct_exec_cmd(char **argv)
 
 void	handle_exec(t_exec *exec_params)
 {
-	if (ft_strncmp(exec_params->argv[0], ECHO, ft_strlen(ECHO)) == 0)
+	if (!ft_strncmp(exec_params->argv[0], ECHO, ft_strlen(ECHO)))
 		echo(exec_params->argv);
-	else if (ft_strncmp(exec_params->argv[0], PWD, ft_strlen(PWD)) == 0)
+	else if (!ft_strncmp(exec_params->argv[0], PWD, ft_strlen(PWD)))
 		pwd();
 	else
 		handle_ext_cmd(exec_params->argv);

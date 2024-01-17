@@ -33,7 +33,7 @@ void	handle_cd(const char *input)
 	argv = ft_split(input, ' ');
 	if (!argv)
 		return ;
-	if (argv[0] && ft_strncmp(argv[0], CD, ft_strlen(CD)) == 0)
+	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
 		cd(argv[1]);
 	cleanup(&argv);
 }

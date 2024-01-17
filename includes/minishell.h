@@ -13,6 +13,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libs/libft/libft.h"
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
@@ -25,6 +26,7 @@
 
 // magic numbers
 # define ERROR -1
+# define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
 
 // command names
 # define ECHO "echo"
@@ -42,6 +44,14 @@ typedef enum e_cmd_type
 	PIPE,
 	REDIR,
 }	t_cmd_type;
+
+typedef enum e_redir_type
+{
+	REDIR_STD_OUT,
+	REDIR_STD_IN,
+	APPEND_STD_OUT,
+	APPEND_STD_IN,
+}	t_redir_type;
 
 // structs
 typedef struct s_cmd
@@ -68,10 +78,10 @@ typedef struct s_pipe
 
 typedef struct s_redir
 {
-	t_cmd	*subcmd;
-	char	*file;
-	int		mode;
-	int		fd;
+	t_redir_type	type;
+	t_cmd			*subcmd;
+	char			*file;
+	int				mode;
 }	t_redir;
 
 // functions
@@ -87,6 +97,8 @@ void	handle_exit(int exit_status);
 // constructors
 t_cmd	*construct_exec_cmd(char **argv);
 t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
+t_cmd	*construct_redir_cmd(
+			t_redir_type type, t_cmd *subcmd, char *file, int mode);
 
 // -src/int_cmds
 void	echo(char **argv);
@@ -97,6 +109,6 @@ void	pwd(void);
 // -utils/sys_calls
 int		chdir1(const char *path); // same as chdir but with perror on error
 pid_t	fork1(void); // same as fork but exits on error
-int		dup3(int fd1, int fd2); // same as dup2 but exits on error
+int		dup3(int new_fd, int old_fd); // same as dup2 but exits on error
 
 #endif

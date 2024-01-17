@@ -18,7 +18,7 @@ void	echo(char **argv)
 	int	i;
 
 	i = 1;
-	is_with_n_flag = ft_strncmp(argv[i], "-n", 2) == 0;
+	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
 	while (argv[i])
