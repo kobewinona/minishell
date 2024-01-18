@@ -34,15 +34,15 @@ t_cmd	*construct_exec_cmd(char **argv)
 	return (cmd);
 }
 
-void	handle_exec(t_exec *exec_params)
+void	handle_exec(t_exec *params)
 {
-	if (ft_strncmp(exec_params->argv[0], CD, ft_strlen(CD)))
+	if (ft_strncmp(params->argv[0], CD, ft_strlen(CD)))
 	{
-		if (!ft_strncmp(exec_params->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(exec_params->argv);
-		else if (!ft_strncmp(exec_params->argv[0], PWD, ft_strlen(PWD)))
+		if (!ft_strncmp(params->argv[0], ECHO, ft_strlen(ECHO)))
+			echo(params->argv);
+		else if (!ft_strncmp(params->argv[0], PWD, ft_strlen(PWD)))
 			pwd();
 		else
-			handle_ext_cmd(exec_params->argv);
+			handle_ext_cmd(params->argv);
 	}
 }

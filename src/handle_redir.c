@@ -36,22 +36,24 @@ t_cmd	*construct_redir_cmd(
 	return (cmd);
 }
 
-void	handle_redir(t_redir *redir_params)
+void	handle_redir(t_redir *params)
 {
 	int	org_stdout;
 	int	new_fd;
 	int	redir_fd;
 
 	redir_fd = 1;
-	new_fd = handle_err(open(redir_params->file, redir_params->mode,
-							 RW_R_R_PERM), OPEN, redir_params->file, true);
-	if (redir_params->type == REDIR_STD_OUT)
+	new_fd = handle_err(open(params->file, params->mode),
+			OPEN, params->file, true);
+	if (params->type == REDIR_STDOUT || params->type == APPEND_STDOUT)
 		redir_fd = STDOUT_FILENO;
-	if (redir_params->type == REDIR_STD_IN)
+	if (params->type == REDIR_STDIN)
 		redir_fd = STDIN_FILENO;
+	if (params->subcmd->type == HEREDOC)
+		return (handle_heredoc(params->subcmd->heredoc, new_fd));
 	org_stdout = handle_err(dup(redir_fd), DUP, NULL, true);
 	handle_err(dup2(new_fd, redir_fd), DUP2, NULL, true);
-	run_cmd(redir_params->subcmd);
+	run_cmd(params->subcmd);
 	close(new_fd);
 	handle_err(dup2(org_stdout, redir_fd), DUP2, NULL, true);
 	close(org_stdout);

@@ -35,7 +35,7 @@ t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2)
 	return (cmd);
 }
 
-void	handle_pipe(t_pipe *pipe_params)
+void	handle_pipe(t_pipe *params)
 {
 	int	fd[2];
 
@@ -44,10 +44,10 @@ void	handle_pipe(t_pipe *pipe_params)
 	{
 		handle_err(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
 		close(fd[0]);
-		run_cmd(pipe_params->from);
+		run_cmd(params->from);
 	}
 	wait(NULL);
 	handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
 	close(fd[1]);
-	run_cmd(pipe_params->to);
+	run_cmd(params->to);
 }

@@ -20,47 +20,32 @@ void	run_cmd(t_cmd *cmd)
 		handle_pipe(cmd->pipe);
 	else if (cmd->type == REDIR_CMD)
 		handle_redir(cmd->redir);
+	else if (cmd->type == HEREDOC)
+		handle_heredoc(cmd->heredoc, -1);
 	else
 		handle_err(ERROR, NULL, NULL, true);
 }
 
 static t_cmd	*parse_cmd(char *input)
 {
-	t_cmd	*exec_cmd1 = NULL;
-	t_cmd	*exec_cmd2 = NULL;
-	t_cmd	*exec_cmd3 = NULL;
-	t_cmd	*pipe_cmd1 = NULL;
-	t_cmd	*pipe_cmd2 = NULL;
-	t_cmd	*redir_cmd1 = NULL;
-	t_cmd	*redir_cmd2 = NULL;
+	t_cmd	*exec_cmd1 = NULL, *exec_cmd2 = NULL, *exec_cmd3 = NULL, *pipe_cmd1 = NULL, *pipe_cmd2 = NULL, *redir_cmd1 = NULL, *redir_cmd2 = NULL, *redir_cmd3 = NULL, *append_cmd1 = NULL, *heredoc_cmd1 = NULL;
 
-	exec_cmd1 = construct_exec_cmd(ft_split(ft_strtok(input, "|"), ' '));
-//	printf("exec_cmd1 cmd name: %s\n", exec_cmd1->exec->argv[0]);
-//	redir_cmd1 = construct_redir_cmd(REDIR_STD_IN, exec_cmd1,
-//			ft_split(ft_strtok(NULL, ">"), ' ')[0], O_RDONLY);
-//	printf("redir1 is created\n");
-//	exec_cmd2 = construct_exec_cmd(ft_split(ft_strtok(NULL, "|"), ' '));
-//	printf("exec_cmd2 cmd name: %s\n", exec_cmd2->exec->argv[0]);
-//	pipe_cmd1 = construct_pipe_cmd(exec_cmd1, exec_cmd2);
-//	printf("pipe1 is created\n");
-//	exec_cmd3 = construct_exec_cmd(ft_split(ft_strtok(NULL, ">"), ' '));
-//	printf("exec_cmd3 cmd name: %s\n", exec_cmd3->exec->argv[0]);
-//	pipe_cmd2 = construct_pipe_cmd(pipe_cmd1, exec_cmd3);
-//	printf("pipe2 is created\n");
-//	redir_cmd2 = construct_redir_cmd(REDIR_STD_OUT, redir_cmd1,
-//			ft_split(ft_strtok(NULL, ">"), ' ')[0],
-//			O_WRONLY | O_CREAT | O_TRUNC);
-//	printf("redir2 is created\n");
-	return (exec_cmd1);
+	exec_cmd1 = construct_exec_cmd(ft_split(ft_strtok(input, "<"), ' '));
+	heredoc_cmd1 = construct_heredoc_cmd(exec_cmd1, "eof");
+	redir_cmd1 = construct_redir_cmd(REDIR_STDOUT, heredoc_cmd1, "sorted.txt",  O_WRONLY | O_CREAT | O_TRUNC);
+	return (redir_cmd1);
 }
 
 int	main(void)
 {
 	char	*input;
+	char	*input_prompt;
 
 	while (1)
 	{
-		input = readline(PROMPT);
+		input_prompt = ft_strjoin(NAME, PROMPT);
+		input = readline(input_prompt);
+		free(input_prompt);
 		if (!input)
 			break ;
 		if (*input)
