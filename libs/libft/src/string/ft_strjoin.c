@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2023/08/30 12:19:27 by dklimkin          #+#    #+#             */
+/*   Updated: 2023/08/30 12:19:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "../../includes/libft.h"
 
-#endif
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*s3;
+	size_t	total_len;
+
+	if (s1 && s2)
+		total_len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	else
+		return (NULL);
+	s3 = (char *)malloc(total_len * sizeof(char));
+	if (!s3)
+		return (NULL);
+	ft_strlcpy(s3, s1, total_len);
+	ft_strlcat(s3, s2, total_len);
+	return (s3);
+}

@@ -1,27 +1,33 @@
-.PHONY: all clean fclean re
+.PHONY:		all clean fclean re
+MACHINE 	:= $(shell uname -m)
 
-NAME	= libft.a
-CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -MMD
-RM		= rm -rf
+NAME		= libft-$(MACHINE).a
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror -MMD
+RM			= rm -rf
 
-SRCS 	= $(wildcard *.c)
-OBJS 	= $(SRCS:.c=.o)
-DEPS	= $(SRCS:.c=.d)
+INCLUDES	= ./includes
+SRCS_DIR	= ./src
+OBJS_DIR	= ./obj
 
-$(NAME): $(OBJS) libft.h
+rwildcard	= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+SRCS		= $(call rwildcard, $(SRCS_DIR)/, *.c)
+OBJS 		= $(SRCS:%.c=$(OBJS_DIR)/%.o)
+DEPS 		= $(OBJS:.o=.d)
+
+$(NAME): $(OBJS)
 	$(AR) rcs $(NAME) $^
 
 all: $(NAME)
 
+$(OBJS_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
+
 -include $(DEPS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
 clean:
-	$(RM) $(OBJS) $(OBJS_B)
-	$(RM) $(DEPS)
+	$(RM) $(OBJS_DIR) $(DEPS)
 
 fclean: clean
 	$(RM) $(NAME)

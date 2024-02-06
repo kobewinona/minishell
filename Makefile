@@ -1,18 +1,20 @@
-.PHONY: all clean fclean re
+.PHONY:			all clean fclean re
+MACHINE 		:= $(shell uname -m)
 NAME			= minishell
 
 CC				= gcc
 #CFLAGS			= -g -Wall -Wextra -Werror -MMD
 CFLAGS			= -g -MMD
 RM				= rm -rf
-INCLUDES		= ./includes
-LIBFT			= -lft
 
+INCLUDES		= ./includes
 SRCS_DIR		= ./src
 UTILS_DIR		= ./utils
 LIBFT_DIR		= ./libs/libft
 LIBS_DIR		= ./libs
 OBJS_DIR		= ./obj
+
+LIBFT			= -lft-$(MACHINE)
 
 rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 SRCS			= $(call rwildcard, $(SRCS_DIR)/, *.c) $(call rwildcard, $(UTILS_DIR)/, *.c)
