@@ -46,8 +46,6 @@ typedef struct s_cmd
 typedef struct s_exec
 {
 	char	**argv;
-	int		st_in;
-	int		st_out;
 }	t_exec;
 
 typedef struct s_pipe
@@ -70,6 +68,7 @@ typedef struct s_heredoc
 	char			*eof;
 }	t_heredoc;
 
+// functions
 void	run_cmd(t_cmd *cmd);
 void	handle_ext_cmd(char **argv);
 void	handle_cd(const char *input);
@@ -78,12 +77,6 @@ void	handle_pipe(t_pipe *params);
 void	handle_redir(t_redir *params);
 void	handle_heredoc(t_heredoc *params, int output_fd);
 int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
-
-// constructors
-t_cmd	*construct_exec_cmd(char **argv);
-t_cmd	*construct_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
-t_cmd	*construct_redir_cmd(t_redir_type type, t_cmd *subcmd, char *file, int mode);
-t_cmd	*construct_heredoc_cmd(t_cmd *subcmd, char *eof);
 
 // -src/int_cmds
 void	echo(char **argv);

@@ -12,28 +12,6 @@
 
 #include "minishell.h"
 
-t_cmd	*construct_exec_cmd(char **argv)
-{
-	t_cmd	*cmd;
-
-	if (argv[0] == NULL)
-		return (NULL);
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!cmd)
-		handle_err(ERROR, argv[0], MALLOC, true);
-	ft_memset(cmd, 0, sizeof(t_cmd));
-	cmd->exec = (t_exec *)malloc(sizeof(t_exec));
-	if (!cmd->exec)
-	{
-		free(cmd);
-		handle_err(ERROR, argv[0], MALLOC, true);
-	}
-	ft_memset(cmd->exec, 0, sizeof(t_cmd));
-	cmd->type = EXEC_CMD;
-	cmd->exec->argv = argv;
-	return (cmd);
-}
-
 void	handle_exec(t_exec *params)
 {
 	if (ft_strncmp(params->argv[0], CD, ft_strlen(CD)))

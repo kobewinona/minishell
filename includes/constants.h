@@ -21,8 +21,10 @@
 
 // magic numbers
 # define ERROR -1
+# define SUCCESS 0
+# define FAILURE 1
 # define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
-# define RW_RW_RW_PERM 0666 // -rw-r--r-- permission settings
+# define RW_RW_RW_PERM 0666 // -rw-rw-rw- permission settings
 
 // command names
 # define ECHO "echo"

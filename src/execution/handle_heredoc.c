@@ -12,28 +12,6 @@
 
 #include "minishell.h"
 
-// TODO put construct cmd to a separate function
-t_cmd	*construct_heredoc_cmd(t_cmd *subcmd, char *eof)
-{
-	t_cmd	*cmd;
-
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!cmd)
-		handle_err(ERROR, NULL, MALLOC, true);
-	ft_memset(cmd, 0, sizeof(t_cmd));
-	cmd->heredoc = (t_heredoc *)malloc(sizeof(t_heredoc));
-	if (!cmd->heredoc)
-	{
-		free(cmd);
-		handle_err(ERROR, NULL, MALLOC, true);
-	}
-	ft_memset(cmd->heredoc, 0, sizeof(t_heredoc));
-	cmd->type = HEREDOC;
-	cmd->heredoc->subcmd = subcmd;
-	cmd->heredoc->eof = eof;
-	return (cmd);
-}
-
 static void	run_heredoc_mode(const char *heredoc, int fd)
 {
 	char	*input;

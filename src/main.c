@@ -26,21 +26,11 @@ void	run_cmd(t_cmd *cmd)
 		handle_err(ERROR, NULL, NULL, true);
 }
 
-//static t_cmd	*parse_cmd(char *input)
-//{
-//	t_cmd	*exec_cmd1 = NULL, *exec_cmd2 = NULL, *exec_cmd3 = NULL, *pipe_cmd1 = NULL, *pipe_cmd2 = NULL, *redir_cmd1 = NULL, *redir_cmd2 = NULL, *redir_cmd3 = NULL, *append_cmd1 = NULL, *heredoc_cmd1 = NULL;
-//
-//	exec_cmd1 = construct_exec_cmd(ft_split(ft_strtok(input, "<"), ' '));
-//	heredoc_cmd1 = construct_heredoc_cmd(exec_cmd1, "eof");
-//	redir_cmd1 = construct_redir_cmd(REDIR_STDOUT, heredoc_cmd1, "sorted.txt",  O_WRONLY | O_CREAT | O_TRUNC);
-//	return (redir_cmd1);
-//}
-
 int	main(void)
 {
 	char	*input;
 	char	*input_prompt;
-	t_cmd	*cmd;
+	char	*input_tmp;
 
 	while (1)
 	{
@@ -52,12 +42,10 @@ int	main(void)
 		if (*input)
 			add_history(input);
 		handle_cd(input);
-		if (handle_err(fork(), FORK, NULL, false) == 0)
-		{
-			cmd = parse_cmd(input);
-			printf("cmd: %s\n", cmd->exec->argv[0]);
-			run_cmd(parse_cmd(input));
-		}
+		input_tmp = input;
+//		if (handle_err(fork(), FORK, NULL, false) == 0)
+//			run_cmd(parse_cmd(input_tmp));
+		run_cmd(parse_cmd(input_tmp));
 		free(input);
 		wait(NULL);
 	}
