@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   handle_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 16:11:27 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "minishell.h"
 
-#endif
+void	handle_exec(t_exec *params)
+{
+	if (ft_strncmp(params->argv[0], CD, ft_strlen(CD)))
+	{
+		if (!ft_strncmp(params->argv[0], ECHO, ft_strlen(ECHO)))
+			echo(params->argv);
+		else if (!ft_strncmp(params->argv[0], PWD, ft_strlen(PWD)))
+			pwd();
+		else
+			handle_ext_cmd(params->argv);
+	}
+}

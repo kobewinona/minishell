@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2023/08/31 18:09:31 by dklimkin          #+#    #+#             */
+/*   Updated: 2023/08/31 18:09:33 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "../../includes/libft.h"
 
-#endif
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+{
+	size_t			s_len;
+	unsigned int	i;
+
+	s_len = 0;
+	i = 0;
+	if (s)
+		s_len = ft_strlen(s);
+	while (i < s_len)
+	{
+		f(i, &s[i]);
+		i++;
+	}
+}

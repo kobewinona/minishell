@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "minishell.h"
 
-#endif
+void	pwd(void)
+{
+	char	*curr_dir;
+
+	curr_dir = NULL;
+	curr_dir = getcwd(curr_dir, 0);
+	if (!curr_dir)
+		handle_err(ERROR, PWD, NULL, true);
+	ft_putstr_fd(curr_dir, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
+	free(curr_dir);
+	exit(EXIT_SUCCESS);
+}

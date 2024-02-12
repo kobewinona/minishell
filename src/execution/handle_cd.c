@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   handle_cd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 23:53:56 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 23:53:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "minishell.h"
 
-#endif
+void	handle_cd(const char *input)
+{
+	char	**argv;
+	int		i;
+
+	argv = NULL;
+	argv = ft_split(input, ' ');
+	if (!argv)
+		return ;
+	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
+		cd(argv[1]);
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}

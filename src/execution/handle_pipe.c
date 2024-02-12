@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   handle_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/16 16:11:04 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "minishell.h"
 
-#endif
+void	handle_pipe(t_pipe *params)
+{
+	int	fd[2];
+
+	handle_err(pipe(fd), PIPE, NULL, true);
+	if (handle_err(fork(), FORK, NULL, true) == 0)
+	{
+		handle_err(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
+		close(fd[0]);
+		run_cmd(params->from);
+	}
+	handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
+	close(fd[1]);
+	run_cmd(params->to);
+}

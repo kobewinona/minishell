@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2023/08/31 16:46:51 by dklimkin          #+#    #+#             */
+/*   Updated: 2023/08/31 16:46:52 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "../../includes/libft.h"
 
-#endif
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+{
+	char	*modified_s;
+	size_t	i;
+
+	modified_s = NULL;
+	if (s && f)
+	{
+		modified_s = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+		if (!modified_s)
+			return (NULL);
+		i = 0;
+		while (s[i])
+		{
+			modified_s[i] = f(i, s[i]);
+			i++;
+		}
+		modified_s[i] = '\0';
+	}
+	return (modified_s);
+}

@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:13:53 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/01/12 11:05:23 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "../libs/libft/includes/libft.h"
-# include "constants.h"
-# include "../src/execution/execution.h"
-# include "../src/parsing/parsing.h"
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <stdbool.h>
-# include <string.h>
-# include <errno.h>
+#include "minishell.h"
 
-#endif
+void	echo(char **argv)
+{
+	int	is_with_n_flag;
+	int	i;
+
+	i = 1;
+	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
+	if (is_with_n_flag == true)
+		i = 2;
+	while (argv[i])
+	{
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		i++;
+		if (argv[i])
+			ft_putchar_fd(' ', STDOUT_FILENO);
+	}
+	if (is_with_n_flag == false)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	exit(EXIT_SUCCESS);
+}
