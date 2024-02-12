@@ -12,21 +12,25 @@
 
 #include "minishell.h"
 
-int	handle_err(int res, char *cxt1, char *cxt2, int is_on_exit)
+int	handle_err(int res, t_err err, int is_on_exit)
 {
 	if (res == ERROR)
 	{
 		ft_putstr_fd(NAME, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
-		if (cxt1)
+		if (err.type == SYNTAX_ERR)
 		{
-			ft_putstr_fd(cxt1, STDERR_FILENO);
-			ft_putstr_fd(": ", STDERR_FILENO);
+			ft_putstr_fd(SYNTAX_ERROR_MSG, STDERR_FILENO);
+			ft_putstr_fd(err.context1, STDERR_FILENO);
+			exit(SYNTAX_ERR);
 		}
-		if (!ft_strncmp(cxt2, CMD_NOT_FOUND, ft_strlen(CMD_NOT_FOUND)))
-			ft_putstr_fd(CMD_NOT_FOUND, STDERR_FILENO);
+		if (err.type == CMD_NOT_FOUND)
+		{
+			ft_putstr_fd(CMD_NOT_FOUND_MSG, STDERR_FILENO);
+			exit(CMD_NOT_FOUND);
+		}
 		else
-			perror(cxt2);
+			perror(err.context2);
 		if (is_on_exit)
 			exit(errno);
 	}

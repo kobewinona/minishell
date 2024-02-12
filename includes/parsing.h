@@ -16,6 +16,10 @@
 
 // ls -l > ls.txt < sort -n | cat
 
+// error messages
+# define CMD_NOT_FOUND_MSG "command not found\n"
+# define SYNTAX_ERROR_MSG "syntax error near unexpected token "
+
 typedef enum e_tok
 {
 	NO_TOK,

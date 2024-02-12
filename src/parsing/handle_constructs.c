@@ -18,7 +18,7 @@ static t_cmd	*constr_cmd(void)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		handle_err(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, NULL, MALLOC}, true);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	return (cmd);
 }
@@ -36,7 +36,7 @@ t_cmd	*constr_exec_cmd(char *input)
 	if (!cmd->exec)
 	{
 		free(cmd);
-		handle_err(ERROR, argv[0], MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, argv[0], MALLOC}, true);
 	}
 	ft_memset(cmd->exec, 0, sizeof(t_cmd));
 	cmd->type = EXEC_CMD;
@@ -53,7 +53,7 @@ t_cmd	*constr_heredoc_cmd(t_cmd *subcmd, char *eof)
 	if (!cmd->heredoc)
 	{
 		free(cmd);
-		handle_err(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, NULL, MALLOC}, true);
 	}
 	ft_memset(cmd->heredoc, 0, sizeof(t_heredoc));
 	cmd->type = HEREDOC;
@@ -72,7 +72,7 @@ t_cmd	*constr_redir_cmd(
 	if (!cmd->redir)
 	{
 		free(cmd);
-		handle_err(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, NULL, MALLOC}, true);
 	}
 	ft_memset(cmd->redir, 0, sizeof(t_redir));
 	cmd->type = REDIR_CMD;
@@ -99,7 +99,7 @@ t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2)
 	if (!cmd->pipe)
 	{
 		free(cmd);
-		handle_err(ERROR, NULL, MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, NULL, MALLOC}, true);
 	}
 	ft_memset(cmd->pipe, 0, sizeof(t_cmd));
 	cmd->type = PIPE_CMD;

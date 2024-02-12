@@ -24,8 +24,10 @@ static void	run_heredoc_mode(const char *heredoc, int fd)
 			free(input);
 			break ;
 		}
-		handle_err((int)write(fd, input, ft_strlen(input)), WRITE, input, true);
-		handle_err((int)write(fd, "\n", 1), WRITE, "\n", true);
+		handle_err((int)write(fd, input, ft_strlen(input)),
+			(t_err){SYSTEM_ERR, WRITE, input}, true);
+		handle_err((int)write(fd, "\n", 1),
+			(t_err){SYSTEM_ERR, WRITE, "\n"}, true);
 		free(input);
 		input = readline(PROMPT);
 	}
@@ -38,14 +40,15 @@ void	handle_heredoc(t_heredoc *params, int output_fd)
 
 	org_stdout = 0;
 	if (output_fd != -1)
-		org_stdout = handle_err(dup(output_fd), DUP, NULL, true);
-	handle_err(pipe(fd), PIPE, NULL, true);
+		org_stdout = handle_err(dup(output_fd), (t_err){SYSTEM_ERR, DUP}, true);
+	handle_err(pipe(fd), (t_err){SYSTEM_ERR, PIPE}, true);
 	run_heredoc_mode(params->eof, fd[1]);
 	close(fd[1]);
-	handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
+	handle_err(dup2(fd[0], STDIN_FILENO), (t_err){SYSTEM_ERR, DUP2}, true);
 	close(fd[0]);
 	if (output_fd != -1)
-		handle_err(dup2(output_fd, STDOUT_FILENO), DUP2, NULL, true);
+		handle_err(dup2(output_fd, STDOUT_FILENO),
+			(t_err){SYSTEM_ERR, DUP2}, true);
 	run_cmd(params->subcmd);
 	dup2(org_stdout, STDOUT_FILENO);
 	close(org_stdout);

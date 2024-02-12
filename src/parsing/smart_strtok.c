@@ -72,8 +72,8 @@ static char	*get_tok(char **stash, const char *sep, t_tok *tok)
 	char	*end;
 
 	start = *stash;
-	while (*start && ft_strchr(sep, *start))
-		start++;
+//	while (*start && ft_strchr(sep, *start))
+//		start++;
 	if (*start == '\0')
 	{
 		*stash = start;
@@ -82,7 +82,7 @@ static char	*get_tok(char **stash, const char *sep, t_tok *tok)
 	update_end(start, &end, sep, tok);
 	if (*end)
 	{
-		if (*end == 'c')
+		if (*end == '|')
 			*tok = PIPE_TOK;
 		*end = '\0';
 		*stash = end + 1;

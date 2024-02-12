@@ -16,27 +16,29 @@ void	handle_pipe(t_pipe *params)
 {
 	int	fd[2];
 
-	handle_err(pipe(fd), PIPE, NULL, true);
-	if (handle_err(fork(), FORK, NULL, true) == 0)
+	handle_err(pipe(fd), (t_err){SYSTEM_ERR, PIPE}, true);
+	if (handle_err(fork(), (t_err){SYSTEM_ERR, FORK}, true) == 0)
 	{
-        close(STDOUT_FILENO);
-		handle_err(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
+		close(STDOUT_FILENO);
+		handle_err(dup2(fd[1], STDOUT_FILENO),
+			(t_err){SYSTEM_ERR, DUP2}, true);
 		close(fd[0]);
-        close(fd[1]);
+		close(fd[1]);
 		run_cmd(params->from);
-        exit(EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
-    if (handle_err(fork(), FORK, NULL, true) == 0)
-    {
-        close(STDIN_FILENO);
-        handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
-        close(fd[0]);
-        close(fd[1]);
-        run_cmd(params->to);
-        exit(EXIT_SUCCESS);
-    }
-    close(fd[0]);
-    close(fd[1]);
-    wait(NULL);
-    wait(NULL);
+	if (handle_err(fork(), (t_err){SYSTEM_ERR, DUP2}, true) == 0)
+	{
+		close(STDIN_FILENO);
+		handle_err(dup2(fd[0], STDIN_FILENO),
+			(t_err){SYSTEM_ERR, DUP2}, true);
+		close(fd[0]);
+		close(fd[1]);
+		run_cmd(params->to);
+		exit(EXIT_SUCCESS);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	wait(NULL);
+	wait(NULL);
 }

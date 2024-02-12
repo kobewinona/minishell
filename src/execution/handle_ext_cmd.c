@@ -35,12 +35,12 @@ static void	exec_ext_cmd(char *cmd_dir, char **env_path, char **argv)
 	cmd_path = NULL;
 	cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
 	if (!cmd_path)
-		handle_err(ERROR, argv[0], argv[1], true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, argv[0], argv[1]}, true);
 	if (access(cmd_path, X_OK) == 0)
 	{
 		free(*env_path);
 		execve(cmd_path, argv, environ);
-		handle_err(ERROR, argv[0], argv[1], false);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, argv[0], argv[1]}, false);
 	}
 	free(cmd_path);
 	cmd_path = NULL;
@@ -54,7 +54,7 @@ void	handle_ext_cmd(char **argv)
 	env_path = NULL;
 	env_path = ft_strdup(getenv("PATH"));
 	if (!env_path)
-		handle_err(ERROR, argv[0], MALLOC, true);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, argv[0], MALLOC}, true);
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
@@ -62,5 +62,5 @@ void	handle_ext_cmd(char **argv)
 		cmd_dir = ft_strtok(NULL, ":");
 	}
 	free(env_path);
-	handle_err(ERROR, argv[0], CMD_NOT_FOUND, true);
+	handle_err(ERROR, (t_err){CMD_NOT_FOUND, argv[0]}, true);
 }

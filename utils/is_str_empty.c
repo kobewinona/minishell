@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   is_str_empty.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/02/12 21:17:01 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/02/12 21:17:02 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void)
+bool	is_empty_str(const char *s)
 {
-	char	*curr_dir;
+	int	i;
 
-	curr_dir = NULL;
-	curr_dir = getcwd(curr_dir, 0);
-	if (!curr_dir)
-		handle_err(ERROR, (t_err){SYSTEM_ERR, PWD}, true);
-	ft_putstr_fd(curr_dir, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(curr_dir);
-	exit(EXIT_SUCCESS);
+	i = 0;
+	if (!s)
+		return (false);
+	while (s[i])
+	{
+		if (!ft_isspace(s[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }

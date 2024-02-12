@@ -45,7 +45,4 @@
 # define MALLOC "malloc"
 # define WRITE "write"
 
-// error messages
-# define CMD_NOT_FOUND "Command not found\n"
-
 #endif

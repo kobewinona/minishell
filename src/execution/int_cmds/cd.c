@@ -24,7 +24,7 @@ static void	handle_home_path(char **res_path, char *path)
 	home_path = getenv("HOME");
 	if (!home_path)
 	{
-		handle_err(ERROR, CD, GETENV, false);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, CD, GETENV}, false);
 		return ;
 	}
 	if (!path)
@@ -47,5 +47,5 @@ void	cd(char *path)
 	if (res_path)
 		free(res_path);
 	if (ret == ERROR)
-		handle_err(ERROR, CD, path, false);
+		handle_err(ERROR, (t_err){SYSTEM_ERR, CD, path}, false);
 }

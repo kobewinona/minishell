@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   tokstr.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/02/12 21:18:14 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/02/12 21:18:15 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void)
+char	*tokstr(int token)
 {
-	char	*curr_dir;
-
-	curr_dir = NULL;
-	curr_dir = getcwd(curr_dir, 0);
-	if (!curr_dir)
-		handle_err(ERROR, (t_err){SYSTEM_ERR, PWD}, true);
-	ft_putstr_fd(curr_dir, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(curr_dir);
-	exit(EXIT_SUCCESS);
+	if (token == REDIR_STDOUT_TOK)
+		return ("`>'\n");
+	if (token == REDIR_STDIN_TOK)
+		return ("`<'\n");
+	if (token == APPEND_STDOUT_TOK)
+		return ("`>>'\n");
+	if (token == HEREDOC_TOK)
+		return ("`<<'\n");
+	if (token == PIPE_TOK)
+		return ("`|'\n");
+	return (NULL);
 }
