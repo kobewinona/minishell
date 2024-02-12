@@ -17,7 +17,7 @@ void	run_cmd(t_cmd *cmd)
 	if (cmd->type == EXEC_CMD)
 		handle_exec(cmd->exec);
 	else if (cmd->type == PIPE_CMD)
-		handle_pipe(cmd->pipe);
+        handle_pipe(cmd->pipe);
 	else if (cmd->type == REDIR_CMD)
 		handle_redir(cmd->redir);
 	else if (cmd->type == HEREDOC)
@@ -43,9 +43,9 @@ int	main(void)
 			add_history(input);
 		handle_cd(input);
 		input_tmp = input;
-//		if (handle_err(fork(), FORK, NULL, false) == 0)
-//			run_cmd(parse_cmd(input_tmp));
-		run_cmd(parse_cmd(input_tmp));
+		if (handle_err(fork(), FORK, NULL, false) == 0)
+			run_cmd(parse_cmd(input_tmp));
+//		run_cmd(parse_cmd(input_tmp));
 		free(input);
 		wait(NULL);
 	}

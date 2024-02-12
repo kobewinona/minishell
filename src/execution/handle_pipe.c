@@ -19,11 +19,22 @@ void	handle_pipe(t_pipe *params)
 	handle_err(pipe(fd), PIPE, NULL, true);
 	if (handle_err(fork(), FORK, NULL, true) == 0)
 	{
+        close(STDOUT_FILENO);
 		handle_err(dup2(fd[1], STDOUT_FILENO), DUP2, NULL, true);
 		close(fd[0]);
+        close(fd[1]);
 		run_cmd(params->from);
 	}
-	handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
-	close(fd[1]);
-	run_cmd(params->to);
+    if (handle_err(fork(), FORK, NULL, true) == 0)
+    {
+        close(STDIN_FILENO);
+        handle_err(dup2(fd[0], STDIN_FILENO), DUP2, NULL, true);
+        close(fd[0]);
+        close(fd[1]);
+        run_cmd(params->to);
+    }
+    close(fd[0]);
+    close(fd[1]);
+    wait(NULL);
+    wait(NULL);
 }
