@@ -29,6 +29,6 @@ void	echo(char **argv)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (is_with_n_flag == false)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);	
 	exit(EXIT_SUCCESS);
 }

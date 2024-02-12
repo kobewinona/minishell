@@ -78,6 +78,9 @@ void	handle_redir(t_redir *params);
 void	handle_heredoc(t_heredoc *params, int output_fd);
 int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
 
+//dolar expansion
+void    expand_dollar(char **arg);
+
 // -src/int_cmds
 void	echo(char **argv);
 void	cd(char *path);
