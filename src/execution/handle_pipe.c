@@ -24,6 +24,7 @@ void	handle_pipe(t_pipe *params)
 		close(fd[0]);
         close(fd[1]);
 		run_cmd(params->from);
+        exit(EXIT_SUCCESS);
 	}
     if (handle_err(fork(), FORK, NULL, true) == 0)
     {
@@ -32,6 +33,7 @@ void	handle_pipe(t_pipe *params)
         close(fd[0]);
         close(fd[1]);
         run_cmd(params->to);
+        exit(EXIT_SUCCESS);
     }
     close(fd[0]);
     close(fd[1]);

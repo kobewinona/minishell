@@ -74,7 +74,7 @@ t_cmd	*parse_pipe(char *input, t_tok_info *tok_info)
 	cmd = parse_exec(smart_strtok(input, "><", &tok_info->curr_tok), tok_info);
 	s = smart_strtok(NULL, "|", &tok_info->curr_tok);
 	if (s)
-		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok_info));
+        cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok_info));
 	return (cmd);
 }
 
