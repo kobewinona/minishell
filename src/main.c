@@ -45,7 +45,7 @@ int	main(void)
 		input_tmp = input;
 		if (handle_err(fork(), FORK, NULL, false) == 0)
 			run_cmd(parse_cmd(input_tmp));
-//		run_cmd(parse_cmd(input_tmp));
+//		run_cmd(parse_cmd(input_tmp)); FOR DEBUG
 		free(input);
 		wait(NULL);
 	}
