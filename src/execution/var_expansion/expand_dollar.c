@@ -25,26 +25,29 @@ bool    is_dollar_there(char *arg)
 
 
 //Naive version
+//For now, only supports this case >> echo $VAR1 $VAR2 
 void    expand_dollar(char **arg)
 {
-    char    *dol_begin;
     char    *var_value;
 
-    dol_begin = ft_strchr(*arg, '$');
-    var_value = getenv(dol_begin);
+    if (**arg == '$')
+    {
+        var_value = getenv((*arg) + 1);
+        *arg = var_value;
+    }
+        
 }
 
 
-t_exec    *replace_dollar_sign(t_exec *cmd)
+void    replace_dollar_sign(char **argv)
 {
     int i;
 
     i = 1;
-    while(cmd->argv[i])
+    while(argv[i])
     {
-        if (is_dollar_there(cmd->argv[i]))
-            expand_dollar(cmd->argv[i]);
+        if (is_dollar_there(argv[i]))
+            expand_dollar(&argv[i]);
         i++;
     }
-    return (cmd);
 }

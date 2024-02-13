@@ -80,6 +80,7 @@ int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
 
 //dolar expansion
 void    expand_dollar(char **arg);
+void    replace_dollar_sign(char **argv);
 
 // -src/int_cmds
 void	echo(char **argv);
