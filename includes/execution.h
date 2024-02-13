@@ -85,7 +85,7 @@ char 	*ft_strslice(const char  *str, int start, int end);
 int 	ft_ind_char(const char *str, char c);
 void    free_array(char **arr);
 void    replace_dollar_sign(char **argv);
-
+bool    is_wraped_single_qtes(char **argv);
 // -src/int_cmds
 void	echo(char **argv);
 void	cd(char *path);

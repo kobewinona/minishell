@@ -12,10 +12,33 @@
 
 #include "minishell.h"
 
-//TODO:
-// make it work fine with any quotes (make expand_dollar work with the whole argv at once)
-// testt
-void    expand_dollar(char **arg)
+
+bool    is_wraped_single_qtes(char **argv) //Implement the same but for local checks
+{
+    char    first_c;
+    char    last_c;
+    int     i;
+    int     j;
+
+    first_c = argv[1][0];
+    i = 1;
+    j = 0;
+    while (argv[i] != NULL)
+        i++;
+    i--;
+    while (argv[i][j])
+        j++;
+    j--;
+    last_c = argv[i][j];
+    printf("first = %c;last=%c\n", first_c, last_c);
+
+    if (first_c == last_c && last_c == '\'')
+        return (false);
+    return (true);
+}
+
+
+void    expand_dollar(char **arg) // Make it add dobule quote at the end as it should
 {
     char    **splitted_arr;
     char    *expanded_str;
@@ -45,11 +68,11 @@ void    expand_dollar(char **arg)
 void    replace_dollar_sign(char **argv)
 {
     int i;
-
+    
     i = 1;
     while(argv[i])
     {
-        if (is_char_there(argv[i], '$'))
+        if (is_char_there(argv[i], '$') )
             expand_dollar(&argv[i]);
         i++;
     }
