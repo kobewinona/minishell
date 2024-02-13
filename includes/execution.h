@@ -80,10 +80,11 @@ int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
 
 //dolar expansion 
 void    expand_dollar(char **arg);
-void    replace_dollar_sign(char **argv);
 bool    is_char_there(char *arg, char c);
 char 	*ft_strslice(const char  *str, int start, int end);
 int 	ft_ind_char(const char *str, char c);
+void    free_array(char **arr);
+void    replace_dollar_sign(char **argv);
 
 // -src/int_cmds
 void	echo(char **argv);
