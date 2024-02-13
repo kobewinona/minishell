@@ -12,17 +12,21 @@
 
 #include "minishell.h"
 
-char	*tokstr(int token)
+char	*tokstr(t_types tok)
 {
-	if (token == REDIR_STDOUT_TOK)
-		return ("`>'\n");
-	if (token == REDIR_STDIN_TOK)
-		return ("`<'\n");
-	if (token == APPEND_STDOUT_TOK)
-		return ("`>>'\n");
-	if (token == HEREDOC_TOK)
-		return ("`<<'\n");
-	if (token == PIPE_TOK)
-		return ("`|'\n");
+	if (tok == T_REDIR_STDOUT)
+		return (">");
+	if (tok == T_REDIR_STDIN)
+		return ("<");
+	if (tok == T_APPEND_STDOUT)
+		return (">>");
+	if (tok == T_HEREDOC)
+		return ("<<");
+	if (tok == T_PIPE)
+		return ("|");
+	if (tok == T_DOUBLE_QUOTE)
+		return ("\"");
+	if (tok == T_SINGLE_QUOTE)
+		return ("\'");
 	return (NULL);
 }

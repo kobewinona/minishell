@@ -16,10 +16,11 @@
 // @ int_cmds = internal commands implemented in this project
 // @ ext_cmds = external builtin commands
 
-# define NAME "minishell"
-# define PROMPT "> "
+# define PRG_NAME "minishell"
+# define INPUT_PROMPT "> "
 
 // magic numbers
+# define UNSPECIFIED -2
 # define ERROR -1
 # define SUCCESS 0
 # define FAILURE 1
@@ -44,5 +45,23 @@
 # define GETENV "getenv"
 # define MALLOC "malloc"
 # define WRITE "write"
+
+// types
+typedef enum e_types
+{
+	T_NO_TOK,
+	T_EXEC,
+	T_PIPE = 124,
+	T_REDIR,
+	T_HEREDOC,
+	T_REDIR_STDOUT = 62,
+	T_REDIR_STDIN = 60,
+	T_APPEND_STDOUT,
+	T_DOUBLE_QUOTE = 34,
+	T_SINGLE_QUOTE = 39,
+	T_SYS_ERR,
+	T_SYNTAX_ERR,
+	T_CMD_NOT_FOUND,
+}	t_types;
 
 #endif

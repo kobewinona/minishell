@@ -12,34 +12,36 @@
 
 #include "parsing.h"
 
-static void	set_curr_tok_type(char *token, t_tok *curr_tok)
+static void	set_curr_tok_type(char **tok, t_types *curr_tok)
 {
-	if (*token == '>')
+	if (**tok == '>')
 	{
-		if (*(token + 1) == '>')
+		if (*(*tok + 1) == '>')
 		{
-			*curr_tok = APPEND_STDOUT_TOK;
-			(*token)++;
+			*curr_tok = T_APPEND_STDOUT;
+			**tok = ' ';
+			(*tok)++;
 			return ;
 		}
-		*curr_tok = REDIR_STDOUT_TOK;
+		*curr_tok = T_REDIR_STDOUT;
 		return ;
 	}
-	if (*token == '<')
+	if (**tok == '<')
 	{
-		if (*(token + 1) == '<')
+		if (*(*tok + 1) == '<')
 		{
-			*curr_tok = HEREDOC_TOK;
-			(*token)++;
+			*curr_tok = T_HEREDOC;
+			**tok = ' ';
+			(*tok)++;
 			return ;
 		}
-		*curr_tok = REDIR_STDIN_TOK;
+		*curr_tok = T_REDIR_STDIN;
 		return ;
 	}
-	*curr_tok = NO_TOK;
+	*curr_tok = T_NO_TOK;
 }
 
-static void	update_end(char *start, char **end, const char *sep, t_tok *tok)
+static void	update_end(char *start, char **end, const char *sep, t_types *tok)
 {
 	bool	is_in_single_quotes;
 	bool	is_in_double_quotes;
@@ -57,23 +59,19 @@ static void	update_end(char *start, char **end, const char *sep, t_tok *tok)
 		else if (!is_in_single_quotes && !is_in_double_quotes
 			&& ft_strchr(sep, **end))
 		{
-			end_trimmed = ft_strtrim(*end, " ");
-			set_curr_tok_type(end_trimmed, tok);
-			free(end_trimmed);
+			set_curr_tok_type(end, tok);
 			break ;
 		}
 		(*end)++;
 	}
 }
 
-static char	*get_tok(char **stash, const char *sep, t_tok *tok)
+static char	*get_tok(char **stash, const char *sep, t_types *tok)
 {
 	char	*start;
 	char	*end;
 
 	start = *stash;
-//	while (*start && ft_strchr(sep, *start))
-//		start++;
 	if (*start == '\0')
 	{
 		*stash = start;
@@ -83,7 +81,7 @@ static char	*get_tok(char **stash, const char *sep, t_tok *tok)
 	if (*end)
 	{
 		if (*end == '|')
-			*tok = PIPE_TOK;
+			*tok = T_PIPE;
 		*end = '\0';
 		*stash = end + 1;
 	}
@@ -93,7 +91,7 @@ static char	*get_tok(char **stash, const char *sep, t_tok *tok)
 }
 
 char	*smart_strtok(char *restrict str,
-		const char *restrict sep, t_tok *tok)
+		const char *restrict sep, t_types *tok)
 {
 	static char	*pipe_stash;
 	static char	*redir_stash;
@@ -103,7 +101,7 @@ char	*smart_strtok(char *restrict str,
 		if (str)
 			pipe_stash = str;
 		else
-			*tok = NO_TOK;
+			*tok = T_NO_TOK;
 		if (!pipe_stash || *pipe_stash == '\0')
 			return (NULL);
 		return (get_tok(&pipe_stash, sep, tok));
@@ -111,7 +109,7 @@ char	*smart_strtok(char *restrict str,
 	if (str)
 		redir_stash = str;
 	else
-		*tok = NO_TOK;
+		*tok = T_NO_TOK;
 	if (!redir_stash || *redir_stash == '\0')
 		return (NULL);
 	return (get_tok(&redir_stash, sep, tok));

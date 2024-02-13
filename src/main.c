@@ -14,16 +14,16 @@
 
 void	run_cmd(t_cmd *cmd)
 {
-	if (cmd->type == EXEC_CMD)
+	if (cmd->type == T_EXEC)
 		handle_exec(cmd->exec);
-	else if (cmd->type == PIPE_CMD)
+	else if (cmd->type == T_PIPE)
 		handle_pipe(cmd->pipe);
-	else if (cmd->type == REDIR_CMD)
+	else if (cmd->type == T_REDIR)
 		handle_redir(cmd->redir);
-	else if (cmd->type == HEREDOC)
-		handle_heredoc(cmd->heredoc, -1);
+	else if (cmd->type == T_HEREDOC)
+		handle_heredoc(cmd->heredoc, UNSPECIFIED);
 	else
-		handle_err(ERROR, (t_err){SYSTEM_ERR}, true);
+		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
 }
 
 int	main(void)
@@ -34,7 +34,7 @@ int	main(void)
 
 	while (1)
 	{
-		input_prompt = ft_strjoin(NAME, PROMPT);
+		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
 		input = readline(input_prompt);
 		free(input_prompt);
 		if (!input)
@@ -43,9 +43,9 @@ int	main(void)
 			add_history(input);
 		handle_cd(input);
 		input_tmp = input;
-		if (handle_err(fork(), (t_err) {SYSTEM_ERR, FORK}, false) == 0)
-			run_cmd(parse_cmd(input_tmp));
-//		run_cmd(parse_cmd(input_tmp));
+//		if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, false) == 0)
+//			run_cmd(parse_cmd(input_tmp));
+		run_cmd(parse_cmd(input_tmp)); // for debugging
 		free(input);
 		wait(NULL);
 	}

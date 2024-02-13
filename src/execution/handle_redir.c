@@ -20,19 +20,19 @@ void	handle_redir(t_redir *params)
 
 	redir_fd = STDOUT_FILENO;
 	new_fd = handle_err(open(params->file, params->mode, RW_R_R_PERM),
-						(t_err){SYSTEM_ERR, NULL, params->file}, true);
-	if (params->type == REDIR_STDIN)
+			(t_err){T_SYS_ERR, NULL, params->file}, true);
+	if (params->type == T_REDIR_STDIN)
 		redir_fd = STDIN_FILENO;
-	if (params->subcmd->type == HEREDOC)
+	if (params->subcmd->type == T_HEREDOC)
 		return (handle_heredoc(params->subcmd->heredoc, new_fd));
 	org_stdout = handle_err(dup(redir_fd),
-							(t_err){SYSTEM_ERR, DUP, NULL}, true);
+			(t_err){T_SYS_ERR, DUP, NULL}, true);
 	handle_err(dup2(new_fd, redir_fd),
-			   (t_err){SYSTEM_ERR, DUP2, NULL}, true);
+		(t_err){T_SYS_ERR, DUP2, NULL}, true);
 	run_cmd(params->subcmd);
 	close(new_fd);
 	handle_err(dup2(org_stdout, redir_fd),
-			   (t_err){SYSTEM_ERR, DUP2, NULL}, true);
+		(t_err){T_SYS_ERR, DUP2, NULL}, true);
 	close(org_stdout);
 	exit(EXIT_SUCCESS);
 }

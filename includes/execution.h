@@ -14,26 +14,10 @@
 # define EXECUTION_H
 # include "minishell.h"
 
-// types
-typedef enum e_cmd_type
-{
-	EXEC_CMD,
-	PIPE_CMD,
-	REDIR_CMD,
-	HEREDOC,
-}	t_cmd_type;
-
-typedef enum e_redir_type
-{
-	REDIR_STDOUT,
-	REDIR_STDIN,
-	APPEND_STDOUT,
-}	t_redir_type;
-
 // structs
 typedef struct s_cmd
 {
-	t_cmd_type	type;
+	t_types	type;
 	union
 	{
 		struct s_exec		*exec;
@@ -56,10 +40,10 @@ typedef struct s_pipe
 
 typedef struct s_redir
 {
-	t_redir_type	type;
-	t_cmd			*subcmd;
-	char			*file;
-	int				mode;
+	t_types	type;
+	t_cmd	*subcmd;
+	char	*file;
+	int		mode;
 }	t_redir;
 
 typedef struct s_heredoc
@@ -68,30 +52,23 @@ typedef struct s_heredoc
 	char			*eof;
 }	t_heredoc;
 
-typedef enum e_err_type
-{
-	SYSTEM_ERR = 0,
-	SYNTAX_ERR = 2,
-	CMD_NOT_FOUND = 127,
-}	t_err_type;
-
 typedef struct s_err
 {
-	t_err_type	type;
-	char		*context1;
-	char		*context2;
+	t_types	type;
+	char	*ctx1;
+	char	*ctx2;
 }	t_err;
 
 // functions
 void		run_cmd(t_cmd *cmd);
 void		handle_ext_cmd(char **argv);
 void		handle_cd(const char *input);
-void		handle_exec(t_exec *params);
+void		handle_exec(t_exec *cmd);
 void		handle_pipe(t_pipe *params);
 void		handle_redir(t_redir *params);
 void		handle_heredoc(t_heredoc *params, int output_fd);
 
-int			handle_err(int res, t_err err, int is_on_exit);
+int			handle_err(int res, t_err err, bool is_on_exit);
 
 // -src/int_cmds
 void		echo(char **argv);

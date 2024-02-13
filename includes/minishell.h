@@ -29,8 +29,7 @@
 # include "parsing.h"
 
 // utils
-bool	is_empty_str(const char *s);
-char	*tokstr(int token);
-
+bool	is_emptystr(const char *s);
+char	*tokstr(t_types tok);
 
 #endif

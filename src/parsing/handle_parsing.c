@@ -20,64 +20,81 @@ char	*parse_file(char *s)
 	file = NULL;
 	if (*s == '\"')
 	{
-		if (ft_strchr((s + 1), '\"'))
+		if (ft_strchr((++s), '\"'))
+		{
 			file = ft_strtrim(s, "\"");
+			if (!file)
+				handle_err(ERROR, (t_err){T_SYS_ERR, NULL, MALLOC}, true);
+		}
 	}
 	else
 	{
 		s_split = ft_split(s, ' ');
 		if (!s_split)
-			return (NULL);
+			handle_err(ERROR, (t_err){T_SYS_ERR, NULL, MALLOC}, true);
 		file = s_split[0];
 	}
 	return (file);
 }
 
-t_cmd	*parse_redir(char *s, t_tok_info *tok_info)
+t_cmd	*parse_redir(char *s, t_types *tok)
 {
 	t_cmd	*cmd;
+	char	*file;
+	t_types	redir_type;
 
-	if (tok_info->curr_tok != NO_TOK && tok_info->curr_tok != PIPE_TOK)
+	if (*tok != T_NO_TOK && *tok != T_PIPE)
 	{
-		if (tok_info->curr_tok == REDIR_STDOUT_TOK)
-			cmd = constr_redir_cmd(REDIR_STDOUT, NULL, NULL);
-		if (tok_info->curr_tok == REDIR_STDIN_TOK)
-			cmd = constr_redir_cmd(REDIR_STDIN, NULL, NULL);
-		if (tok_info->curr_tok == APPEND_STDOUT_TOK)
-			cmd = constr_redir_cmd(APPEND_STDOUT, NULL, NULL);
-		s = smart_strtok(NULL, "><", &tok_info->curr_tok);
-		if (is_empty_str(s))
-			handle_err(ERROR, (t_err){SYNTAX_ERR,
-				tokstr(tok_info->curr_tok)}, true);
-		cmd->redir->file = parse_file(ft_strtrim(s, " "));
+		redir_type = *tok;
+		s = smart_strtok(NULL, "><", tok);
+		file = parse_file(ft_strtrim(s, " "));
+		if (is_emptystr(s))
+			handle_err(ERROR, (t_err){T_SYNTAX_ERR, UNEXPECTED_TOK_MSG,
+				tokstr(*tok)}, true);
+		cmd = constr_redir_cmd(redir_type, NULL, file);
 		return (cmd);
 	}
 	return (NULL);
 }
 
-t_cmd	*parse_exec(char *input, t_tok_info *tok_info)
+t_cmd	*parse_exec(char *input, t_types *tok)
 {
 	t_cmd			*cmd;
 
-	if (tok_info->curr_tok == NO_TOK || tok_info->curr_tok == PIPE_TOK)
+	if (*tok == T_NO_TOK || *tok == T_PIPE)
 		cmd = constr_exec_cmd(input);
 	else
 	{
-		cmd = parse_redir(input, tok_info);
-		cmd->redir->subcmd = parse_exec(input, tok_info);
+		cmd = parse_redir(input, tok);
+		cmd->redir->subcmd = parse_exec(input, tok);
 	}
 	return (cmd);
 }
 
-t_cmd	*parse_pipe(char *input, t_tok_info *tok_info)
+//t_cmd	*parse_pipe(char *input, t_tok_info *tok_info)
+//{
+//	t_cmd	*cmd;
+//	char	*s;
+//
+//	s = smart_strtok(input, "><", &tok_info->curr_tok);
+//	if (is_emptystr(s) && tok_info->curr_tok == REDIR_STDIN_TOK)
+//		s = smart_strtok(NULL, "><", &tok_info->curr_tok);
+//	cmd = parse_exec(s, tok_info);
+//	s = smart_strtok(NULL, "|", &tok_info->curr_tok);
+//	if (s)
+//		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok_info));
+//	return (cmd);
+//}
+
+t_cmd	*parse_pipe(char *input, t_types *tok)
 {
 	t_cmd	*cmd;
 	char	*s;
 
-	cmd = parse_exec(smart_strtok(input, "><", &tok_info->curr_tok), tok_info);
-	s = smart_strtok(NULL, "|", &tok_info->curr_tok);
+	cmd = parse_exec(smart_strtok(input, "><", tok), tok);
+	s = smart_strtok(NULL, "|", tok);
 	if (s)
-		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok_info));
+		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok));
 	return (cmd);
 }
 
@@ -85,15 +102,15 @@ t_cmd	*parse_pipe(char *input, t_tok_info *tok_info)
 t_cmd	*parse_cmd(char *input)
 {
 	t_cmd		*cmd;
-	t_tok_info	tok_info;
+	t_types		tok;
 	char		*s;
 
 	cmd = NULL;
-	tok_info.curr_tok = NO_TOK;
-	s = smart_strtok(input, "|", &tok_info.curr_tok);
-	if (is_empty_str(s))
-		handle_err(ERROR, (t_err){SYNTAX_ERR,
-			tokstr(tok_info.curr_tok)}, true);
-	cmd = parse_pipe(s, &tok_info);
+	tok = T_NO_TOK;
+	s = smart_strtok(input, "|", &tok);
+	if (is_emptystr(s))
+		handle_err(ERROR, (t_err){T_SYNTAX_ERR, UNEXPECTED_TOK_MSG,
+			tokstr(tok)}, true);
+	cmd = parse_pipe(s, &tok);
 	return (cmd);
 }

@@ -19,7 +19,7 @@ void	pwd(void)
 	curr_dir = NULL;
 	curr_dir = getcwd(curr_dir, 0);
 	if (!curr_dir)
-		handle_err(ERROR, (t_err){SYSTEM_ERR, PWD}, true);
+		handle_err(ERROR, (t_err){T_SYS_ERR, PWD}, true);
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	free(curr_dir);
