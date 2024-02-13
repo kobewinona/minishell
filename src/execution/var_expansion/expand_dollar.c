@@ -12,11 +12,9 @@
 
 #include "minishell.h"
 
-
-
-//Naive version
-//For now, only supports this case >> echo $VAR1 $VAR2 
-// and this case >> echo hello$VAR1 somewords$VAR2
+//TODO:
+// make it work fine with any quotes (make expand_dollar work with the whole argv at once)
+// testt
 void    expand_dollar(char **arg)
 {
     char    **splitted_arr;
@@ -34,7 +32,7 @@ void    expand_dollar(char **arg)
     }
     while (splitted_arr[i])
     {
-        value = getenv(splitted_arr[i]);
+        value = getenv(ft_strtrim(splitted_arr[i], "\""));
         if (value)
             expanded_str = ft_strjoin(expanded_str, value);
         i++;
