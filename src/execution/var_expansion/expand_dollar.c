@@ -12,29 +12,20 @@
 
 #include "minishell.h"
 
-bool    is_dollar_there(char *arg)
-{
-    while (*arg)
-    {
-        if (*arg == '$')
-            return (true);
-        arg++;
-    }
-    return (false);
-}
 
 
 //Naive version
 //For now, only supports this case >> echo $VAR1 $VAR2 
+// and this case >> echo hello$VAR1 somewords$VAR2
 void    expand_dollar(char **arg)
 {
     char    *var_value;
+    char    *expanded_arg;
 
-    if (**arg == '$')
-    {
-        var_value = getenv((*arg) + 1);
-        *arg = var_value;
-    }
+    expanded_arg = ft_strjoin(ft_strslice(*arg, 0, ft_ind_char(*arg, '$')),
+        getenv((*arg) + ft_ind_char(*arg, '$') + 1));
+
+    *arg = expanded_arg;
         
 }
 
@@ -46,7 +37,7 @@ void    replace_dollar_sign(char **argv)
     i = 1;
     while(argv[i])
     {
-        if (is_dollar_there(argv[i]))
+        if (is_char_there(argv[i], '$'))
             expand_dollar(&argv[i]);
         i++;
     }
