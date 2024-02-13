@@ -14,8 +14,6 @@
 # define MINISHELL_H
 # include "../libs/libft/includes/libft.h"
 # include "constants.h"
-# include "execution.h"
-# include "parsing.h"
 # include <stdio.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -27,6 +25,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <errno.h>
-
+# include "execution.h"
+# include "parsing.h"
 
 #endif

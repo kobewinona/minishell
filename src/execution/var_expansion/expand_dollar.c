@@ -19,14 +19,28 @@
 // and this case >> echo hello$VAR1 somewords$VAR2
 void    expand_dollar(char **arg)
 {
-    char    *var_value;
-    char    *expanded_arg;
+    char    **splitted_arr;
+    char    *expanded_str;
+    char    *value;
+    int     i;
 
-    expanded_arg = ft_strjoin(ft_strslice(*arg, 0, ft_ind_char(*arg, '$')),
-        getenv((*arg) + ft_ind_char(*arg, '$') + 1));
-
-    *arg = expanded_arg;
-        
+    splitted_arr = ft_split(*arg, '$');
+    expanded_str = "";
+    i = 0;
+    if (**arg != '$')
+    {
+        expanded_str = splitted_arr[0];
+        i++;
+    }
+    while (splitted_arr[i])
+    {
+        value = getenv(splitted_arr[i]);
+        if (value)
+            expanded_str = ft_strjoin(expanded_str, value);
+        i++;
+    }
+    *arg = expanded_str;
+    free_array(splitted_arr);
 }
 
 
