@@ -96,11 +96,10 @@ char 	*ft_strslice(const char  *str, int start, int end);
 int 	ft_ind_char(const char *str, char c);
 void    free_array(char **arr);
 void    replace_dollar_sign(char **argv);
-
+    printf("Splitted arr[1] = %s\n", splitted_arr[1]);
 
 //working with ENV
 void    append_var_node(t_var_node **head, char *key_val_str);
-
 
 // -src/int_cmds
 void	echo(char **argv);

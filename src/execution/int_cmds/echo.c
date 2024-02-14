@@ -21,10 +21,15 @@ void	echo(char **argv)
 
 	i = 1;
 	
+	if (is_wraped_single_qtes(argv))
+	{	
+		printf("GOT HERE\n");
+		replace_dollar_sign(argv);
+	}
 	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
-	replace_dollar_sign(argv);//DONT'FORGET TO REMOVE
+	
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);
