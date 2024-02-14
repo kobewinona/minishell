@@ -68,6 +68,17 @@ typedef struct s_heredoc
 	char			*eof;
 }	t_heredoc;
 
+typedef struct s_var_node
+{
+	char				*name;
+	char				*value;
+	bool				is_numeric;
+	bool				deleted;
+	struct s_var_node	*next;
+
+}	t_var_node;
+
+
 // functions
 void	run_cmd(t_cmd *cmd);
 void	handle_ext_cmd(char **argv);
@@ -85,6 +96,11 @@ char 	*ft_strslice(const char  *str, int start, int end);
 int 	ft_ind_char(const char *str, char c);
 void    free_array(char **arr);
 void    replace_dollar_sign(char **argv);
+
+
+//working with ENV
+void    append_var_node(t_var_node **head, char *key_val_str);
+
 
 // -src/int_cmds
 void	echo(char **argv);
