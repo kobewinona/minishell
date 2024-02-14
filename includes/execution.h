@@ -96,13 +96,12 @@ char 	*ft_strslice(const char  *str, int start, int end);
 int 	ft_ind_char(const char *str, char c);
 void    free_array(char **arr);
 void    replace_dollar_sign(char **argv);
-
+    printf("Splitted arr[1] = %s\n", splitted_arr[1]);
 
 //working with ENV
 void    append_var_node(t_var_node **head, char *key_val_str);
 char    *get_env_var(t_var_node **env_vars, char *varname);
 void    set_var_deleted(t_var_node **env_vars, char *varname);
-
 
 // -src/int_cmds
 void	echo(char **argv);
