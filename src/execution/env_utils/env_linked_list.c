@@ -53,3 +53,53 @@ void    append_var_node(t_var_node **head, char *key_val_str)
         
     }
 }
+
+char    *get_env_var(t_var_node *head, char *varname)
+{
+    t_var_node  *curr;
+
+    curr = head;
+    while (curr)
+    {
+        if (!((ft_strncmp(varname, curr->name, ft_strlen(varname)))  | curr->deleted))
+        {
+            return (curr->value);
+        }
+        curr = curr->next;
+    }
+    return (NULL);
+}
+
+void    set_var_deleted(t_var_node *head, char *varname)
+{
+    t_var_node  *curr;
+
+    curr = head;
+    while (curr)
+    {
+        //if (!(ft_strncmp(varname, curr->name, ft_strlen(varname))))
+        if (!(ft_strncmp(varname, curr->name, 5000)))
+        {
+            
+            curr->deleted = true; 
+        }
+        curr = curr->next;
+    }
+    
+}
+
+t_var_node  *copy_env_vars(char **envp)
+{
+    int             i;
+    t_var_node      *head;
+
+    i = 1;
+    head = create_var_node(envp[i]);
+    head = NULL;
+    while (envp[i])
+    {
+        append_var_node(&head, envp[i]);
+        i++;
+    }
+    return (head);
+}
