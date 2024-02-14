@@ -17,11 +17,10 @@ void	pwd(void)
 	char	*curr_dir;
 
 	curr_dir = NULL;
-	curr_dir = getcwd(curr_dir, 0);
+	curr_dir = getenv("PWD");
 	if (!curr_dir)
 		handle_err(ERROR, PWD, NULL, true);
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(curr_dir);
 	exit(EXIT_SUCCESS);
 }
