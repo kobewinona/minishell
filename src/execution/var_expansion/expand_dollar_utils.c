@@ -23,19 +23,6 @@ bool    is_char_there(char *arg, char c)
     return (false);
 }
 
-void    free_array(char **arr)
-{
-    char **temp;
-
-    temp = arr;
-    while (*arr)
-    {
-        free(*arr);
-        arr++;
-    }
-    free(temp);
-}
-
 char *ft_strslice(const char  *str, int start, int end)
 {
     char    *slice;

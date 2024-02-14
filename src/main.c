@@ -26,7 +26,7 @@ void	run_cmd(t_cmd *cmd)
 		handle_err(ERROR, NULL, NULL, true);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	char	*input_prompt;
@@ -43,9 +43,9 @@ int	main(void)
 			add_history(input);
 		handle_cd(input);
 		input_tmp = input;
-		if (handle_err(fork(), FORK, NULL, false) == 0)
-			run_cmd(parse_cmd(input_tmp));
-//		run_cmd(parse_cmd(input_tmp)); FOR DEBUG
+		// if (handle_err(fork(), FORK, NULL, false) == 0)
+		// 	run_cmd(parse_cmd(input_tmp));
+		run_cmd(parse_cmd(input_tmp)); //FOR DEBUG
 		free(input);
 		wait(NULL);
 	}
