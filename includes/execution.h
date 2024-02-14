@@ -101,6 +101,7 @@ void    replace_dollar_sign(char **argv);
 //working with ENV
 void    append_var_node(t_var_node **head, char *key_val_str);
 char    *get_env_var(t_var_node **env_vars, char *varname);
+void    set_var_deleted(t_var_node **env_vars, char *varname);
 
 
 // -src/int_cmds

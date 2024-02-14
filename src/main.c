@@ -63,20 +63,18 @@ int main(int argc, char **argv, char **envp)
     env_vars = NULL;
     while (envp[i])
     {
-        printf("%s\n", envp[i]);
+        //printf("%s\n", envp[i]);
         append_var_node(&env_vars, envp[i]);
         i++;
     }
-    // while (env_vars->next)
-    // {
-    //     printf("name:%s; value:%s\n", env_vars->name, env_vars->value);
-    //     env_vars = env_vars->next;
-    // }    
+  
     
-
     printf("home = %s\n", get_env_var(&env_vars, "HOME"));
     printf("shell = %s\n", get_env_var(&env_vars, "SHELL"));
     printf("user = %s\n", get_env_var(&env_vars, "USER"));
-    printf("user = %s\n", get_env_var(&env_vars, "HUI"));
+    set_var_deleted(&env_vars, "USER");
+    char *res = get_env_var(&env_vars, "USER");
+    printf("result = %s\n", res);
+
     return (0);
 }
