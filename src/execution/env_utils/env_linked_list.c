@@ -54,16 +54,15 @@ void    append_var_node(t_var_node **head, char *key_val_str)
     }
 }
 
-char    *get_env_var(t_var_node **head, char *varname)
+char    *get_env_var(t_var_node *head, char *varname)
 {
     t_var_node  *curr;
 
-    curr = *head;
+    curr = head;
     while (curr)
     {
         if (!((ft_strncmp(varname, curr->name, ft_strlen(varname)))  | curr->deleted))
         {
-            printf("deleted = %d\n", curr->deleted);
             return (curr->value);
         }
         curr = curr->next;
@@ -71,20 +70,18 @@ char    *get_env_var(t_var_node **head, char *varname)
     return (NULL);
 }
 
-void    set_var_deleted(t_var_node **head, char *varname)
+void    set_var_deleted(t_var_node *head, char *varname)
 {
     t_var_node  *curr;
 
-    curr = *head;
+    curr = head;
     while (curr)
     {
-        if (!(ft_strncmp(varname, curr->name, ft_strlen(varname))))
+        //if (!(ft_strncmp(varname, curr->name, ft_strlen(varname))))
+        if (!(ft_strncmp(varname, curr->name, 5000)))
         {
             
-            curr->deleted = true;
-
-            printf("var = %s; deleted = %d\n", curr->value, curr->deleted);
-            return ;
+            curr->deleted = true; 
         }
         curr = curr->next;
     }
