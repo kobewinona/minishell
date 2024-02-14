@@ -53,26 +53,23 @@ void	run_cmd(t_cmd *cmd)
 // }
 
 
-//Testing linked lists for env
+// //Testing linked lists for env
 int main(int argc, char **argv, char **envp)
 {
     t_var_node *head;
-    int i;
 
-    i = 0;
-    head = NULL;
-    while (envp[i])
-    {
-        printf("%s\n", envp[i]);
-        append_var_node(&head, envp[i]);
-        i++;
-    }
-    while (head->next)
-    {
-        printf("name:%s; value:%s\n", head->name, head->value);
-        head = head->next;
-    }
+    head = copy_env_vars(envp);
     
+    
+    printf("user = %s\n", get_env_var(&head, "USER"));
+   
+    set_var_deleted(&head, "USER");
+    
+
+    printf("user after = %s\n", get_env_var(&head, "USER"));
+    
+
+
     return (0);
 
 }
