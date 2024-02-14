@@ -56,23 +56,27 @@ void	run_cmd(t_cmd *cmd)
 //Testing linked lists for env
 int main(int argc, char **argv, char **envp)
 {
-    t_var_node *head;
+    t_var_node *env_vars;
     int i;
 
     i = 0;
-    head = NULL;
+    env_vars = NULL;
     while (envp[i])
     {
         printf("%s\n", envp[i]);
-        append_var_node(&head, envp[i]);
+        append_var_node(&env_vars, envp[i]);
         i++;
     }
-    while (head->next)
-    {
-        printf("name:%s; value:%s\n", head->name, head->value);
-        head = head->next;
-    }
+    // while (env_vars->next)
+    // {
+    //     printf("name:%s; value:%s\n", env_vars->name, env_vars->value);
+    //     env_vars = env_vars->next;
+    // }    
     
-    return (0);
 
+    printf("home = %s\n", get_env_var(&env_vars, "HOME"));
+    printf("shell = %s\n", get_env_var(&env_vars, "SHELL"));
+    printf("user = %s\n", get_env_var(&env_vars, "USER"));
+    printf("user = %s\n", get_env_var(&env_vars, "HUI"));
+    return (0);
 }
