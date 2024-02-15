@@ -12,83 +12,62 @@
 
 #include "minishell.h"
 
-static void	*cleanup_argv_on_exit(char **argv)
+static void	nullterminate(char **s, int end, char end_chr)
 {
-	int	index;
-
-	index = 0;
-	while (argv[index])
+	if (end_chr != ' ' && (*s)[end] != end_chr)
+		handle_err(ERROR, (t_err){T_SYNTAX_ERR,
+			UNEXPECTED_EOF_MSG, tokstr(end_chr)}, true);
+	if ((*s)[end] == end_chr)
 	{
-		free(argv[index]);
-		index++;
+		(*s)[end] = '\0';
+		end++;
 	}
-	free(argv);
-	return (NULL);
-}
-
-static void	update_end(char *s, int *end, char end_chr)
-{
-	while (s[*end] && s[*end] != end_chr)
-		(*end)++;
-	if (end_chr != '\0' && end_chr != ' ')
+	(*s) += end;
+	if (end_chr == T_DOUBLE_QUOTE || end_chr == T_SINGLE_QUOTE)
 	{
-		if (s[*end] != end_chr)
-			handle_err(ERROR, (t_err){T_SYNTAX_ERR, UNEXPECTED_EOF_MSG,
-				tokstr(end_chr)}, true);
+		if ((**s) == end_chr)
+			(*s) += 1;
 	}
 }
 
-static size_t	get_value(char **dest, char *s)
+
+char	*get_value(char **s)
 {
-	int		start;
+	char	*value;
+	char	end_chr;
 	int		end;
-	char	quote_tok;
 
-	start = 0;
-	end = start;
-	quote_tok = '\0';
-	if (s[end] == '\"' || s[end] == '\'')
+	end_chr = ' ';
+	end = 0;
+	while (**s && ft_isspace(**s))
+		(*s)++;
+	value = (*s);
+	if (**s == T_DOUBLE_QUOTE || **s == T_SINGLE_QUOTE)
 	{
-		quote_tok = s[end++];
-		start = end;
-		update_end(s, &end, quote_tok);
+		end_chr = *(*s)++;
+		end++;
 	}
-	else
-		update_end(s, &end, ' ');
-	*dest = ft_substr(s, start, (end - start));
-	if (!*dest)
-		handle_err(ERROR, (t_err){T_SYS_ERR, NULL, MALLOC}, true);
-	*dest = ft_strtrim(*dest, "\"\'");
-	if (quote_tok != '\0')
-		return (end + 1);
-	return (end);
+	while ((*s)[end])
+	{
+		if ((*s)[end] == end_chr)
+			break ;
+		end++;
+	}
+	nullterminate(s, end, end_chr);
+	return (value);
 }
 
-char	**parse_argv(char *input)
+void	populate_argv(char **argv, char *input)
 {
-	char	**argv;
 	int		index;
 
 	if (!input)
-		return (NULL);
-	argv = (char **)malloc(sizeof(char *) * 1);
-	if (!argv)
-		handle_err(ERROR, (t_err){T_SYNTAX_ERR, NULL, MALLOC}, true);
+		return ;
 	index = 0;
-	while (*input)
+	while (!is_emptystr(input))
 	{
-		while (*input && ft_isspace(*input))
-			input++;
-		if (*input != '\0')
-		{
-			input += get_value(&argv[index], input);
-			if (!argv[index] && index == 0)
-				return (cleanup_argv_on_exit(argv));
-			index++;
-			argv = ft_realloc(argv, sizeof(char *) * index,
-					sizeof(char *) * (index + 1));
-		}
+		argv[index] = get_value(&input);
+		argv[index] = ft_strtrim(argv[index], "\"\'");
+		index++;
 	}
-	argv[index] = NULL;
-	return (argv);
 }

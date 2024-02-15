@@ -12,23 +12,31 @@
 
 #include "minishell.h"
 
+static void	handle_exit(bool is_on_exit, int err_num)
+{
+	if (is_on_exit)
+	{
+		clear_history();
+		exit(err_num);
+	}
+}
+
 static int	handle_parsing_err(t_err err, bool is_on_exit)
 {
 	int	org_fd;
 
 	org_fd = handle_err(dup(STDOUT_FILENO),
-			(t_err){T_SYS_ERR, DUP}, true);
+			(t_err){T_SYS_ERR, DUP}, false);
 	handle_err(dup2(STDERR_FILENO, STDOUT_FILENO),
-		(t_err){T_SYS_ERR, DUP2}, true);
+		(t_err){T_SYS_ERR, DUP2}, false);
 	if (err.type == T_SYNTAX_ERR)
 		printf("%s: %s `%s'\n", PRG_NAME, err.ctx1, err.ctx2);
 	if (err.type == T_CMD_NOT_FOUND)
 		printf("%s: %s: %s\n", PRG_NAME, err.ctx1, CMD_NOT_FOUND_MSG);
 	handle_err(dup2(STDOUT_FILENO, STDERR_FILENO),
-		(t_err){T_SYS_ERR, DUP2}, true);
+		(t_err){T_SYS_ERR, DUP2}, false);
 	close(org_fd);
-	if (is_on_exit)
-		exit(err.type);
+	handle_exit(is_on_exit, err.type);
 }
 
 int	handle_err(int res, t_err err, bool is_on_exit)
@@ -39,9 +47,8 @@ int	handle_err(int res, t_err err, bool is_on_exit)
 		{
 			ft_putstr_fd(PRG_NAME, STDERR_FILENO);
 			ft_putstr_fd(": ", STDERR_FILENO);
-			perror(err.ctx2);
-			if (is_on_exit)
-				exit(errno);
+			perror(err.ctx1);
+			handle_exit(is_on_exit, errno);
 		}
 		handle_parsing_err(err, is_on_exit);
 	}

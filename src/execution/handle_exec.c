@@ -14,15 +14,16 @@
 
 void	handle_exec(t_exec *cmd)
 {
-	if (!cmd->argv)
-		return ;
-	if (ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+	if (cmd->argv[0])
 	{
-		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(cmd->argv);
-		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-			pwd();
-		else
-			handle_ext_cmd(cmd->argv);
+		if (ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+		{
+			if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
+				echo(cmd->argv);
+			else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
+				pwd();
+			else
+				handle_ext_cmd(cmd->argv);
+		}
 	}
 }

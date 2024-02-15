@@ -15,13 +15,13 @@
 void	run_cmd(t_cmd *cmd)
 {
 	if (cmd->type == T_EXEC)
-		handle_exec(cmd->exec);
+		handle_exec(&(cmd->exec));
 	else if (cmd->type == T_PIPE)
-		handle_pipe(cmd->pipe);
+		handle_pipe(&(cmd->pipe));
 	else if (cmd->type == T_REDIR)
-		handle_redir(cmd->redir);
+		handle_redir(&(cmd->redir));
 	else if (cmd->type == T_HEREDOC)
-		handle_heredoc(cmd->heredoc, UNSPECIFIED);
+		handle_heredoc(&(cmd->heredoc), UNSPECIFIED);
 	else
 		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
 }
@@ -43,11 +43,12 @@ int	main(void)
 			add_history(input);
 		handle_cd(input);
 		input_tmp = input;
-//		if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, false) == 0)
+//		if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)
 //			run_cmd(parse_cmd(input_tmp));
-		run_cmd(parse_cmd(input_tmp)); // for debugging
-		free(input);
+		run_cmd(parse_cmd(input_tmp));
 		wait(NULL);
+		free(input);
 	}
+	clear_history();
 	return (EXIT_SUCCESS);
 }
