@@ -28,34 +28,34 @@ t_cmd	*parse_redir(char *s, t_types *tok)
 	return (cmd);
 }
 
-t_cmd	*parse_exec(char *input, t_types *tok)
+t_cmd	*parse_exec(char *input, t_types *tok, char **envp)
 {
 	t_cmd	*cmd;
 
 	if (*tok == T_NO_TOK || *tok == T_PIPE)
-		cmd = constr_exec_cmd(input);
+		cmd = constr_exec_cmd(input, envp);
 	else
 	{
 		cmd = parse_redir(input, tok);
-		cmd->redir.subcmd = parse_exec(input, tok);
+		cmd->redir.subcmd = parse_exec(input, tok, envp);
 	}
 	return (cmd);
 }
 
-t_cmd	*parse_pipe(char *input, t_types *tok)
+t_cmd	*parse_pipe(char *input, t_types *tok, char **envp)
 {
 	t_cmd	*cmd;
 	char	*s;
 
-	cmd = parse_exec(smart_strtok(input, "><", tok), tok);
+	cmd = parse_exec(smart_strtok(input, "><", tok), tok, envp);
 	s = smart_strtok(NULL, "|", tok);
 	if (s)
-		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok));
+		cmd = constr_pipe_cmd(cmd, parse_pipe(s, tok, envp));
 	return (cmd);
 }
 
 // TODO maybe add handling of `ls |`
-t_cmd	*parse_cmd(char *input)
+t_cmd	*parse_cmd(char *input, char **envp)
 {
 	t_cmd		*cmd;
 	t_types		tok;
@@ -66,6 +66,6 @@ t_cmd	*parse_cmd(char *input)
 	if (is_emptystr(s))
 		handle_err(ERROR, (t_err){T_SYNTAX_ERR,
 			UNEXPECTED_TOK_MSG, tokstr(tok)}, true);
-	cmd = parse_pipe(s, &tok);
+	cmd = parse_pipe(s, &tok, envp);
 	return (cmd);
 }

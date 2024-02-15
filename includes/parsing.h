@@ -21,13 +21,12 @@
 
 // constructors
 t_cmd	*constr_cmd(t_types cmd_type);
-t_cmd	*constr_exec_cmd(char *input);
+t_cmd	*constr_exec_cmd(char *input, char **envp);
 t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
 t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *file);
 t_cmd	*constr_heredoc_cmd(t_cmd *subcmd, char *eof);
-void	cleanup_cmd(t_cmd *cmd);
 
-t_cmd	*parse_cmd(char *input);
+t_cmd	*parse_cmd(char *input, char **envp);
 char	*smart_strtok(char *restrict str,
 			const char *restrict sep, t_types *tok);
 

@@ -20,6 +20,7 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_exec
 {
 	char	*argv[MAX_INPUT + 1];
+	char	**envp;
 }	t_exec;
 
 typedef struct s_pipe

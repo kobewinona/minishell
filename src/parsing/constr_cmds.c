@@ -24,13 +24,14 @@ t_cmd	*constr_cmd(t_types cmd_type)
 	return (cmd);
 }
 
-t_cmd	*constr_exec_cmd(char *input)
+t_cmd	*constr_exec_cmd(char *input, char **envp)
 {
 	t_cmd	*cmd;
 
 	cmd = constr_cmd(T_EXEC);
 	memset(cmd->exec.argv, 0, sizeof(cmd->exec.argv));
 	populate_argv(cmd->exec.argv, input);
+	cmd->exec.envp = envp;
 	return (cmd);
 }
 
