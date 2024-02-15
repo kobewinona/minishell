@@ -53,22 +53,26 @@ int	main(int argc, char **argv, char **envp)
 }
 
 
-// //Testing linked lists for env
-// int main(int argc, char **argv, char **envp)
+ //Testing linked lists for env
+//  int main(int argc, char **argv, char **envp)
 // {
 //     t_var_node *head;
 
 //     head = copy_env_vars(envp);
-    
-    
-//     printf("user = %s\n", get_env_var(head, argv[1]));
+
+//     printf("user = %s\n", get_env_var(head, "SHLVL"));
    
-//     set_var_deleted(head, argv[1]);
-    
+//    	set_var_deleted(head, "SHLVL");
+//     update_var(head, "SHLVL", "350");
+//     printf("user = %s\n", get_env_var(head, "SHLVL"));
 
-//     printf("user after = %s\n", get_env_var(head, argv[1]));
-    
+// 	update_var(head, "HOME", "TAMBOV");
+// 	printf("user = %s\n", get_env_var(head, "HOME"));
 
+// 	update_var(head, "HELLO", "STAS");
+// 	printf("user = %s\n", get_env_var(head, "HELLO"));
+// 	set_var_deleted(head, "HELLO");
+// 	printf("user = %s\n", get_env_var(head, "HELLO"));
 
 //     return (0);
 

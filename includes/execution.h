@@ -102,6 +102,7 @@ t_var_node  *create_var_node(char *key_val_str);
 void		append_var_node(t_var_node **head, char *key_val_str);
 char   		*get_env_var(t_var_node *head, char *varname);
 void   		set_var_deleted(t_var_node *head, char *varname);
+void 		update_var(t_var_node *head, char *varname, char *value);
 t_var_node  *copy_env_vars(char **envp);
 
 // -src/int_cmds
