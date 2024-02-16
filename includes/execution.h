@@ -113,5 +113,6 @@ void	echo(char **argv);
 void	cd(char *path);
 void	pwd(void);
 void    export(char **argv, t_var_node *env_vars);
+void    unset(char **argv, t_var_node *env_vars);
 
 #endif

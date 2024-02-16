@@ -76,8 +76,8 @@ int	main(int argc, char **argv, char **envp)
 		handle_cd(input);
 		input_tmp = input;
 
-		//if built-in cmd, we run without fork()
-		handle_builtin(parse_cmd(input_tmp)->exec, env_vars);
+		
+		handle_builtin(parse_cmd(input_tmp)->exec, env_vars);//if built-in cmd, we run without fork()
 		if (handle_err(fork(), FORK, NULL, false) == 0)
 		 	run_cmd(parse_cmd(input_tmp));
 		//run_cmd(parse_cmd(input_tmp)); //FOR DEBUG

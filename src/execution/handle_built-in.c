@@ -20,7 +20,7 @@ void    handle_builtin(t_exec *params, t_var_node *env_vars)
     if (!ft_strncmp(params->argv[0], PWD, ft_strlen(PWD)))
         pwd();
     if (!ft_strncmp(params->argv[0], EXPORT, ft_strlen(EXPORT)))
-        export(params->argv, env_vars) ; //export command here
+        export(params->argv, env_vars);
     if (!ft_strncmp(params->argv[0], UNSET, ft_strlen(UNSET)))
-        return ; //unser command here
+        unset(params->argv, env_vars);
 }
