@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-void    exit_cmd(char **argv)
+void	exit_cmd(char **argv)
 {
-    if (argv[1] != NULL)
-        handle_err(ERROR, EXIT, NULL, true);
-    exit(SUCCESS);
+	if (argv[1] != NULL)
+		handle_err(ERROR, (t_err){T_SYS_ERR, EXIT}, true);
+	exit(SUCCESS);
 }
