@@ -14,13 +14,15 @@
 
 //Dima's version
 
-void	echo(char **argv)
+void	echo(char **argv, t_var_node *env_vars)
 {
 	int	is_with_n_flag;
 	int	i;
 
 	i = 1;
 	
+
+	replace_dollar_sign(argv, env_vars);
 	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
@@ -33,6 +35,5 @@ void	echo(char **argv)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (is_with_n_flag == false)
-		ft_putchar_fd('\n', STDOUT_FILENO);	
-	exit(EXIT_SUCCESS);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 }

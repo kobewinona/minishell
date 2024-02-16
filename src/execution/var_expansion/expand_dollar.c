@@ -38,7 +38,7 @@ bool    is_wraped_single_qtes(char **argv) //Implement the same but for local ch
 }
 
 
-void    expand_dollar(char **arg) // Make it add dobule quote at the end as it should
+void    expand_dollar(char **arg, t_var_node *env_vars) // Make it add dobule quote at the end as it should
 {
     char    **splitted_arr;
     char    *expanded_str;
@@ -55,7 +55,7 @@ void    expand_dollar(char **arg) // Make it add dobule quote at the end as it s
     }
     while (splitted_arr[i])
     {
-        value = getenv(ft_strtrim(splitted_arr[i], "\""));
+        value = get_env_var(env_vars, ft_strtrim(splitted_arr[i], "\""));
         if (value)
             expanded_str = ft_strjoin(expanded_str, value);
         i++;
@@ -65,7 +65,7 @@ void    expand_dollar(char **arg) // Make it add dobule quote at the end as it s
 }
 
 
-void    replace_dollar_sign(char **argv)
+void    replace_dollar_sign(char **argv, t_var_node *env_vars)
 {
     int i;
     
@@ -73,7 +73,7 @@ void    replace_dollar_sign(char **argv)
     while(argv[i])
     {
         if (is_char_there(argv[i], '$') )
-            expand_dollar(&argv[i]);
+            expand_dollar(&argv[i], env_vars);
         i++;
     }
 }

@@ -28,10 +28,12 @@ void	run_cmd(t_cmd *cmd)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	char	*input_prompt;
-	char	*input_tmp;
+	char		*input;
+	char		*input_prompt;
+	char		*input_tmp;
+	t_var_node	*env_vars;
 
+	env_vars = copy_env_vars(envp);
 	while (1)
 	{
 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
