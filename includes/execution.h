@@ -31,6 +31,18 @@ typedef enum e_redir_type
 }	t_redir_type;
 
 // structs
+
+typedef struct s_var_node
+{
+	char				*name;
+	char				*value;
+	bool				is_numeric;
+	bool				deleted;
+	struct s_var_node	*next;
+
+}	t_var_node;
+
+
 typedef struct s_cmd
 {
 	t_cmd_type	type;
@@ -68,15 +80,6 @@ typedef struct s_heredoc
 	char			*eof;
 }	t_heredoc;
 
-typedef struct s_var_node
-{
-	char				*name;
-	char				*value;
-	bool				is_numeric;
-	bool				deleted;
-	struct s_var_node	*next;
-
-}	t_var_node;
 
 
 // functions
@@ -88,7 +91,7 @@ void	handle_pipe(t_pipe *params);
 void	handle_redir(t_redir *params);
 void	handle_heredoc(t_heredoc *params, int output_fd);
 int		handle_err(int res, char *cxt1, char *cxt2, int is_on_exit);
-
+void    handle_builtin(t_exec *params, t_var_node *env_vars);
 //dolar expansion 
 void    expand_dollar(char **arg);
 bool    is_char_there(char *arg, char c);
@@ -109,5 +112,6 @@ t_var_node  *copy_env_vars(char **envp);
 void	echo(char **argv);
 void	cd(char *path);
 void	pwd(void);
+void    export(char **argv, t_var_node *env_vars);
 
 #endif

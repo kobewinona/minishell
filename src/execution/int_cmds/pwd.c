@@ -17,7 +17,7 @@ void	pwd(void)
 	char	*curr_dir;
 
 	curr_dir = NULL;
-	curr_dir = getenv("PWD");
+	curr_dir = getenv("PWD"); // replace with getting pwd from our list
 	if (!curr_dir)
 		handle_err(ERROR, PWD, NULL, true);
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
