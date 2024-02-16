@@ -33,7 +33,7 @@ static void	run_heredoc_mode(const char *heredoc, int fd)
 	}
 }
 
-void	handle_heredoc(t_heredoc *cmd, int output_fd)
+void	handle_heredoc(t_heredoc *cmd, int output_fd, t_var_node *env_vars)
 {
 	int		org_stdout;
 	int		fd[2];
@@ -49,7 +49,7 @@ void	handle_heredoc(t_heredoc *cmd, int output_fd)
 	if (output_fd != -1)
 		handle_err(dup2(output_fd, STDOUT_FILENO),
 			(t_err){T_SYS_ERR, DUP2}, true);
-	run_cmd(cmd->subcmd);
+	run_cmd(cmd->subcmd, env_vars);
 	dup2(org_stdout, STDOUT_FILENO);
 	close(org_stdout);
 }

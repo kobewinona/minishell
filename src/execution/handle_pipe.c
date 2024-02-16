@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_pipe(t_pipe *cmd)
+void	handle_pipe(t_pipe *cmd, t_var_node *env_vars)
 {
 	int	fd[2];
 
@@ -23,7 +23,7 @@ void	handle_pipe(t_pipe *cmd)
 		handle_err(dup2(fd[1], STDOUT_FILENO), (t_err){T_SYS_ERR, DUP2}, true);
 		close(fd[0]);
 		close(fd[1]);
-		run_cmd(cmd->from);
+		run_cmd(cmd->from, env_vars);
 		exit(EXIT_SUCCESS);
 	}
 	if (handle_err(fork(), (t_err){T_SYS_ERR, DUP2}, true) == 0)
@@ -32,7 +32,7 @@ void	handle_pipe(t_pipe *cmd)
 		handle_err(dup2(fd[0], STDIN_FILENO), (t_err){T_SYS_ERR, DUP2}, true);
 		close(fd[0]);
 		close(fd[1]);
-		run_cmd(cmd->to);
+		run_cmd(cmd->to, env_vars);
 		exit(EXIT_SUCCESS);
 	}
 	close(fd[0]);

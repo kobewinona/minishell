@@ -12,16 +12,16 @@
 
 #include "minishell.h"
 
-void	run_cmd(t_cmd *cmd)
+void	run_cmd(t_cmd *cmd, t_var_node *env_vars)
 {
 	if (cmd->type == T_EXEC)
-		handle_exec(&(cmd->exec));
+		handle_exec(&(cmd->exec), env_vars);
 	else if (cmd->type == T_PIPE)
-		handle_pipe(&(cmd->pipe));
+		handle_pipe(&(cmd->pipe), env_vars);
 	else if (cmd->type == T_REDIR)
-		handle_redir(&(cmd->redir));
+		handle_redir(&(cmd->redir), env_vars);
 	else if (cmd->type == T_HEREDOC)
-		handle_heredoc(&(cmd->heredoc), UNSPECIFIED);
+		handle_heredoc(&(cmd->heredoc), UNSPECIFIED, env_vars);
 	else
 		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
 }
@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 		handle_cd(input);
 		input_tmp = input;
-		run_cmd(parse_cmd(input_tmp, envp));
+		run_cmd(parse_cmd(input_tmp, envp), env_vars);
 		wait(NULL);
 		free(input);
 	}
