@@ -85,20 +85,20 @@ void		handle_heredoc(t_heredoc *cmd, int output_fd);
 int			handle_err(int res, t_err err, bool is_on_exit);
 
 //dollar expansion
-void    	expand_dollar(char **arg);
-bool   		is_char_there(char *arg, char c);
-char 		*ft_strslice(const char  *str, int start, int end);
-int 		ft_ind_char(const char *str, char c);
-void    	free_array(char **arr);
-void    	replace_dollar_sign(char **argv);
+void		expand_dollar(char **arg);
+bool		is_char_there(char *arg, char c);
+char		*ft_strslice(const char *str, int start, int end);
+int			ft_ind_char(const char *str, char c);
+void		free_array(char **arr);
+void		replace_dollar_sign(char **argv);
 
 //working with ENV
-t_var_node  *create_var_node(char *key_val_str);
+t_var_node	*create_var_node(char *key_val_str);
 void		append_var_node(t_var_node **head, char *key_val_str);
-char   		*get_env_var(t_var_node *head, char *varname);
-void   		set_var_deleted(t_var_node *head, char *varname);
-void 		update_var(t_var_node *head, char *varname, char *value);
-t_var_node  *copy_env_vars(char **envp);
+char		*get_env_var(t_var_node *head, char *varname);
+void		set_var_deleted(t_var_node *head, char *varname);
+void		update_var(t_var_node *head, char *varname, char *value);
+t_var_node	*copy_env_vars(char **envp);
 
 // -src/int_cmds
 void		echo(char **argv);

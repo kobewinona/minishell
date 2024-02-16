@@ -41,7 +41,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-		handle_cd(input);
+//		handle_cd(input);
 		input_tmp = input;
 		run_cmd(parse_cmd(input_tmp, envp));
 		wait(NULL);
