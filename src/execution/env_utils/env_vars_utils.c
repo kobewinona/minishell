@@ -37,7 +37,6 @@ void    set_var_deleted(t_var_node *head, char *varname)
     curr = head;
     while (curr)
     {
-        //if (!(ft_strncmp(varname, curr->name, ft_strlen(varname))))
         if (!(ft_strncmp(varname, curr->name, 5000)))
         {
             
@@ -64,12 +63,11 @@ void update_var(t_var_node *head, char *varname, char *value)
         {
             
             curr->deleted = false;
-            curr->value = value;
+            curr->value = ft_strdup(value);
             return ;
         }
         curr = curr->next;
     }
-    //Var does not exists, need to create
     key_val_str = ft_strjoin(varname, "=");
     key_val_str = ft_strjoin(key_val_str, value);
     append_var_node(&head, key_val_str);

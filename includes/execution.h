@@ -79,7 +79,7 @@ typedef struct s_err
 // functions
 void		run_cmd(t_cmd *cmd, t_var_node *env_vars);
 void		handle_ext_cmd(char **argv);
-void		handle_cd(const char *input);
+void		handle_cd(const char *input, t_var_node *env_vars);
 void		handle_exec(t_exec *cmd, t_var_node *env_vars);
 void		handle_pipe(t_pipe *cmd, t_var_node *env_vars);
 void		handle_redir(t_redir *cmd, t_var_node *env_vars);
@@ -108,8 +108,8 @@ t_var_node  *copy_env_vars(char **envp);
 
 // -src/int_cmds
 void	echo(char **argv, t_var_node *env_vars);
-void	cd(char *path);
-void	pwd(void);
+void	cd(char *path, t_var_node *env_vars);
+void	pwd(t_var_node *env_vars);
 void    export(char **argv, t_var_node *env_vars);
 void    unset(char **argv, t_var_node *env_vars);
 void	exit_cmd(char **argv);
