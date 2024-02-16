@@ -17,9 +17,9 @@ void	handle_exec(t_exec *params)
 	if (ft_strncmp(params->argv[0], CD, ft_strlen(CD)))
 	{
 		if (!ft_strncmp(params->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(params->argv);
+			return ;
 		else if (!ft_strncmp(params->argv[0], PWD, ft_strlen(PWD)))
-			pwd();
+			return ;
 		else
 			handle_ext_cmd(params->argv);
 	}
