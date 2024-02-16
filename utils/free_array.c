@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   free_array.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/02/14 17:17:47 by sliashko          #+#    #+#             */
+/*   Updated: 2024/02/14 17:17:47 by sliashko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void)
+void    free_array(char **array)
 {
-	char	*curr_dir;
+    char    **temp;
 
-	curr_dir = NULL;
-	curr_dir = getenv("PWD");
-	if (!curr_dir)
-		handle_err(ERROR, (t_err){T_SYS_ERR, PWD}, true);
-	ft_putstr_fd(curr_dir, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
-	exit(EXIT_SUCCESS);
+    temp = array;
+    while (*temp)
+    {
+        free(*temp);
+        temp++;
+    }
+    free(array);
 }

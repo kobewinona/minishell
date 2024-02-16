@@ -12,15 +12,19 @@
 
 #include "minishell.h"
 
+//Dima's version
+
 void	echo(char **argv)
 {
 	int	is_with_n_flag;
 	int	i;
 
 	i = 1;
+	
 	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
+	
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);
@@ -29,6 +33,6 @@ void	echo(char **argv)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (is_with_n_flag == false)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);	
 	exit(EXIT_SUCCESS);
 }
