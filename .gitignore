@@ -13,3 +13,4 @@ obj
 # rest
 .DS_store
 *.txt
+tmp
