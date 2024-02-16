@@ -18,11 +18,11 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
         	echo(cmd->argv, env_vars);
-		if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
+		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
 			pwd();
-		if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
+		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
 			export(cmd->argv, env_vars);
-		if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
+		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
 			unset(cmd->argv, env_vars);
 		else
 		{
