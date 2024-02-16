@@ -54,36 +54,19 @@ void    append_var_node(t_var_node **head, char *key_val_str)
     }
 }
 
-char    *get_env_var(t_var_node **env_vars, char *varname)
+
+t_var_node  *copy_env_vars(char **envp)
 {
-    t_var_node  *curr_var;
+    int             i;
+    t_var_node      *head;
 
-    curr_var = *env_vars;
-    while (curr_var)
+    i = 1;
+    head = create_var_node(envp[i]);
+    head = NULL;
+    while (envp[i])
     {
-        if (!ft_strncmp(varname, curr_var->name, ft_strlen(varname))
-                && !curr_var->deleted)
-            return (curr_var->value);
-        curr_var = curr_var->next;
+        append_var_node(&head, envp[i]);
+        i++;
     }
-    return (NULL);
-}
-
-
-//Doesnt work properly for some reasons: need to adjust
-void    set_var_deleted(t_var_node **env_vars, char *varname)
-{
-    t_var_node  *curr_var;
-
-    curr_var = *env_vars;
-    while (curr_var)
-    {
-        if (!ft_strncmp(varname, curr_var->name, ft_strlen(varname)))
-        {
-            curr_var->value = NULL;
-            curr_var->deleted = true;
-            return ;
-        }
-        curr_var = curr_var->next;
-    }
+    return (head);
 }
