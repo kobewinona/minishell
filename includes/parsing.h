@@ -30,6 +30,8 @@ t_cmd	*parse_cmd(char *input, char **envp);
 char	*smart_strtok(char *restrict str,
 			const char *restrict sep, t_types *tok);
 
+t_cmd	*parse_exec(char *input, t_types *tok, char **envp);
+
 void	populate_argv(char **argv, char *input);
 char	*get_value(char **s);
 

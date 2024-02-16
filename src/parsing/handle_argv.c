@@ -54,7 +54,9 @@ char	*get_value(char **s)
 		end++;
 	}
 	nullterminate(s, end, end_chr);
-	return (value);
+	if (!is_emptystr(value))
+		return (value);
+	return (NULL);
 }
 
 void	populate_argv(char **argv, char *input)
@@ -64,10 +66,13 @@ void	populate_argv(char **argv, char *input)
 	if (!input)
 		return ;
 	index = 0;
+	while (argv && argv[index])
+		index++;
 	while (!is_emptystr(input))
 	{
 		argv[index] = get_value(&input);
-		argv[index] = ft_strtrim(argv[index], "\"\'");
+		if (argv[index])
+			argv[index] = ft_strtrim(argv[index], "\"\'");
 		index++;
 	}
 }
