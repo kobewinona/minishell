@@ -86,7 +86,7 @@ void		handle_redir(t_redir *cmd, t_var_node *env_vars);
 void		handle_heredoc(t_heredoc *cmd, int output_fd, t_var_node *env_vars);
 
 int			handle_err(int res, t_err err, bool is_on_exit);
-void    handle_builtin(t_exec *params, t_var_node *env_vars);
+void   		handle_builtin(t_exec *params, t_var_node *env_vars);
 
 
 //dolar expansion 
@@ -112,5 +112,6 @@ void	cd(char *path);
 void	pwd(void);
 void    export(char **argv, t_var_node *env_vars);
 void    unset(char **argv, t_var_node *env_vars);
+void	exit_cmd(char **argv);
 
 #endif

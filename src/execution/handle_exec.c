@@ -24,6 +24,8 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 			export(cmd->argv, env_vars);
 		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
 			unset(cmd->argv, env_vars);
+		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
+			exit_cmd(cmd->argv);
 		else
 		{
 			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)
