@@ -46,13 +46,22 @@ static void	exec_ext_cmd(char *cmd_dir, char **env_path, char **argv)
 	cmd_path = NULL;
 }
 
-void	handle_ext_cmd(char **argv)
+
+
+void	handle_ext_cmd(char **argv, t_var_node *env_vars)
 {
 	char		*env_path;
 	char		*cmd_dir;
 
-	env_path = NULL;
-	env_path = ft_strdup(getenv("PATH"));
+	env_path = get_env_var(env_vars, "PATH");
+	if (env_path == NULL && (access(argv[0], F_OK | X_OK) == -1)) // PATH deleted and executable not found locally
+		handle_err(ERROR, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+	if (access(argv[0], F_OK | X_OK) == 0)
+	{
+		execve(argv[0], argv, NULL); //will need to pass env from our list too
+		handle_err(ERROR, (t_err){T_SYS_ERR, argv[0], argv[1]}, false);
+	}
+	env_path = ft_strdup(get_env_var(env_vars,"PATH"));
 	if (!env_path)
 		handle_err(ERROR, (t_err){T_SYS_ERR, argv[0], MALLOC}, true);
 	cmd_dir = ft_strtok(env_path, ":");

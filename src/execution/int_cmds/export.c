@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+
+//handle export without args (prints declared vars in ascii order)
+//handle declaration without assignment
 void    export(char **argv, t_var_node *env_vars)
 {
     char    **keyval_arr;
