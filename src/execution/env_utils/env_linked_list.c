@@ -54,7 +54,6 @@ void    append_var_node(t_var_node **head, char *key_val_str)
     }
 }
 
-
 t_var_node  *copy_env_vars(char **envp)
 {
     int             i;

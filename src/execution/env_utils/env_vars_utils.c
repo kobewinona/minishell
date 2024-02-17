@@ -72,3 +72,5 @@ void update_var(t_var_node *head, char *varname, char *value)
     key_val_str = ft_strjoin(key_val_str, value);
     append_var_node(&head, key_val_str);
 }
+
+

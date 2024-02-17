@@ -104,6 +104,7 @@ char   		*get_env_var(t_var_node *head, char *varname);
 void   		set_var_deleted(t_var_node *head, char *varname);
 void 		update_var(t_var_node *head, char *varname, char *value);
 t_var_node  *copy_env_vars(char **envp);
+char		**envlist_to_arr(t_var_node *env_vars);
 
 
 // -src/int_cmds

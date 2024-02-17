@@ -54,27 +54,20 @@ int	main(int argc, char **argv, char **envp)
 }
 
 
- //Testing linked lists for env
 //  int main(int argc, char **argv, char **envp)
 // {
 //     t_var_node *head;
+// 	char *fake_envp[] = {"MYVAR=HelloWorld", "NAME=STAS", NULL};
 
 //     head = copy_env_vars(envp);
 
-//     printf("user = %s\n", get_env_var(head, "SHLVL"));
+// 	char **mycopy = envlist_to_arr(head);
 
-//    	set_var_deleted(head, "SHLVL");
-//     update_var(head, "SHLVL", "350");
-//     printf("user = %s\n", get_env_var(head, "SHLVL"));
+// 	int i = 0;
 
-// 	update_var(head, "HOME", "TAMBOV");
-// 	printf("user = %s\n", get_env_var(head, "HOME"));
-
-// 	update_var(head, "HELLO", "STAS");
-// 	printf("user = %s\n", get_env_var(head, "HELLO"));
-// 	set_var_deleted(head, "HELLO");
-// 	printf("user = %s\n", get_env_var(head, "HELLO"));
-
+// 	printf("%s\n", mycopy[0]);
+	
+	
 //     return (0);
 
 // }
