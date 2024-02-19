@@ -17,9 +17,13 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(cmd->argv, env_vars);
+
+        	echo(cmd->argv, env_vars);
+		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+			return ;
+
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-			pwd();
+			pwd(env_vars);
 		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
 			export(cmd->argv, env_vars);
 		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
@@ -28,9 +32,10 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 			exit_cmd(cmd->argv);
 		else
 		{
-			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)
-				handle_ext_cmd(cmd->argv);
+			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)	
+				handle_ext_cmd(cmd->argv, env_vars);
 			wait(NULL);
 		}
 	}
+	return ;
 }

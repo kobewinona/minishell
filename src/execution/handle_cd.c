@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_cd(const char *input)
+void	handle_cd(const char *input, t_var_node *env_vars)
 {
 	char	**argv;
 	int		i;
@@ -22,7 +22,7 @@ void	handle_cd(const char *input)
 	if (!argv)
 		return ;
 	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
-		cd(argv[1]);
+		cd(argv[1], env_vars);
 	i = 0;
 	while (argv[i])
 	{
