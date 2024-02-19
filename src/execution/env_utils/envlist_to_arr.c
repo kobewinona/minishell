@@ -47,6 +47,7 @@ char	**envlist_to_arr(t_var_node *env_vars)
 		{
 			arr[i] = curr->key_val_str;
 			i++;
+			
 		}
 		curr = curr->next;
 	}

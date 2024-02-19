@@ -41,6 +41,8 @@ void    set_var_deleted(t_var_node *head, char *varname)
         {
             
             curr->deleted = true; 
+			curr->key_val_str = NULL;
+			curr->value = NULL;
         }
         curr = curr->next;
     }
@@ -55,7 +57,8 @@ void update_var(t_var_node *head, char *varname, char *value)
     char        *key_val_str;
 
 
-    key_val_str = NULL;
+	key_val_str = ft_strjoin(varname, "=");
+    key_val_str = ft_strjoin(key_val_str, value);
     curr = head;
     while (curr)
     {
@@ -64,12 +67,13 @@ void update_var(t_var_node *head, char *varname, char *value)
             
             curr->deleted = false;
             curr->value = ft_strdup(value);
+			curr->key_val_str = key_val_str;
+			
             return ;
         }
         curr = curr->next;
     }
-    key_val_str = ft_strjoin(varname, "=");
-    key_val_str = ft_strjoin(key_val_str, value);
+    
     append_var_node(&head, key_val_str);
 }
 
