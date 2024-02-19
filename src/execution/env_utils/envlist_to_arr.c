@@ -46,11 +46,10 @@ char	**envlist_to_arr(t_var_node *env_vars)
 		if (curr->value && !curr->deleted)
 		{
 			arr[i] = curr->key_val_str;
-			printf("%s\n", arr[i]);
 			i++;
 		}
 		curr = curr->next;
 	}
-	//arr[i] = NULL;
+	arr[i] = NULL;
 	return (arr);
 }

@@ -26,50 +26,40 @@ void	run_cmd(t_cmd *cmd, t_var_node *env_vars)
 		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char		*input;
-// 	char		*input_prompt;
-// 	char		*input_tmp;
-// 	t_var_node	*env_vars;
-
-// 	env_vars = copy_env_vars(envp);
-// 	while (1)
-// 	{
-// 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
-// 		input = readline(input_prompt);
-// 		free(input_prompt);
-// 		if (!input)
-// 			break ;
-// 		if (*input)
-// 			add_history(input);
-// 		handle_cd(input, env_vars);
-// 		input_tmp = input;
-// 		run_cmd(parse_cmd(input_tmp, envp), env_vars);
-// 		wait(NULL);
-// 		free(input);
-// 	}
-// 	clear_history();
-// 	return (EXIT_SUCCESS);
-// }
-
-
- int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_var_node *head;
+	char		*input;
+	char		*input_prompt;
+	char		*input_tmp;
+	t_var_node	*env_vars;
 
-	head = copy_env_vars(envp);
+
+	printf("....Starting minishell...\n");
+	env_vars = copy_env_vars(envp);
 
 
-	char	**arr_envp;
+	//update shlvl
+	int new_shlvl;
 
-	arr_envp = envlist_to_arr(head);
-
-	printf("arr[0] = %s\n", arr_envp[0]);
-	printf("arr[0] = %s\n", arr_envp[3]);
-	printf("arr[0] = %s\n", arr_envp[4]);
-	printf("arr[0] = %s\n", arr_envp[5]);
+	new_shlvl = ft_atoi(get_env_var(env_vars, "SHLVL")) + 1;
+	update_var(env_vars, "SHLVL", ft_itoa(new_shlvl));
 	
-    return (0);
 
+	while (1)
+	{
+		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
+		input = readline(input_prompt);
+		free(input_prompt);
+		if (!input)
+			break ;
+		if (*input)
+			add_history(input);
+		handle_cd(input, env_vars);
+		input_tmp = input;
+		run_cmd(parse_cmd(input_tmp, envp), env_vars);
+		wait(NULL);
+		free(input);
+	}
+	clear_history();
+	return (EXIT_SUCCESS);
 }

@@ -58,7 +58,7 @@ void	handle_ext_cmd(char **argv, t_var_node *env_vars)
 		handle_err(ERROR, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
 	if (access(argv[0], F_OK | X_OK) == 0)
 	{
-		execve(argv[0], argv, NULL); //will need to pass env from our list too
+		execve(argv[0], argv, envlist_to_arr(env_vars));
 		handle_err(ERROR, (t_err){T_SYS_ERR, argv[0], argv[1]}, false);
 	}
 	env_path = ft_strdup(get_env_var(env_vars,"PATH"));
