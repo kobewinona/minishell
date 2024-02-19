@@ -30,8 +30,9 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 			exit_cmd(cmd->argv);
 		else
 		{
-			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)
+			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)	
 				handle_ext_cmd(cmd->argv, env_vars);
+			wait(NULL);
 		}
 	}
 	return ;
