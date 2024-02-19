@@ -17,9 +17,11 @@ void	handle_exec(t_exec *cmd, t_var_node *env_vars)
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
+
         	echo(cmd->argv, env_vars);
 		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
 			return ;
+
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
 			pwd(env_vars);
 		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
