@@ -26,48 +26,50 @@ void	run_cmd(t_cmd *cmd, t_var_node *env_vars)
 		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	char		*input;
-	char		*input_prompt;
-	char		*input_tmp;
-	t_var_node	*env_vars;
-
-	env_vars = copy_env_vars(envp);
-	while (1)
-	{
-		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
-		input = readline(input_prompt);
-		free(input_prompt);
-		if (!input)
-			break ;
-		if (*input)
-			add_history(input);
-		handle_cd(input, env_vars);
-		input_tmp = input;
-		run_cmd(parse_cmd(input_tmp, envp), env_vars);
-		wait(NULL);
-		free(input);
-	}
-	clear_history();
-	return (EXIT_SUCCESS);
-}
-
-
-//  int main(int argc, char **argv, char **envp)
+// int	main(int argc, char **argv, char **envp)
 // {
-//     t_var_node *head;
-// 	char *fake_envp[] = {"MYVAR=HelloWorld", "NAME=STAS", NULL};
+// 	char		*input;
+// 	char		*input_prompt;
+// 	char		*input_tmp;
+// 	t_var_node	*env_vars;
 
-//     head = copy_env_vars(envp);
-
-// 	char **mycopy = envlist_to_arr(head);
-
-// 	int i = 0;
-
-// 	printf("%s\n", mycopy[0]);
-	
-	
-//     return (0);
-
+// 	env_vars = copy_env_vars(envp);
+// 	while (1)
+// 	{
+// 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
+// 		input = readline(input_prompt);
+// 		free(input_prompt);
+// 		if (!input)
+// 			break ;
+// 		if (*input)
+// 			add_history(input);
+// 		handle_cd(input, env_vars);
+// 		input_tmp = input;
+// 		run_cmd(parse_cmd(input_tmp, envp), env_vars);
+// 		wait(NULL);
+// 		free(input);
+// 	}
+// 	clear_history();
+// 	return (EXIT_SUCCESS);
 // }
+
+
+ int main(int argc, char **argv, char **envp)
+{
+    t_var_node *head;
+
+	head = copy_env_vars(envp);
+
+
+	char	**arr_envp;
+
+	arr_envp = envlist_to_arr(head);
+
+	printf("arr[0] = %s\n", arr_envp[0]);
+	printf("arr[0] = %s\n", arr_envp[3]);
+	printf("arr[0] = %s\n", arr_envp[4]);
+	printf("arr[0] = %s\n", arr_envp[5]);
+	
+    return (0);
+
+}

@@ -20,6 +20,7 @@ typedef struct s_var_node
 {
 	char				*name;
 	char				*value;
+	char				*key_val_str;
 	bool				is_numeric;
 	bool				deleted;
 	struct s_var_node	*next;

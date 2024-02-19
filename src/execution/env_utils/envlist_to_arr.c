@@ -28,20 +28,6 @@ static int	len_list(t_var_node *env_vars)
 	return (i);
 }
 
-
-static char	*get_keyval(t_var_node *node)
-{
-	char	*keyvalstr;
-	
-	if (node->value)
-	{
-		keyvalstr = ft_strjoin(node->name, "=");
-		keyvalstr = ft_strjoin(keyvalstr, node->value);
-		return (keyvalstr);
-	}
-	return (NULL);
-}
-
 char	**envlist_to_arr(t_var_node *env_vars)
 {
 	int	len;
@@ -52,18 +38,19 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	i = 0;
 	len = len_list(env_vars);
 	curr = env_vars;
-	arr = (char **) malloc(sizeof(char *) * (len + 1));
+	arr = (char **) malloc(sizeof(char *) * len);
 	if (arr == NULL)
 		return (NULL);
-	while (i < len)
+	while (i < len - 1)
 	{
 		if (curr->value && !curr->deleted)
 		{
-			arr[i] = get_keyval(curr);
+			arr[i] = curr->key_val_str;
+			printf("%s\n", arr[i]);
 			i++;
 		}
 		curr = curr->next;
 	}
-	arr[i] = NULL;
+	//arr[i] = NULL;
 	return (arr);
 }
