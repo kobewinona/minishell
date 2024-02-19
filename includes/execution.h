@@ -106,6 +106,7 @@ void   		set_var_deleted(t_var_node *head, char *varname);
 void 		update_var(t_var_node *head, char *varname, char *value);
 t_var_node  *copy_env_vars(char **envp);
 char		**envlist_to_arr(t_var_node *env_vars);
+void		increment_shlvl(t_var_node *env_vars);
 
 
 // -src/int_cmds
@@ -115,4 +116,6 @@ void	pwd(t_var_node *env_vars);
 void    export(char **argv, t_var_node *env_vars);
 void    unset(char **argv, t_var_node *env_vars);
 void	exit_cmd(char **argv);
+void	env_cmd(char **argv, t_var_node *env_vars);
+
 #endif

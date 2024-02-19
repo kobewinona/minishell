@@ -20,7 +20,7 @@ char    *get_env_var(t_var_node *head, char *varname)
     curr = head;
     while (curr)
     {
-        if (!((ft_strncmp(varname, curr->name, ft_strlen(varname)))  | curr->deleted))
+        if (!((ft_strncmp(varname, curr->name, 5000))  | curr->deleted))
         {
             return (curr->value);
         }
@@ -73,8 +73,19 @@ void update_var(t_var_node *head, char *varname, char *value)
         }
         curr = curr->next;
     }
-    
     append_var_node(&head, key_val_str);
 }
 
 
+void	increment_shlvl(t_var_node *env_vars)
+{
+	int new_shlvl;
+
+	if (get_env_var(env_vars, "SHLVL"))
+	{
+	new_shlvl = ft_atoi(get_env_var(env_vars, "SHLVL")) + 1;
+	update_var(env_vars, "SHLVL", ft_itoa(new_shlvl));
+	}
+	else
+		update_var(env_vars, "SHLVL", "1");
+}

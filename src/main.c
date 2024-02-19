@@ -36,15 +36,7 @@ int	main(int argc, char **argv, char **envp)
 
 	printf("....Starting minishell...\n");
 	env_vars = copy_env_vars(envp);
-
-
-	//update shlvl
-	int new_shlvl;
-
-	new_shlvl = ft_atoi(get_env_var(env_vars, "SHLVL")) + 1;
-	update_var(env_vars, "SHLVL", ft_itoa(new_shlvl));
-	
-
+	increment_shlvl(env_vars);
 	while (1)
 	{
 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
