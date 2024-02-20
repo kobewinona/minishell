@@ -32,17 +32,6 @@ static bool	is_valid_varname(char *varname)
 	return (!ft_isdigit(*varname));
 }
 
-static bool is_char_inside(char *str, char c)
-{
-	while (*str)
-	{
-		if (*str == c)
-			return (true);
-		str++;
-	}
-	return (false);
-}
-
 bool	is_var_deleted(t_var_node *env_vars, char *varname)
 {
 	t_var_node *curr;
@@ -65,7 +54,7 @@ void    export(char **argv, t_var_node *env_vars)
     i = 1;
     while (argv[i])
     {	
-		if (is_char_inside(argv[i], '='))
+		if (is_char_there(argv[i], '='))
 		{
 			keyval_arr = ft_split(argv[i], '=');
 			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))

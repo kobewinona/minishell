@@ -24,9 +24,15 @@ t_var_node  *create_var_node(char *key_val_str)
     splitted_arr = ft_split(key_val_str, '=');
     new_element->name = ft_strdup(splitted_arr[0]);
     if (splitted_arr[1])
+	{
         new_element->value = ft_strdup(splitted_arr[1]);
+		new_element->value_assigned = true;
+	}
     else
+	{
         new_element->value = NULL;
+		new_element->value_assigned = false;
+	}
 	new_element->key_val_str = ft_strdup(key_val_str);
 	//new_element->key_val_str = key_val_str;
     new_element->is_numeric = false;

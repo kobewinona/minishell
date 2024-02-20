@@ -23,6 +23,7 @@ typedef struct s_var_node
 	char				*key_val_str;
 	bool				is_numeric;
 	bool				deleted;
+	bool				value_assigned;
 	struct s_var_node	*next;
 
 }	t_var_node;

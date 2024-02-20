@@ -20,7 +20,7 @@ char    *get_env_var(t_var_node *head, char *varname)
     curr = head;
     while (curr)
     {
-        if (!((ft_strncmp(varname, curr->name, 5000))  | curr->deleted))
+        if (!((ft_strncmp(varname, curr->name, 5000))  | curr->deleted | curr->value_assigned))
         {
             return (curr->value);
         }
@@ -77,9 +77,15 @@ void update_var(t_var_node *head, char *varname, char *value)
             
             curr->deleted = false;
 			if (value)
+			{
            		curr->value = ft_strdup(value);
+				curr->value_assigned = true;
+			}
 			else
+			{
 				curr->value = NULL;
+				curr->value_assigned = is_char_there(key_val_str, '=');
+			}
 			curr->key_val_str = key_val_str;
 			
             return ;
