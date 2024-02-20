@@ -6,7 +6,7 @@
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/16 17:14:58 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:11:27 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,23 @@ void	handle_exec(t_exec *cmd)
 {
 	if (cmd->argv[0])
 	{
-		if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
-			cd(cmd->argv[1]);
-		else if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(cmd->argv);
+		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
+			echo(cmd->argv, cmd->env_vars);
+		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+			return ;
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-			pwd();
+			pwd(cmd->env_vars);
+		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
+			export(cmd->argv, cmd->env_vars);
+		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
+			unset(cmd->argv, cmd->env_vars);
+		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
+			exit_cmd(cmd->argv);
 		else
 		{
-			handle_ext_cmd(cmd->argv);
-//			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, false) == 0)
-//				handle_ext_cmd(cmd->argv);
-//			wait(NULL);
+			if (!handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true))
+				handle_ext_cmd(cmd->argv, cmd->env_vars);
+			wait(NULL);
 		}
 	}
 }

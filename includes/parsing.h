@@ -21,16 +21,14 @@
 
 // constructors
 t_cmd	*constr_cmd(t_types cmd_type);
-t_cmd	*constr_exec_cmd(char *input, char **envp);
+t_cmd	*constr_exec_cmd(char *input, t_var_node *env_vars);
 t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
 t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *file);
 t_cmd	*constr_heredoc_cmd(t_cmd *subcmd, char *eof);
 
-t_cmd	*parse_cmd(char *input, char **envp);
+t_cmd	*parse_cmd(char *input, t_var_node *env_vars);
 char	*smart_strtok(char *restrict str,
 			const char *restrict sep, t_types *tok);
-
-t_cmd	*parse_exec(char *input, t_types *tok, char **envp);
 
 void	populate_argv(char **argv, char *input);
 char	*get_value(char **s);

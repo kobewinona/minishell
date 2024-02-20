@@ -28,9 +28,19 @@ void	run_cmd(t_cmd *cmd)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	char	*input_prompt;
-	char	*input_tmp;
+	char		*input;
+	char		*input_prompt;
+	char		*input_tmp;
+	t_var_node	*env_vars;
+
+	printf("....Starting minishell...\n");
+	env_vars = copy_env_vars(envp);
+
+	//update shlvl
+	int new_shlvl;
+
+	new_shlvl = ft_atoi(get_env_var(env_vars, "SHLVL")) + 1;
+	update_var(env_vars, "SHLVL", ft_itoa(new_shlvl));
 
 	(void)argc;
 	(void)argv;
@@ -43,37 +53,12 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-		handle_cd(input);
+		handle_cd(input, env_vars);
 		input_tmp = input;
-		run_cmd(parse_cmd(input_tmp, envp));
+		run_cmd(parse_cmd(input_tmp, env_vars));
 		wait(NULL);
 		free(input);
 	}
 	clear_history();
 	return (EXIT_SUCCESS);
 }
-
- //Testing linked lists for env
-//  int main(int argc, char **argv, char **envp)
-// {
-//     t_var_node *head;
-
-//     head = copy_env_vars(envp);
-
-//     printf("user = %s\n", get_env_var(head, "SHLVL"));
-
-//    	set_var_deleted(head, "SHLVL");
-//     update_var(head, "SHLVL", "350");
-//     printf("user = %s\n", get_env_var(head, "SHLVL"));
-
-// 	update_var(head, "HOME", "TAMBOV");
-// 	printf("user = %s\n", get_env_var(head, "HOME"));
-
-// 	update_var(head, "HELLO", "STAS");
-// 	printf("user = %s\n", get_env_var(head, "HELLO"));
-// 	set_var_deleted(head, "HELLO");
-// 	printf("user = %s\n", get_env_var(head, "HELLO"));
-
-//     return (0);
-
-// }

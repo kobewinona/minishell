@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 14:03:06 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/14 14:03:07 by sliashko         ###   ########.fr       */
+/*   Created: 2024/02/16 12:50:25 by sliashko          #+#    #+#             */
+/*   Updated: 2024/02/16 12:50:27 by sliashko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//need to return exit code passed as arg / ext code of last executed cmdq
-void	exit_cmd(char **argv)
+void    unset(char **argv, t_var_node *env_vars)
 {
-	if (argv[1] != NULL)
-		handle_err(ERROR, (t_err){T_SYS_ERR, EXIT}, true);
-	exit(SUCCESS);
+    int i;
+
+    i = 1;
+    while (argv[i])
+    {
+        set_var_deleted(env_vars, argv[i]);
+        i++;
+    }
 }
