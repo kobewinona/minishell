@@ -20,7 +20,7 @@ char    *get_env_var(t_var_node *head, char *varname)
     curr = head;
     while (curr)
     {
-        if (!((ft_strncmp(varname, curr->name, 5000))  | curr->deleted | curr->value_assigned))
+        if (!((ft_strncmp(varname, curr->name, 5000))  | curr->deleted | !curr->value_assigned))
         {
             return (curr->value);
         }

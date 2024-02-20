@@ -34,7 +34,6 @@ t_var_node  *create_var_node(char *key_val_str)
 		new_element->value_assigned = false;
 	}
 	new_element->key_val_str = ft_strdup(key_val_str);
-	//new_element->key_val_str = key_val_str;
     new_element->is_numeric = false;
     new_element->deleted = false;
     new_element->next = NULL;
