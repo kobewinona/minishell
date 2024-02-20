@@ -34,5 +34,4 @@ void	handle_redir(t_redir *cmd)
 	handle_err(dup2(org_stdout, redir_fd),
 		(t_err){T_SYS_ERR, DUP2, NULL}, true);
 	close(org_stdout);
-	exit(EXIT_SUCCESS);
 }
