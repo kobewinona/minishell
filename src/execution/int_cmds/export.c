@@ -46,11 +46,37 @@ bool	is_var_deleted(t_var_node *env_vars, char *varname)
 	return (true);
 }
 
+
+static void	print_declared_vars(t_var_node *env_vars)
+{	
+	t_var_node *curr;
+
+	curr = env_vars;
+	while (curr)
+	{
+		if (!curr->deleted && curr->value_assigned)
+		{
+			printf("declare -x %s=\"%s\"\n", curr->name, curr->value);
+		}
+		else if (!curr->deleted && !curr->value_assigned)
+		{
+			printf("declare -x %s\n", curr->name);
+		}
+		curr = curr->next;
+	}
+	
+}
+
 void    export(char **argv, t_var_node *env_vars)
 {
     char    **keyval_arr;
     int     i;
 
+	if (argv[1] == NULL)
+	{
+		print_declared_vars(env_vars);
+		return ;
+	}
     i = 1;
     while (argv[i])
     {	
