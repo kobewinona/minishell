@@ -57,3 +57,25 @@ int	main(int argc, char **argv, char **envp)
 	clear_history();
 	return (EXIT_SUCCESS);
 }
+
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	char		*input;
+// 	char		*input_prompt;
+// 	char		*input_tmp;
+// 	t_var_node	*env_vars;
+
+
+// 	printf("....Starting minishell...\n");
+// 	env_vars = copy_env_vars(envp);
+// 	increment_shlvl(env_vars);
+	
+// 	char **to_pass = argv + 1;
+	
+// 	export(to_pass, env_vars);
+
+// 	printf("myvar = %s; deleted = %d\n", get_env_var(env_vars, "MYVAR"), );
+
+// 	return (EXIT_SUCCESS);
+// }

@@ -20,6 +20,29 @@
 //export VAR=: empty string as value
 //export VAR : declare var without assignment
 //check for correctness of name
+
+
+// Environment variable names used by the utilities in the Shell and Utilities volume of IEEE Std 1003.1-2001 consist
+//  solely of uppercase letters, digits, and the '_' 
+// (underscore) from the characters defined in Portable Character Set and do not begin with a digit. 
+// Other characters may be permitted by an implementation; applications shall tolerate the presence of such names
+
+static bool	is_valid_varname(char *varname)
+{
+	return (!ft_isdigit(*varname));
+}
+
+static bool is_char_inside(char *str, char c)
+{
+	while (*str)
+	{
+		if (*str == c)
+			return (true);
+		str++;
+	}
+	return (false);
+}
+
 void    export(char **argv, t_var_node *env_vars)
 {
     char    **keyval_arr;
@@ -27,11 +50,22 @@ void    export(char **argv, t_var_node *env_vars)
 
     i = 1;
     while (argv[i])
-    {
-        keyval_arr = ft_split(argv[i], '=');
-        if (keyval_arr == NULL)
-            return ;
-        update_var(env_vars, keyval_arr[0], keyval_arr[1]);
+    {	
+		if (is_char_inside(argv[i], '='))
+		{
+			keyval_arr = ft_split(argv[i], '=');
+			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))
+			{	
+				free_array(keyval_arr);
+				return ;
+			}
+			update_var(env_vars, keyval_arr[0], keyval_arr[1]);
+		}
+		else
+		{
+			if (is_valid_varname(argv[i]));
+				update_var(env_vars, argv[i], NULL); //if var already exists, do nothing
+		}
         i++;
     }
 }

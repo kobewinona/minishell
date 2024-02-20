@@ -33,17 +33,26 @@ char    *get_env_var(t_var_node *head, char *varname)
 void    set_var_deleted(t_var_node *head, char *varname)
 {
     t_var_node  *curr;
+	t_var_node  *temp;
+	t_var_node	*prev;
 
+	prev = NULL;
     curr = head;
     while (curr)
     {
         if (!(ft_strncmp(varname, curr->name, 5000)))
         {
             
-            curr->deleted = true; 
-			curr->key_val_str = NULL;
-			curr->value = NULL;
+            // curr->deleted = true; 
+			// curr->key_val_str = NULL;
+			// curr->value = NULL;
+			temp = curr->next;
+			curr = prev;
+			//free node we delete
+			free(curr->next);
+			curr->next = temp;
         }
+		prev = curr;
         curr = curr->next;
     }
     
@@ -58,7 +67,8 @@ void update_var(t_var_node *head, char *varname, char *value)
 
 
 	key_val_str = ft_strjoin(varname, "=");
-    key_val_str = ft_strjoin(key_val_str, value);
+	if (value)
+    	key_val_str = ft_strjoin(key_val_str, value);
     curr = head;
     while (curr)
     {
@@ -66,7 +76,10 @@ void update_var(t_var_node *head, char *varname, char *value)
         {
             
             curr->deleted = false;
-            curr->value = ft_strdup(value);
+			if (value)
+           		curr->value = ft_strdup(value);
+			else
+				curr->value = NULL;
 			curr->key_val_str = key_val_str;
 			
             return ;
