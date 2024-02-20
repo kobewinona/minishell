@@ -46,7 +46,8 @@ typedef struct s_redir
 {
 	t_types	type;
 	t_cmd	*subcmd;
-	char	*file;
+	char	*input;
+	int		fd;
 	int		mode;
 }	t_redir;
 

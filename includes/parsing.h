@@ -23,10 +23,10 @@
 t_cmd	*constr_cmd(t_types cmd_type);
 t_cmd	*constr_exec_cmd(char *input, t_var_node *env_vars);
 t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
-t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *file);
-t_cmd	*constr_heredoc_cmd(t_cmd *subcmd, char *eof);
+t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *f);
 
 t_cmd	*parse_cmd(char *input, t_var_node *env_vars);
+char	*collect_heredoc_input(const char *eof);
 char	*smart_strtok(char *restrict str,
 			const char *restrict sep, t_types *tok);
 
