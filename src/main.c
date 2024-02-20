@@ -32,6 +32,8 @@ int	main(int argc, char **argv, char **envp)
 	char	*input_prompt;
 	char	*input_tmp;
 
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
@@ -41,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-//		handle_cd(input);
+		handle_cd(input);
 		input_tmp = input;
 		run_cmd(parse_cmd(input_tmp, envp));
 		wait(NULL);
@@ -50,7 +52,6 @@ int	main(int argc, char **argv, char **envp)
 	clear_history();
 	return (EXIT_SUCCESS);
 }
-
 
  //Testing linked lists for env
 //  int main(int argc, char **argv, char **envp)
