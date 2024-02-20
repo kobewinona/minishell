@@ -43,6 +43,20 @@ static bool is_char_inside(char *str, char c)
 	return (false);
 }
 
+bool	is_var_deleted(t_var_node *env_vars, char *varname)
+{
+	t_var_node *curr;
+
+	curr = env_vars;
+	while (curr)
+	{
+		if (!ft_strncmp(varname, curr->name, 5000) && !curr->deleted)
+			return (false);
+		curr = curr->next;
+	}
+	return (true);
+}
+
 void    export(char **argv, t_var_node *env_vars)
 {
     char    **keyval_arr;
@@ -63,8 +77,8 @@ void    export(char **argv, t_var_node *env_vars)
 		}
 		else
 		{
-			if (is_valid_varname(argv[i]));
-				update_var(env_vars, argv[i], NULL); //if var already exists, do nothing
+			if (is_valid_varname(argv[i]) && is_var_deleted(env_vars, argv[i]))
+				update_var(env_vars, argv[i], NULL);
 		}
         i++;
     }

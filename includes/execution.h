@@ -107,6 +107,7 @@ void 		update_var(t_var_node *head, char *varname, char *value);
 t_var_node  *copy_env_vars(char **envp);
 char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
+bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
 // -src/int_cmds
