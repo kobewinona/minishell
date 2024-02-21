@@ -16,7 +16,7 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 {
 	char	*home_path;
 
-	if (res_path && (*res_path))
+	if ((*res_path))
 	{
 		free((*res_path));
 		(*res_path) = NULL;

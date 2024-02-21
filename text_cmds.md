@@ -28,7 +28,7 @@ return (redir_cmd1);
 <br/>
 
 ```bash
-cat < file.txt | sort > sorted.txt
+cat < input.txt | sort > sorted.txt
 ```
 
 ```C

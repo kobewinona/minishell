@@ -12,32 +12,29 @@
 
 #include "minishell.h"
 
-void	handle_exec(t_exec *cmd, t_var_node *env_vars)
+void	handle_exec(t_exec *cmd)
 {
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-
-        	echo(cmd->argv, env_vars);
+			echo(cmd->argv, cmd->env_vars);
 		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
 			return ;
-
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-			pwd(env_vars);
+			pwd(cmd->env_vars);
 		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
-			export(cmd->argv, env_vars);
+			export(cmd->argv, cmd->env_vars);
 		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
-			unset(cmd->argv, env_vars);
+			unset(cmd->argv, cmd->env_vars);
 		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
 			exit_cmd(cmd->argv);
 		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
 			env_cmd(cmd->argv, env_vars);
 		else
 		{
-			if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)	
-				handle_ext_cmd(cmd->argv, env_vars);
+			if (!handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true))
+				handle_ext_cmd(cmd->argv, cmd->env_vars);
 			wait(NULL);
 		}
 	}
-	return ;
 }
