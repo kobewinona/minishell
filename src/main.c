@@ -32,11 +32,15 @@ int	main(int argc, char **argv, char **envp)
 	char		*input_prompt;
 	char		*input_tmp;
 	t_cmd		*cmd;
-	t_var_node	*env_vars;
+	t_state		*state;
 
+	state = (t_state *) malloc(sizeof(t_state));
+	if (!state)
+		return (EXIT_FAILURE);
+	memset(state, 0, sizeof(t_state));
 	printf("....Starting minishell...\n");
-	env_vars = copy_env_vars(envp);
-	increment_shlvl(env_vars);
+	state->env_vars = copy_env_vars(envp);
+	increment_shlvl(state->env_vars);
 	while (1)
 	{
 		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
@@ -46,10 +50,10 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (*input)
 			add_history(input);
-		handle_cd(input, env_vars);
+		handle_cd(input, state->env_vars);
 		input_tmp = input;
-		cmd = parse_cmd(input_tmp, env_vars);
-		run_cmd(cmd);
+		cmd = parse_cmd(&state, input_tmp);
+		run_cmd(&state, cmd);
 		wait(NULL);
 		free(input);
 	}
