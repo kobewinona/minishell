@@ -12,15 +12,12 @@
 
 #include "minishell.h"
 
-
 //handle export without args (prints declared vars in ascii order)
 //handle declaration without assignment
-
 
 //export VAR=: empty string as value
 //export VAR : declare var without assignment
 //check for correctness of name
-
 
 // Environment variable names used by the utilities in the Shell and Utilities volume of IEEE Std 1003.1-2001 consist
 //  solely of uppercase letters, digits, and the '_' 
@@ -34,7 +31,7 @@ static bool	is_valid_varname(char *varname)
 
 bool	is_var_deleted(t_var_node *env_vars, char *varname)
 {
-	t_var_node *curr;
+	t_var_node	*curr;
 
 	curr = env_vars;
 	while (curr)
@@ -46,10 +43,9 @@ bool	is_var_deleted(t_var_node *env_vars, char *varname)
 	return (true);
 }
 
-
 static void	print_declared_vars(t_var_node *env_vars)
-{	
-	t_var_node *curr;
+{
+	t_var_node	*curr;
 
 	curr = env_vars;
 	while (curr)
@@ -64,27 +60,26 @@ static void	print_declared_vars(t_var_node *env_vars)
 		}
 		curr = curr->next;
 	}
-	
 }
 
-void    export(char **argv, t_var_node *env_vars)
+void	export(char **argv, t_var_node *env_vars)
 {
-    char    **keyval_arr;
-    int     i;
+	char	**keyval_arr;
+	int		i;
 
 	if (argv[1] == NULL)
 	{
 		print_declared_vars(env_vars);
 		return ;
 	}
-    i = 1;
-    while (argv[i])
-    {	
+	i = 1;
+	while (argv[i])
+	{
 		if (is_char_there(argv[i], '='))
 		{
 			keyval_arr = ft_split(argv[i], '=');
 			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))
-			{	
+			{
 				free_array(keyval_arr);
 				return ;
 			}
@@ -95,6 +90,6 @@ void    export(char **argv, t_var_node *env_vars)
 			if (is_valid_varname(argv[i]) && is_var_deleted(env_vars, argv[i]))
 				update_var(env_vars, argv[i], NULL);
 		}
-        i++;
-    }
+		i++;
+	}
 }

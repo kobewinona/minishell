@@ -18,8 +18,8 @@ void	pwd(t_var_node *env_vars)
 
 	curr_dir = NULL;
 	curr_dir = get_env_var(env_vars, "PWD"); // replace with getting pwd from our list
-	if (!curr_dir)
-		handle_err(ERROR, (t_err){T_SYS_ERR, PWD}, true);
+//	if (!curr_dir)
+//		handle_err(ERROR, (t_err){T_SYS_ERR, PWD}, true);
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	//exit(EXIT_SUCCESS);

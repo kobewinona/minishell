@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-//need to return exit code passed as arg / ext code of last executed cmdq
+// need to return exit code passed as arg / ext code of last executed cmdq
 void	exit_cmd(char **argv)
 {
 	// if (argv[1] != NULL)
-	// 	handle_err(ERROR, (t_err){T_SYS_ERR, EXIT}, true);
+	// process_err(ERROR, (t_err){T_SYS_ERR, EXIT}, true);
 	printf("exit\n");
 	exit(SUCCESS);
 }

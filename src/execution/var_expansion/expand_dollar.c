@@ -12,68 +12,66 @@
 
 #include "minishell.h"
 
-
-bool    is_wraped_single_qtes(char **argv) //Implement the same but for local checks
+// implement the same but for local checks
+bool	is_wrapped_single_quotes(char **argv)
 {
-    char    first_c;
-    char    last_c;
-    int     i;
-    int     j;
+	char	first_c;
+	char	last_c;
+	int		i;
+	int		j;
 
-    first_c = argv[1][0];
-    i = 1;
-    j = 0;
-    while (argv[i] != NULL)
-        i++;
-    i--;
-    while (argv[i][j])
-        j++;
-    j--;
-    last_c = argv[i][j];
-    printf("first = %c;last=%c\n", first_c, last_c);
-
-    if (first_c == last_c && last_c == '\'')
-        return (false);
-    return (true);
+	first_c = argv[1][0];
+	i = 1;
+	j = 0;
+	while (argv[i] != NULL)
+		i++;
+	i--;
+	while (argv[i][j])
+		j++;
+	j--;
+	last_c = argv[i][j];
+	printf("first = %c;last=%c\n", first_c, last_c);
+	if (first_c == last_c && last_c == '\'')
+		return (false);
+	return (true);
 }
 
-
-void    expand_dollar(char **arg, t_var_node *env_vars) // Make it add dobule quote at the end as it should
+// make it add double quote at the end as it should
+void	expand_dollar(char **arg, t_var_node *env_vars)
 {
-    char    **splitted_arr;
-    char    *expanded_str;
-    char    *value;
-    int     i;
+	char	**split_arr;
+	char	*expanded_str;
+	char	*value;
+	int		i;
 
-    splitted_arr = ft_split(*arg, '$');
-    expanded_str = "";
-    i = 0;
-    if (**arg != '$')
-    {
-        expanded_str = splitted_arr[0];
-        i++;
-    }
-    while (splitted_arr[i])
-    {
-        value = get_env_var(env_vars, ft_strtrim(splitted_arr[i], "\""));
-        if (value)
-            expanded_str = ft_strjoin(expanded_str, value);
-        i++;
-    }
-    *arg = expanded_str;
-    free_array(splitted_arr);
+	split_arr = ft_split(*arg, '$');
+	expanded_str = "";
+	i = 0;
+	if (**arg != '$')
+	{
+		expanded_str = split_arr[0];
+		i++;
+	}
+	while (split_arr[i])
+	{
+		value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
+		if (value)
+			expanded_str = ft_strjoin(expanded_str, value);
+		i++;
+	}
+	*arg = expanded_str;
+	free_array(split_arr);
 }
 
-
-void    replace_dollar_sign(char **argv, t_var_node *env_vars)
+void	replace_dollar_sign(char **argv, t_var_node *env_vars)
 {
-    int i;
-    
-    i = 1;
-    while(argv[i])
-    {
-        if (is_char_there(argv[i], '$') )
-            expand_dollar(&argv[i], env_vars);
-        i++;
-    }
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (is_char_there(argv[i], '$'))
+			expand_dollar(&argv[i], env_vars);
+		i++;
+	}
 }

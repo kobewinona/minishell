@@ -18,6 +18,7 @@
 
 # define PRG_NAME "minishell"
 # define INPUT_PROMPT "> "
+# define PRG_PROMPT "minishel> "
 
 // magic numbers
 # define UNSPECIFIED -2
@@ -45,6 +46,7 @@
 # define GETENV "getenv"
 # define MALLOC "malloc"
 # define WRITE "write"
+# define NEWLINE "newline"
 
 // types
 typedef enum e_types
@@ -60,8 +62,8 @@ typedef enum e_types
 	T_DOUBLE_QUOTE = 34,
 	T_SINGLE_QUOTE = 39,
 	T_SYS_ERR,
-	T_SYNTAX_ERR,
-	T_CMD_NOT_FOUND,
+	T_SYNTAX_ERR = 2,
+	T_CMD_NOT_FOUND = 127,
 }	t_types;
 
 #endif

@@ -34,7 +34,6 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_exec
 {
 	char		*argv[MAX_INPUT + 1];
-	t_var_node	*env_vars;
 }	t_exec;
 
 typedef struct s_pipe
@@ -47,18 +46,9 @@ typedef struct s_redir
 {
 	t_types	type;
 	t_cmd	*subcmd;
-	char	*input;
 	int		fd;
 	int		mode;
 }	t_redir;
-
-typedef struct s_heredoc
-{
-	t_cmd			*subcmd;
-	char			*eof;
-}	t_heredoc;
-
-
 
 struct s_cmd
 {
@@ -78,23 +68,27 @@ typedef struct s_err
 	char	*ctx2;
 }	t_err;
 
-typedef struct s_state
+typedef struct s_msh
 {
 	int			exit_code;
-	int			ppid;
+	pid_t		ppid;
 	t_var_node	*env_vars;
-	t_err		*err_log;
-}	t_state;
+	t_err		*err;
+}	t_msh;
 
 // functions
-void		run_cmd(t_cmd *cmd);
-void		handle_ext_cmd(char **argv, t_var_node *env_vars);
+void		run_cmd(t_msh **msh, t_cmd *cmd);
+void		handle_ext_cmd(t_msh **msh, char **argv);
 void		handle_cd(const char *input, t_var_node *env_vars);
-void		handle_exec(t_exec *cmd);
-void		handle_pipe(t_pipe *cmd);
-void		handle_redir(t_redir *cmd);
+void		handle_exec(t_msh **msh, t_exec *cmd);
+int			handle_pipe(t_msh **msh, t_pipe *cmd);
+void		handle_redir(t_msh **msh, t_redir *cmd);
 
-int			handle_err(int res, t_err err, bool is_on_exit);
+void		log_err(t_msh **msh, t_types err_type, char *ctx1, char *ctx2);
+int			handle_err(int ret_val, t_msh **msh,
+				t_types err_type, char *ctx1, char *ctx2);
+void		process_err(t_msh **msh, bool is_on_exit);
+
 void		handle_builtin(t_exec *params, t_var_node *env_vars);
 
 
@@ -119,12 +113,12 @@ bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
 // -src/int_cmds
-void	echo(char **argv, t_var_node *env_vars);
-void	cd(char *path, t_var_node *env_vars);
-void	pwd(t_var_node *env_vars);
-void    export(char **argv, t_var_node *env_vars);
-void    unset(char **argv, t_var_node *env_vars);
-void	exit_cmd(char **argv);
-void	env_cmd(char **argv, t_var_node *env_vars);
+void		echo(char **argv, t_var_node *env_vars);
+void		cd(char *path, t_var_node *env_vars);
+void		pwd(t_var_node *env_vars);
+void		export(char **argv, t_var_node *env_vars);
+void		unset(char **argv, t_var_node *env_vars);
+void		exit_cmd(char **argv);
+void		env_cmd(char **argv, t_var_node *env_vars);
 
 #endif

@@ -14,8 +14,8 @@
 
 static int	len_list(t_var_node *env_vars)
 {
+	t_var_node	*curr_node;
 	int			i;
-	t_var_node *curr_node;
 
 	i = 0;
 	curr_node = env_vars;
@@ -30,10 +30,10 @@ static int	len_list(t_var_node *env_vars)
 
 char	**envlist_to_arr(t_var_node *env_vars)
 {
-	int	len;
-	t_var_node *curr;
-	char	**arr;
-	int		i;
+	int			len;
+	t_var_node	*curr;
+	char		**arr;
+	int			i;
 
 	i = 0;
 	len = len_list(env_vars);
@@ -47,7 +47,6 @@ char	**envlist_to_arr(t_var_node *env_vars)
 		{
 			arr[i] = curr->key_val_str;
 			i++;
-			
 		}
 		curr = curr->next;
 	}

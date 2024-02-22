@@ -43,7 +43,7 @@ When creating a new t_cmd, you would set the construct function pointer to the a
 t_cmd *create_cmd(t_cmd_type type, void *params) {
     t_cmd *cmd = (t_cmd *)malloc(sizeof(t_cmd));
     if (!cmd)
-        handle_err(ERROR, NULL, MALLOC, true);
+        process_err(ERROR, NULL, MALLOC, true);
     ft_memset(cmd, 0, sizeof(t_cmd));
 
     cmd->type = type;

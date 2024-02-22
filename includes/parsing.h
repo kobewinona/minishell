@@ -20,17 +20,17 @@
 # define UNEXPECTED_EOF_MSG "unexpected EOF while looking for matching"
 
 // constructors
-t_cmd	*constr_cmd(t_types cmd_type);
-t_cmd	*constr_exec_cmd(char *input, t_var_node *env_vars);
-t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2);
-t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *f);
+t_cmd	*constr_exec_cmd(t_msh **msh, char *input);
+t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2);
+t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f);
+void	cleanup_cmds(t_cmd *cmd);
 
-t_cmd	*parse_cmd(char *input, t_var_node *env_vars);
-char	*collect_heredoc_input(const char *eof);
+t_cmd	*parse_cmd(t_msh **msh, char *input);
+char	*collect_heredoc_input(t_msh **msh, const char *eof);
 char	*smart_strtok(char *restrict str,
 			const char *restrict sep, t_types *tok);
 
-void	populate_argv(char **argv, char *input);
-char	*get_value(char **s);
+int		populate_argv(t_msh **msh, char **argv, char *input);
+char	*get_value(t_msh **msh, char **s);
 
 #endif

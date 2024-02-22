@@ -12,33 +12,43 @@
 
 #include "minishell.h"
 
-void	handle_pipe(t_pipe *cmd)
+static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
+{
+	int	pid;
+
+	pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
+	if (pid == ERROR)
+		process_err(msh, false);
+	if (pid == 0)
+	{
+		if (handle_err(dup2(pipe_fds[end], end),
+				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
+			process_err(msh, true);
+		if (end == STDOUT_FILENO)
+			close(pipe_fds[STDIN_FILENO]);
+		if (handle_err(dup2(pipe_fds[end], end),
+				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
+			process_err(msh, true);
+		if (end == STDIN_FILENO)
+			close(pipe_fds[STDOUT_FILENO]);
+		close(pipe_fds[STDIN_FILENO]);
+		close(pipe_fds[STDOUT_FILENO]);
+		run_cmd(msh, cmd);
+		exit(EXIT_SUCCESS);
+	}
+}
+
+int	handle_pipe(t_msh **msh, t_pipe *cmd)
 {
 	int	pipe_fds[2];
 
-	handle_err(pipe(pipe_fds), (t_err){T_SYS_ERR, PIPE}, true);
-	if (handle_err(fork(), (t_err){T_SYS_ERR, FORK}, true) == 0)
-	{
-		close(STDOUT_FILENO);
-		handle_err(dup2(pipe_fds[1], STDOUT_FILENO),
-			(t_err){T_SYS_ERR, DUP2}, true);
-		close(pipe_fds[0]);
-		close(pipe_fds[1]);
-		run_cmd(cmd->from);
-		exit(EXIT_SUCCESS);
-	}
-	if (handle_err(fork(), (t_err){T_SYS_ERR, DUP2}, true) == 0)
-	{
-		close(STDIN_FILENO);
-		handle_err(dup2(pipe_fds[0], STDIN_FILENO),
-			(t_err){T_SYS_ERR, DUP2}, true);
-		close(pipe_fds[0]);
-		close(pipe_fds[1]);
-		run_cmd(cmd->to);
-		exit(EXIT_SUCCESS);
-	}
-	close(pipe_fds[0]);
-	close(pipe_fds[1]);
+	if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
+		return (ERROR);
+	run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
+	run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO);
+	close(pipe_fds[STDIN_FILENO]);
+	close(pipe_fds[STDOUT_FILENO]);
 	wait(NULL);
 	wait(NULL);
+	return (SUCCESS);
 }

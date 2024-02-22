@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 
-void    free_array(char **array)
+void	free_array(char **array)
 {
-    char    **temp;
+	char	**temp;
 
-    temp = array;
-    while (*temp)
-    {
-        free(*temp);
-        temp++;
-    }
-    free(array);
+	temp = array;
+	while (*temp)
+	{
+		free(*temp);
+		temp++;
+	}
+	free(array);
 }

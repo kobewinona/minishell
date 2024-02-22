@@ -12,73 +12,52 @@
 
 #include "minishell.h"
 
-void	run_cmd(t_cmd *cmd)
+void	run_cmd(t_msh **msh, t_cmd *cmd)
 {
+	if (!cmd)
+		return ;
 	if (cmd->type == T_EXEC)
-		handle_exec(&(cmd->exec));
+		handle_exec(msh, &(cmd->exec));
 	else if (cmd->type == T_PIPE)
-		handle_pipe(&(cmd->pipe));
+		handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == T_REDIR)
-		handle_redir(&(cmd->redir));
-//	else if (cmd->type == T_HEREDOC)
-//		handle_heredoc(&(cmd->heredoc), UNSPECIFIED);
-	else
-		handle_err(ERROR, (t_err){T_SYS_ERR}, true);
+		handle_redir(msh, &(cmd->redir));
+}
+
+static void	run_minishell(t_msh **msh)
+{
+	t_cmd	*cmd;
+	char	*input;
+	char	*temp;
+
+	while (1)
+	{
+		input = readline(PRG_PROMPT);
+		if (!input)
+			break ;
+		add_history(input);
+		temp = input;
+		cmd = parse_cmd(msh, temp);
+		process_err(msh, false);
+		run_cmd(msh, cmd);
+		cleanup_cmds(cmd);
+		free(input);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input;
-	char		*input_prompt;
-	char		*input_tmp;
-	t_cmd		*cmd;
-	t_state		*state;
+	t_msh		*msh;
 
-	state = (t_state *) malloc(sizeof(t_state));
-	if (!state)
+	(void)argc;
+	(void)argv;
+	msh = (t_msh *) malloc(sizeof(t_msh));
+	if (!msh)
 		return (EXIT_FAILURE);
-	memset(state, 0, sizeof(t_state));
-	printf("....Starting minishell...\n");
-	state->env_vars = copy_env_vars(envp);
-	increment_shlvl(state->env_vars);
-	while (1)
-	{
-		input_prompt = ft_strjoin(PRG_NAME, INPUT_PROMPT);
-		input = readline(input_prompt);
-		free(input_prompt);
-		if (!input)
-			break ;
-		if (*input)
-			add_history(input);
-		handle_cd(input, state->env_vars);
-		input_tmp = input;
-		cmd = parse_cmd(&state, input_tmp);
-		run_cmd(&state, cmd);
-		wait(NULL);
-		free(input);
-	}
-	clear_history();
-	return (EXIT_SUCCESS);
+	memset(msh, 0, sizeof(t_msh));
+	msh->ppid = getppid();
+	msh->env_vars = copy_env_vars(envp);
+	increment_shlvl(msh->env_vars);
+	run_minishell(&msh);
+	return (msh->exit_code);
 }
-
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	char		*input;
-// 	char		*input_prompt;
-// 	char		*input_tmp;
-// 	t_var_node	*env_vars;
-
-
-// 	printf("....Starting minishell...\n");
-// 	env_vars = copy_env_vars(envp);
-// 	increment_shlvl(env_vars);
-	
-// 	char **to_pass = argv + 1;
-	
-// 	export(to_pass, env_vars);
-
-// 	printf("myvar = %s; deleted = %d\n", get_env_var(env_vars, "MYVAR"), );
-
-// 	return (EXIT_SUCCESS);
-// }

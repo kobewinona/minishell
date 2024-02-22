@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_redir(t_redir *cmd)
+void	handle_redir(t_msh **msh, t_redir *cmd)
 {
 	int	org_fd;
 
@@ -26,7 +26,7 @@ void	handle_redir(t_redir *cmd)
 		org_fd = dup(STDIN_FILENO);
 		dup2(cmd->fd, STDIN_FILENO);
 	}
-	run_cmd(cmd->subcmd);
+	run_cmd(msh, cmd->subcmd);
 	if (cmd->type == T_REDIR_STDOUT || cmd->type == T_APPEND_STDOUT)
 		dup2(org_fd, STDOUT_FILENO);
 	else

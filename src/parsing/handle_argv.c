@@ -12,11 +12,13 @@
 
 #include "minishell.h"
 
-static void	nullterminate(char **s, int end, char end_chr)
+static int	nullterminate(t_msh **msh, char **s, int end, char end_chr)
 {
 	if (end_chr != ' ' && (*s)[end] != end_chr)
-		handle_err(ERROR, (t_err){T_SYNTAX_ERR,
-			UNEXPECTED_EOF_MSG, tokstr(end_chr)}, true);
+	{
+		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_EOF_MSG, tokstr(end_chr));
+		return (ERROR);
+	}
 	if ((*s)[end] == end_chr)
 	{
 		(*s)[end] = '\0';
@@ -28,15 +30,17 @@ static void	nullterminate(char **s, int end, char end_chr)
 		if ((**s) == end_chr)
 			(*s) += 1;
 	}
+	return (SUCCESS);
 }
 
-
-char	*get_value(char **s)
+char	*get_value(t_msh **msh, char **s)
 {
 	char	*value;
 	char	end_chr;
 	int		end;
 
+	if (!*s)
+		return (NULL);
 	end_chr = ' ';
 	end = 0;
 	while (**s && ft_isspace(**s))
@@ -53,26 +57,31 @@ char	*get_value(char **s)
 			break ;
 		end++;
 	}
-	nullterminate(s, end, end_chr);
+	if (nullterminate(msh, s, end, end_chr) == ERROR)
+		return (NULL);
 	if (!is_emptystr(value))
 		return (value);
 	return (NULL);
 }
 
-void	populate_argv(char **argv, char *input)
+int	populate_argv(t_msh **msh, char **argv, char *input)
 {
 	int		index;
 
 	if (!input)
-		return ;
+		return (ERROR);
 	index = 0;
 	while (argv && argv[index])
 		index++;
 	while (!is_emptystr(input))
 	{
-		argv[index] = get_value(&input);
-		if (argv[index])
-			argv[index] = ft_strtrim(argv[index], "\"\'");
+		argv[index] = get_value(msh, &input);
+		if (!argv[index])
+			return (ERROR);
+		argv[index] = ft_strtrim(argv[index], "\"\'");
+		if (!argv[index])
+			return (ERROR);
 		index++;
 	}
+	return (SUCCESS);
 }

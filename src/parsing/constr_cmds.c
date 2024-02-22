@@ -12,36 +12,43 @@
 
 #include "parsing.h"
 
-t_cmd	*constr_cmd(t_types cmd_type)
+static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
 {
 	t_cmd	*cmd;
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		handle_err(ERROR, (t_err){T_SYS_ERR, NULL, MALLOC}, true);
+	{
+		log_err(msh, T_SYS_ERR, NULL, MALLOC);
+		return (NULL);
+	}
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->type = cmd_type;
 	return (cmd);
 }
 
-t_cmd	*constr_exec_cmd(char *input, t_var_node *env_vars)
+t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 {
 	t_cmd	*cmd;
 
-	cmd = constr_cmd(T_EXEC);
+	cmd = constr_cmd(msh, T_EXEC);
+	if (!cmd)
+		return (NULL);
 	memset(cmd->exec.argv, 0, sizeof(cmd->exec.argv));
-	populate_argv(cmd->exec.argv, input);
-	cmd->exec.env_vars = env_vars;
+	if (populate_argv(msh, cmd->exec.argv, input) == ERROR)
+		return (NULL);
 	return (cmd);
 }
 
-static int	prepare_fd(t_types redir_type, int mode, char *f)
+static int	prepare_fd(t_msh **msh, t_types redir_type, int mode, char *f)
 {
 	int	ret_fd;
 	int	pipe_fds[2];
 
-	if (redir_type == T_HEREDOC) {
-		handle_err(pipe(pipe_fds), (t_err){T_SYS_ERR, PIPE}, true);
+	if (redir_type == T_HEREDOC)
+	{
+		if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
+			return (ERROR);
 		write(pipe_fds[1], f, strlen(f));
 		close(pipe_fds[1]);
 		ret_fd = pipe_fds[0];
@@ -49,34 +56,38 @@ static int	prepare_fd(t_types redir_type, int mode, char *f)
 	}
 	else
 		ret_fd = handle_err(open(f, mode, RW_R_R_PERM),
-				(t_err){T_SYS_ERR, f}, true);
+				msh, T_SYS_ERR, f, NULL);
 	return (ret_fd);
 }
 
-t_cmd	*constr_redir_cmd(t_types redir_type, t_cmd *subcmd, char *f)
+t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
 {
 	t_cmd	*cmd;
 
-	cmd = constr_cmd(T_REDIR);
-	cmd->redir.type = redir_type;
+	cmd = constr_cmd(msh, T_REDIR);
+	if (!cmd || !f)
+		return (NULL);
+	cmd->redir.type = r_type;
 	cmd->redir.subcmd = subcmd;
-	if (redir_type == T_REDIR_STDOUT)
+	if (r_type == T_REDIR_STDOUT)
 		cmd->redir.mode = O_WRONLY | O_CREAT | O_TRUNC;
-	if (redir_type == T_APPEND_STDOUT)
+	if (r_type == T_APPEND_STDOUT)
 		cmd->redir.mode = O_WRONLY | O_APPEND | O_CREAT;
-	if (redir_type == T_REDIR_STDIN || redir_type == T_HEREDOC)
+	if (r_type == T_REDIR_STDIN || r_type == T_HEREDOC)
 		cmd->redir.mode = O_RDONLY;
-	cmd->redir.fd = prepare_fd(cmd->redir.type, cmd->redir.mode, f);
+	cmd->redir.fd = prepare_fd(msh, cmd->redir.type, cmd->redir.mode, f);
 	return (cmd);
 }
 
-t_cmd	*constr_pipe_cmd(t_cmd *cmd1, t_cmd *cmd2)
+t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2)
 {
 	t_cmd	*cmd;
 
 	if (!cmd1 || !cmd2)
 		return (NULL);
-	cmd = constr_cmd(T_PIPE);
+	cmd = constr_cmd(msh, T_PIPE);
+	if (!cmd)
+		return (NULL);
 	cmd->pipe.from = cmd1;
 	cmd->pipe.to = cmd2;
 	return (cmd);

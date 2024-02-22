@@ -24,7 +24,7 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 	home_path = get_env_var(env_vars, "HOME");
 	if (!home_path)
 	{
-		handle_err(ERROR, (t_err){T_SYS_ERR, CD, GETENV}, false);
+//		handle_err(ERROR, (t_err){T_SYS_ERR, CD, GETENV}, false);
 		return ;
 	}
 	if (!path)
@@ -43,12 +43,11 @@ void	cd(char *path, t_var_node *env_vars)
 		res_path = ft_strdup(path);
 	if (!path || !ft_strncmp(path, "~", 1))
 		handle_home_path(&res_path, path, env_vars);
-	
 	update_var(env_vars, "OLDPWD", get_env_var(env_vars, "PWD"));
 	ret = chdir(res_path);
 	update_var(env_vars, "PWD", res_path); //update our pwd
 	if (res_path)
 		free(res_path);
-	if (ret == ERROR)
-		handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
+//	if (ret == ERROR)
+//		handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
 }
