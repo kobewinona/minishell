@@ -20,8 +20,10 @@ int	echo(char **argv, t_var_node *env_vars)
 	int	i;
 
 	i = 1;
-	replace_dollar_sign(argv, env_vars);
-	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
+	is_with_n_flag = false;
+	replace_dollar_sign(argv, env_vars);	
+	if (argv[i])
+		is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
 	while (argv[i])
