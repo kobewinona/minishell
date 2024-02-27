@@ -56,9 +56,9 @@ int		handle_builtin_cmd(t_msh **msh, t_exec *cmd)
 	return (ext_code);
 }
 
-void	handle_exec(t_msh **msh, t_exec *cmd)
+int	handle_exec(t_msh **msh, t_exec *cmd)
 {
-	int	exit_status;	
+	int	exit_status;
 
 	exit_status = 0;
 	if (cmd->argv[0])
@@ -77,5 +77,5 @@ void	handle_exec(t_msh **msh, t_exec *cmd)
 	}
 	if (getpid() != (*msh)->pid)
 		exit((*msh)->exit_code);
-
+	return ((*msh)->exit_code);
 }
