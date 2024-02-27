@@ -14,6 +14,9 @@
 
 void	handle_exec(t_msh **msh, t_exec *cmd)
 {
+	int	exit_status;	
+
+	exit_status = 0;
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
@@ -34,7 +37,13 @@ void	handle_exec(t_msh **msh, t_exec *cmd)
 		{
 			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
 				handle_ext_cmd(msh, cmd->argv);
-			wait(NULL);
+
+			wait(&exit_status);
+			if (WIFEXITED(exit_status))
+				(*msh)->exit_code = WEXITSTATUS(exit_status);
 		}
 	}
+	if (getpid() != (*msh)->pid)
+		exit((*msh)->exit_code);
+
 }
