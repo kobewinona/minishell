@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	unset(char **argv, t_var_node *env_vars)
+int	unset(char **argv, t_var_node *env_vars)
 {
 	int	i;
 
@@ -22,4 +22,5 @@ void	unset(char **argv, t_var_node *env_vars)
 		set_var_deleted(env_vars, argv[i]);
 		i++;
 	}
+	return (SUCCESS);
 }

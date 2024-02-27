@@ -62,7 +62,7 @@ static void	print_declared_vars(t_var_node *env_vars)
 	}
 }
 
-void	export(char **argv, t_var_node *env_vars)
+int	export(char **argv, t_var_node *env_vars)
 {
 	char	**keyval_arr;
 	int		i;
@@ -70,18 +70,20 @@ void	export(char **argv, t_var_node *env_vars)
 	if (argv[1] == NULL)
 	{
 		print_declared_vars(env_vars);
-		return ;
+		return (SUCCESS);
 	}
 	i = 1;
 	while (argv[i])
 	{
+		if (!is_valid_varname(argv[i]))
+			return (EXIT_FAILURE); //need to add some message
 		if (is_char_there(argv[i], '='))
 		{
 			keyval_arr = ft_split(argv[i], '=');
 			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))
 			{
 				free_array(keyval_arr);
-				return ;
+				return (EXIT_FAILURE);
 			}
 			update_var(env_vars, keyval_arr[0], keyval_arr[1]);
 		}
@@ -92,4 +94,5 @@ void	export(char **argv, t_var_node *env_vars)
 		}
 		i++;
 	}
+	return (SUCCESS);
 }

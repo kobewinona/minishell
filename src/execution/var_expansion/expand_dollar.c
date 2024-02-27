@@ -45,7 +45,7 @@ void	expand_dollar(char **arg, t_var_node *env_vars)
 	int		i;
 
 	split_arr = ft_split(*arg, '$');
-	expanded_str = "";
+	expanded_str = NULL;
 	i = 0;
 	if (**arg != '$')
 	{
@@ -54,11 +54,15 @@ void	expand_dollar(char **arg, t_var_node *env_vars)
 	}
 	while (split_arr[i])
 	{
+		
 		value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
-		if (value)
+		if (value && expanded_str)
 			expanded_str = ft_strjoin(expanded_str, value);
+		else if (value && expanded_str == NULL)
+			expanded_str = ft_strdup(value);
 		i++;
 	}
+
 	*arg = expanded_str;
 	free_array(split_arr);
 }
