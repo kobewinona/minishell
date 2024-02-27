@@ -36,6 +36,8 @@ static void	process_parsing_err(t_msh **msh, bool is_on_exit)
 		printf("%s: %s `%s'\n", PRG_NAME, (*msh)->err->ctx1, (*msh)->err->ctx2);
 	if ((*msh)->err->type == T_CMD_NOT_FOUND)
 		printf("%s: %s: %s\n", PRG_NAME, (*msh)->err->ctx1, CMD_NOT_FOUND_MSG);
+	if ((*msh)->err->type == T_CMD_FOUND_NO_EXEC)
+		printf("%s: %s: %s\n", PRG_NAME, (*msh)->err->ctx1, CMD_FOUND_NOT_EXEC_MSG);
 	dup2(STDOUT_FILENO, STDERR_FILENO);
 	close(org_fd);
 	handle_exit(msh, is_on_exit);
