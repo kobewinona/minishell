@@ -14,6 +14,9 @@
 
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
+	int ext_code;
+
+	ext_code = 0;
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
@@ -34,7 +37,8 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 		{
 			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
 				handle_ext_cmd(msh, cmd->argv);
-			wait(NULL);
+			wait(&ext_code);
+			(*msh)->exit_code = WEXITSTATUS(ext_code);
 		}
 	}
 	return (SUCCESS);
