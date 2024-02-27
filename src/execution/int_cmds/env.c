@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	env_cmd(char **argv, t_var_node *env_vars)
+int	env_cmd(char **argv, t_var_node *env_vars)
 {
 	t_var_node	*curr;
 
@@ -23,4 +23,5 @@ void	env_cmd(char **argv, t_var_node *env_vars)
 			printf("%s\n", curr->key_val_str);
 		curr = curr->next;
 	}
+	return (SUCCESS);
 }

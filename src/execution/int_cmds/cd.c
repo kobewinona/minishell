@@ -33,7 +33,11 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 		(*res_path) = ft_strjoin(home_path, (path + 1));
 }
 
-void	cd(char *path, t_var_node *env_vars)
+
+//
+// "cd -" should move us to OLDPWD
+
+int	cd(char *path, t_var_node *env_vars)
 {
 	char	*res_path;
 	int		ret;
@@ -48,6 +52,7 @@ void	cd(char *path, t_var_node *env_vars)
 	update_var(env_vars, "PWD", res_path); //update our pwd
 	if (res_path)
 		free(res_path);
-//	if (ret == ERROR)
-//		handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
+	return (ret);
+	// if (ret == ERROR)
+	// 	handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
 }
