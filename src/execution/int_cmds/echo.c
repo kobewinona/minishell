@@ -14,7 +14,7 @@
 
 //Dima's version
 
-void	echo(char **argv, t_var_node *env_vars)
+int	echo(char **argv, t_var_node *env_vars)
 {
 	int	is_with_n_flag;
 	int	i;
@@ -33,4 +33,5 @@ void	echo(char **argv, t_var_node *env_vars)
 	}
 	if (is_with_n_flag == false)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	return (SUCCESS);
 }

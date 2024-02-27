@@ -89,7 +89,7 @@ int			handle_err(int ret_val, t_msh **msh,
 				t_types err_type, char *ctx1, char *ctx2);
 void		process_err(t_msh **msh, bool is_on_exit);
 
-void		handle_builtin(t_exec *params, t_var_node *env_vars);
+
 
 
 //dollar expansion
@@ -112,13 +112,15 @@ void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
+
 // -src/int_cmds
-void		echo(char **argv, t_var_node *env_vars);
-void		cd(char *path, t_var_node *env_vars);
-void		pwd(t_var_node *env_vars);
-void		export(char **argv, t_var_node *env_vars);
-void		unset(char **argv, t_var_node *env_vars);
-void		exit_cmd(char **argv);
-void		env_cmd(char **argv, t_var_node *env_vars);
+int		echo(char **argv, t_var_node *env_vars);
+int		cd(char *path, t_var_node *env_vars);
+int		pwd(t_var_node *env_vars);
+int		export(char **argv, t_var_node *env_vars);
+int		unset(char **argv, t_var_node *env_vars);
+void	exit_cmd(char **argv);
+int		env_cmd(char **argv, t_var_node *env_vars);
+int		handle_builtin_cmd(t_msh **msh, t_exec *cmd);
 
 #endif

@@ -54,7 +54,10 @@ void	expand_dollar(char **arg, t_var_node *env_vars)
 	}
 	while (split_arr[i])
 	{
-		value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
+		printf("Value = %s\n", split_arr[i]);
+		//value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
+		value = get_env_var(env_vars, split_arr[i]);
+
 		if (value)
 			expanded_str = ft_strjoin(expanded_str, value);
 		i++;

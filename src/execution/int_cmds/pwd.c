@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	pwd(t_var_node *env_vars)
+int	pwd(t_var_node *env_vars)
 {
 	char	*curr_dir;
 
@@ -22,5 +22,5 @@ void	pwd(t_var_node *env_vars)
 //		handle_err(ERROR, (t_err){T_SYS_ERR, PWD}, true);
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	//exit(EXIT_SUCCESS);
+	return (SUCCESS);
 }
