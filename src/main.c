@@ -45,6 +45,8 @@ static void	run_minishell(t_msh **msh)
 	}
 }
 
+//HINT: a cool idea to build ft_linked_malloc()
+// that allocates memory and keep it in a linked list to free easilly
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh		*msh;
