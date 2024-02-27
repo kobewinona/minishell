@@ -46,7 +46,7 @@ typedef struct s_redir
 {
 	t_types	type;
 	t_cmd	*subcmd;
-	int		fd;
+	int		fd[2];
 	int		mode;
 }	t_redir;
 
@@ -77,12 +77,13 @@ typedef struct s_msh
 }	t_msh;
 
 // functions
-void		run_cmd(t_msh **msh, t_cmd *cmd);
+int			run_cmd(t_msh **msh, t_cmd *cmd);
 void		handle_ext_cmd(t_msh **msh, char **argv);
 void		handle_cd(const char *input, t_var_node *env_vars);
-void		handle_exec(t_msh **msh, t_exec *cmd);
+int			handle_exec(t_msh **msh, t_exec *cmd);
 int			handle_pipe(t_msh **msh, t_pipe *cmd);
-void		handle_redir(t_msh **msh, t_redir *cmd);
+int			handle_redir(t_msh **msh, t_redir *cmd);
+//void	handle_redir(t_msh **msh, t_redir *cmd);
 
 void		log_err(t_msh **msh, t_types err_type, char *ctx1, char *ctx2);
 int			handle_err(int ret_val, t_msh **msh,

@@ -18,7 +18,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 
 	pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
 	if (pid == ERROR)
-		process_err(msh, false);
+		return (ERROR);
 	if (pid == 0)
 	{
 		if (handle_err(dup2(pipe_fds[end], end),
@@ -33,9 +33,11 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 			close(pipe_fds[STDOUT_FILENO]);
 		close(pipe_fds[STDIN_FILENO]);
 		close(pipe_fds[STDOUT_FILENO]);
-		run_cmd(msh, cmd);
+		if (run_cmd(msh, cmd) == ERROR)
+			process_err(msh, true);
 		exit(EXIT_SUCCESS);
 	}
+	return (SUCCESS);
 }
 
 int	handle_pipe(t_msh **msh, t_pipe *cmd)
@@ -44,8 +46,16 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 
 	if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
 		return (ERROR);
-	run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
-	run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO);
+	if (run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO) == ERROR)
+	{
+		process_err(msh, false);
+		return (ERROR);
+	}
+	if (run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO) == ERROR)
+	{
+		process_err(msh, false);
+		return (ERROR);
+	}
 	close(pipe_fds[STDIN_FILENO]);
 	close(pipe_fds[STDOUT_FILENO]);
 	wait(NULL);

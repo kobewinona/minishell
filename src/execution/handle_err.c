@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_err.c                                       :+:      :+:    :+:   */
+/*   handle_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/22 19:52:01 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/02/27 17:08:11 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,17 @@ static void	handle_exit(t_msh **msh, bool is_on_exit)
 		exit((*msh)->exit_code);
 }
 
-static int	process_parsing_err(t_msh **msh, bool is_on_exit)
+static void	process_parsing_err(t_msh **msh, bool is_on_exit)
 {
 	int	org_fd;
 
+	if (!(*msh)->err)
+		return ;
 	org_fd = dup(STDOUT_FILENO);
-	dup2(STDERR_FILENO, STDOUT_FILENO);
+	if (org_fd < 0)
+		handle_exit(msh, is_on_exit);
+	if (dup2(STDERR_FILENO, STDOUT_FILENO) == ERROR)
+		handle_exit(msh, is_on_exit);
 	if ((*msh)->err->type == T_SYNTAX_ERR)
 		printf("%s: %s `%s'\n", PRG_NAME, (*msh)->err->ctx1, (*msh)->err->ctx2);
 	if ((*msh)->err->type == T_CMD_NOT_FOUND)
@@ -58,10 +63,7 @@ void	log_err(t_msh **msh, t_types err_type, char *ctx1, char *ctx2)
 	if (err_type != T_SYS_ERR)
 		(*msh)->exit_code = err_type;
 	else
-	{
 		(*msh)->exit_code = errno;
-		printf("errno: %d\n", errno);
-	}
 	(*msh)->err->type = err_type;
 	(*msh)->err->ctx1 = ctx1;
 	(*msh)->err->ctx2 = ctx2;

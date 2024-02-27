@@ -12,16 +12,17 @@
 
 #include "minishell.h"
 
-void	run_cmd(t_msh **msh, t_cmd *cmd)
+int	run_cmd(t_msh **msh, t_cmd *cmd)
 {
-	if (!cmd)
-		return ;
+	int	res;
+
 	if (cmd->type == T_EXEC)
-		handle_exec(msh, &(cmd->exec));
+		res = handle_exec(msh, &(cmd->exec));
 	else if (cmd->type == T_PIPE)
-		handle_pipe(msh, &(cmd->pipe));
+		res = handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == T_REDIR)
-		handle_redir(msh, &(cmd->redir));
+		res = handle_redir(msh, &(cmd->redir));
+	return (res);
 }
 
 static void	run_minishell(t_msh **msh)
@@ -39,8 +40,11 @@ static void	run_minishell(t_msh **msh)
 		temp = input;
 		cmd = parse_cmd(msh, temp);
 		process_err(msh, false);
-		run_cmd(msh, cmd);
-		cleanup_cmds(cmd);
+		if (cmd)
+		{
+			run_cmd(msh, cmd);
+			cleanup_cmds(cmd);
+		}
 		free(input);
 	}
 }
