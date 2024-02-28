@@ -35,4 +35,5 @@ void	echo(char **argv,  t_msh **msh)
 	}
 	if (is_with_n_flag == false)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	(*msh)->exit_code = 0;
 }

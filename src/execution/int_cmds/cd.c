@@ -50,4 +50,5 @@ void	cd(char *path, t_msh **msh)
 		free(res_path);
 //	if (ret == ERROR)
 //		handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
+	(*msh)->exit_code = ret;
 }

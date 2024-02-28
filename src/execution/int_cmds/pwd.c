@@ -23,4 +23,5 @@ void	pwd(t_msh **msh)
 	ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	//exit(EXIT_SUCCESS);
+	(*msh)->exit_code = 0;
 }

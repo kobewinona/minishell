@@ -92,4 +92,5 @@ void	export(char **argv, t_msh **msh)
 		}
 		i++;
 	}
+	(*msh)->exit_code = 0;
 }

@@ -23,4 +23,6 @@ void	env_cmd(char **argv, t_msh **msh)
 			printf("%s\n", curr->key_val_str);
 		curr = curr->next;
 	}
+
+	(*msh)->exit_code = 0;
 }
