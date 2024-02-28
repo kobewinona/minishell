@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 // need to return exit code passed as arg / ext code of last executed cmdq
-void	exit_cmd(char **argv)
+void	exit_cmd(char **argv, t_msh **msh)
 {
 	// if (argv[1] != NULL)
 	// process_err(ERROR, (t_err){T_SYS_ERR, EXIT}, true);

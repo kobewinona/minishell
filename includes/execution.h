@@ -114,12 +114,12 @@ bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
 // -src/int_cmds
-void		echo(char **argv, t_var_node *env_vars, t_msh **msh);
-void		cd(char *path, t_var_node *env_vars);
-void		pwd(t_var_node *env_vars);
-void		export(char **argv, t_var_node *env_vars);
-void		unset(char **argv, t_var_node *env_vars);
-void		exit_cmd(char **argv);
-void		env_cmd(char **argv, t_var_node *env_vars);
+void	echo(char **argv,  t_msh **msh);
+void	cd(char *path, t_msh **msh);
+void	pwd(t_msh **msh);
+void	export(char **argv, t_msh **msh);
+void	unset(char **argv, t_msh **msh);
+void	exit_cmd(char **argv, t_msh **msh);
+void	env_cmd(char **argv, t_msh **msh);
 
 #endif
