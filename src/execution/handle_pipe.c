@@ -33,46 +33,30 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 			close(pipe_fds[STDOUT_FILENO]);
 		close(pipe_fds[STDIN_FILENO]);
 		close(pipe_fds[STDOUT_FILENO]);
-		// if (run_cmd(msh, cmd) == ERROR)
-		// 	process_err(msh, true);
-		run_cmd(msh, cmd);
-		printf("GOTHERE\n");
+		if (run_cmd(msh, cmd) == ERROR)
+			process_err(msh, true);
 		exit((*msh)->exit_code);
 	}
-	return (SUCCESS);
+	return (pid);
 }
 
 int	handle_pipe(t_msh **msh, t_pipe *cmd)
 {
 	int	pipe_fds[2];
-	int	ext_status_left;
 	int ext_status_right;
-
-	ext_status_left = 0;
+	int	right_pid;
+	int	left_pid;
+	
 	ext_status_right = 0;
 	if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
 		return (ERROR);
-	if (run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO) == ERROR)
-	{
-		process_err(msh, false);
-		return (ERROR);
-	}
-	if (run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO) == ERROR)
-	{
-		process_err(msh, false);
-		return (ERROR);
-	}
+	left_pid = run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
+	right_pid = run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO);
 	close(pipe_fds[STDIN_FILENO]);
 	close(pipe_fds[STDOUT_FILENO]);
-	// wait(NULL);
-	// wait(NULL);
-	wait(&ext_status_left);
-	wait(&ext_status_right);
-
-	ext_status_left = WEXITSTATUS(ext_status_left);
-	printf("Pipe result = %d\n", ext_status_left);
+	waitpid(left_pid, NULL, 0);
+	waitpid(right_pid, &ext_status_right, 0);
 	ext_status_right = WEXITSTATUS(ext_status_right);
-
 	printf("Pipe result = %d\n", ext_status_right);
 	return (SUCCESS);
 }
