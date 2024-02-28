@@ -61,12 +61,10 @@ void	handle_ext_cmd(t_msh **msh, char **argv)
 	char		*cmd_dir;
 
 	env_path = get_env_var((*msh)->env_vars, "PATH");
-
-	//check if we can execute it without PATH
-	if (access(argv[0], X_OK) == SUCCESS)
+	if (!access(argv[0], F_OK | X_OK))
 	{
 		execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
-		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
+		log_err(msh, T_SYS_ERR, argv[0], NULL);
 		process_err(msh, true);
 	}
 	if (!env_path)

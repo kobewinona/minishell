@@ -66,7 +66,7 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
 			echo(cmd->argv, msh);
 		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
-			cd(cmd->argv[0], msh);
+			cd(cmd->argv[1], msh);
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
 			pwd(msh);
 		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
