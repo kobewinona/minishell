@@ -57,6 +57,7 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 	waitpid(left_pid, NULL, 0);
 	waitpid(right_pid, &ext_status_right, 0);
 	ext_status_right = WEXITSTATUS(ext_status_right);
-	printf("Pipe result = %d\n", ext_status_right);
-	return (SUCCESS);
+
+	(*msh)->exit_code = ext_status_right;
+	return (ext_status_right);
 }

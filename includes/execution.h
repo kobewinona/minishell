@@ -94,12 +94,12 @@ void		handle_builtin(t_exec *params, t_var_node *env_vars);
 
 
 //dollar expansion
-void		expand_dollar(char **arg, t_var_node *env_vars);
+void		expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh);
 bool		is_char_there(char *arg, char c);
 char		*ft_strslice(const char *str, int start, int end);
 int			ft_ind_char(const char *str, char c);
 void		free_array(char **arr);
-void		replace_dollar_sign(char **argv, t_var_node *env_vars);
+void		replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh);
 
 //working with ENV
 t_var_node	*create_var_node(char *key_val_str);
@@ -114,7 +114,7 @@ bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
 // -src/int_cmds
-void		echo(char **argv, t_var_node *env_vars);
+void		echo(char **argv, t_var_node *env_vars, t_msh **msh);
 void		cd(char *path, t_var_node *env_vars);
 void		pwd(t_var_node *env_vars);
 void		export(char **argv, t_var_node *env_vars);

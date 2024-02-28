@@ -20,7 +20,7 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(cmd->argv, (*msh)->env_vars);
+			echo(cmd->argv, (*msh)->env_vars, msh);
 		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
 			return (SUCCESS);
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
@@ -40,6 +40,7 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 			wait(&ext_code);
 			(*msh)->exit_code = WEXITSTATUS(ext_code);
 		}
+		
 	}
 	return (SUCCESS);
 }
