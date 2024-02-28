@@ -20,8 +20,10 @@ void	echo(char **argv,  t_msh **msh)
 	int	i;
 
 	i = 1;
+	is_with_n_flag = false;
 	replace_dollar_sign(argv, (*msh)->env_vars, msh);
-	is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
+	if (argv[i])
+		is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
 		i = 2;
 	while (argv[i])
