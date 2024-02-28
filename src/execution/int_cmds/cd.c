@@ -37,18 +37,22 @@ void	cd(char *path, t_msh **msh)
 {
 	char	*res_path;
 	int		ret;
+	char	*curr_path;
 
+	
 	res_path = NULL;
+	curr_path = getcwd(NULL, 0);
 	if (path)
 		res_path = ft_strdup(path);
 	if (!path || !ft_strncmp(path, "~", 1))
 		handle_home_path(&res_path, path, (*msh)->env_vars);
-	update_var((*msh)->env_vars, "OLDPWD", get_env_var((*msh)->env_vars, "PWD"));
+	update_var((*msh)->env_vars, "OLDPWD", curr_path);
+	free(curr_path);
 	ret = chdir(res_path);
-	update_var((*msh)->env_vars, "PWD", res_path); //update our pwd
+	curr_path =  getcwd(NULL, 0);
+	update_var((*msh)->env_vars, "PWD", curr_path);
 	if (res_path)
 		free(res_path);
-//	if (ret == ERROR)
-//		handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
+	free(curr_path);
 	(*msh)->exit_code = ret;
 }
