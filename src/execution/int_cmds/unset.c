@@ -22,5 +22,6 @@ void	unset(char **argv, t_msh **msh)
 		set_var_deleted((*msh)->env_vars, argv[i]);
 		i++;
 	}
+
 	(*msh)->exit_code = 0;
 }

@@ -15,6 +15,7 @@
 //Dima's version
 
 void	echo(char **argv,  t_msh **msh)
+
 {
 	int	is_with_n_flag;
 	int	i;
@@ -22,6 +23,7 @@ void	echo(char **argv,  t_msh **msh)
 	i = 1;
 	is_with_n_flag = false;
 	replace_dollar_sign(argv, (*msh)->env_vars, msh);
+
 	if (argv[i])
 		is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
@@ -36,4 +38,5 @@ void	echo(char **argv,  t_msh **msh)
 	if (is_with_n_flag == false)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	(*msh)->exit_code = 0;
+
 }

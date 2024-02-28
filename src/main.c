@@ -62,6 +62,7 @@ int	main(int argc, char **argv, char **envp)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
 	msh->ppid = getpid();
+
 	msh->env_vars = copy_env_vars(envp);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);

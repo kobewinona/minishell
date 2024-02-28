@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 void	env_cmd(char **argv, t_msh **msh)
+
 {
 	t_var_node	*curr;
 
@@ -25,4 +26,5 @@ void	env_cmd(char **argv, t_msh **msh)
 	}
 
 	(*msh)->exit_code = 0;
+
 }

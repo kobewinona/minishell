@@ -34,6 +34,7 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 }
 
 void	cd(char *path, t_msh **msh)
+
 {
 	char	*res_path;
 	int		ret;

@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 void	pwd(t_msh **msh)
+
 {
 	char	*curr_dir;
 
@@ -24,4 +25,5 @@ void	pwd(t_msh **msh)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	//exit(EXIT_SUCCESS);
 	(*msh)->exit_code = 0;
+
 }

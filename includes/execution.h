@@ -71,7 +71,7 @@ typedef struct s_err
 typedef struct s_msh
 {
 	int			exit_code;
-	pid_t		ppid;
+	pid_t		pid;
 	t_var_node	*env_vars;
 	t_err		*err;
 }	t_msh;
@@ -90,7 +90,7 @@ int			handle_err(int ret_val, t_msh **msh,
 				t_types err_type, char *ctx1, char *ctx2);
 void		process_err(t_msh **msh, bool is_on_exit);
 
-void		handle_builtin(t_exec *params, t_var_node *env_vars);
+
 
 
 //dollar expansion
@@ -113,7 +113,9 @@ void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
+
 // -src/int_cmds
+
 void	echo(char **argv,  t_msh **msh);
 void	cd(char *path, t_msh **msh);
 void	pwd(t_msh **msh);

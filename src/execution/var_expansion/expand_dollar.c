@@ -59,13 +59,14 @@ void	expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh)
 		else
 
 			value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
-		
+
 		if (value && expanded_str)
 			expanded_str = ft_strjoin(expanded_str, value);
 		else if (value && expanded_str == NULL)
 			expanded_str = ft_strdup(value);
 		i++;
 	}
+
 	*arg = expanded_str;
 	free_array(split_arr);
 }
