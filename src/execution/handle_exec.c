@@ -58,22 +58,35 @@ int		handle_builtin_cmd(t_msh **msh, t_exec *cmd)
 
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
-	int	exit_status;
+	int ext_code;
 
-	exit_status = 0;
+	ext_code = 0;
 	if (cmd->argv[0])
 	{
-		if (is_builtin(cmd))
-			(*msh)->exit_code = handle_builtin_cmd(msh, cmd);
+		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
+			echo(cmd->argv, msh);
+		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+			cd(cmd->argv[0], msh);
+		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
+			pwd(msh);
+		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
+			export(cmd->argv, msh);
+		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
+			unset(cmd->argv, msh);
+		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
+			exit_cmd(cmd->argv, msh);
+		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
+			env_cmd(cmd->argv, msh);
+
 		else
 		{
 			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
 				handle_ext_cmd(msh, cmd->argv);
+			wait(&ext_code);
+			(*msh)->exit_code = WEXITSTATUS(ext_code);
 
-			wait(&exit_status);
-			if (WIFEXITED(exit_status))
-				(*msh)->exit_code = WEXITSTATUS(exit_status);
 		}
+		
 	}
 	if (getpid() != (*msh)->pid)
 		exit((*msh)->exit_code);

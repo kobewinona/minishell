@@ -62,15 +62,18 @@ static void	print_declared_vars(t_var_node *env_vars)
 	}
 }
 
-int	export(char **argv, t_var_node *env_vars)
+
+void	export(char **argv, t_msh **msh)
+
 {
 	char	**keyval_arr;
 	int		i;
 
 	if (argv[1] == NULL)
 	{
-		print_declared_vars(env_vars);
-		return (SUCCESS);
+		print_declared_vars((*msh)->env_vars);
+		return ;
+
 	}
 	i = 1;
 	while (argv[i])
@@ -85,14 +88,16 @@ int	export(char **argv, t_var_node *env_vars)
 				free_array(keyval_arr);
 				return (EXIT_FAILURE);
 			}
-			update_var(env_vars, keyval_arr[0], keyval_arr[1]);
+			update_var((*msh)->env_vars, keyval_arr[0], keyval_arr[1]);
 		}
 		else
 		{
-			if (is_valid_varname(argv[i]) && is_var_deleted(env_vars, argv[i]))
-				update_var(env_vars, argv[i], NULL);
+			if (is_valid_varname(argv[i]) && is_var_deleted((*msh)->env_vars, argv[i]))
+				update_var((*msh)->env_vars, argv[i], NULL);
 		}
 		i++;
 	}
-	return (SUCCESS);
+
+	(*msh)->exit_code = 0;
+
 }

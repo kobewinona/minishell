@@ -94,12 +94,12 @@ void		process_err(t_msh **msh, bool is_on_exit);
 
 
 //dollar expansion
-void		expand_dollar(char **arg, t_var_node *env_vars);
+void		expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh);
 bool		is_char_there(char *arg, char c);
 char		*ft_strslice(const char *str, int start, int end);
 int			ft_ind_char(const char *str, char c);
 void		free_array(char **arr);
-void		replace_dollar_sign(char **argv, t_var_node *env_vars);
+void		replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh);
 
 //working with ENV
 t_var_node	*create_var_node(char *key_val_str);
@@ -115,13 +115,13 @@ bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
 
 // -src/int_cmds
-int		echo(char **argv, t_var_node *env_vars);
-int		cd(char *path, t_var_node *env_vars);
-int		pwd(t_var_node *env_vars);
-int		export(char **argv, t_var_node *env_vars);
-int		unset(char **argv, t_var_node *env_vars);
-void	exit_cmd(char **argv);
-int		env_cmd(char **argv, t_var_node *env_vars);
-int		handle_builtin_cmd(t_msh **msh, t_exec *cmd);
+
+void	echo(char **argv,  t_msh **msh);
+void	cd(char *path, t_msh **msh);
+void	pwd(t_msh **msh);
+void	export(char **argv, t_msh **msh);
+void	unset(char **argv, t_msh **msh);
+void	exit_cmd(char **argv, t_msh **msh);
+void	env_cmd(char **argv, t_msh **msh);
 
 #endif
