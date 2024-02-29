@@ -37,11 +37,7 @@ bool	is_builtin(t_exec *cmd)
 
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
-	int ext_code;
-
-
-
-
+	int	ext_code;
 
 	ext_code = 0;
 	if (cmd->argv[0])
@@ -60,16 +56,13 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 			exit_cmd(cmd->argv, msh);
 		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
 			env_cmd(cmd->argv, msh);
-
 		else
 		{
 			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
 				handle_ext_cmd(msh, cmd->argv);
 			wait(&ext_code);
 			(*msh)->exit_code = WEXITSTATUS(ext_code);
-
 		}
-		
 	}
 	if (getpid() != (*msh)->ppid)
 		exit((*msh)->exit_code);

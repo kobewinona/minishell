@@ -16,7 +16,6 @@ static void	handle_exit(t_msh **msh, bool is_on_exit)
 {
 	free((*msh)->err);
 	(*msh)->err = NULL;
-	printf("\n\nexit code: %d\n\n", (*msh)->exit_code);
 	if (is_on_exit)
 		exit((*msh)->exit_code);
 }

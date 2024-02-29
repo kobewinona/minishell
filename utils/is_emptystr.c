@@ -21,7 +21,7 @@ bool	is_emptystr(const char *s)
 		return (false);
 	while (s[i])
 	{
-		if (!ft_isspace(s[i]))
+		if (!ft_isspace(s[i]) || s[i] != 73)
 			return (false);
 		i++;
 	}
