@@ -12,6 +12,26 @@
 
 #include "minishell.h"
 
+void	print_errortrace(char *prog_name, char *ctx1, char *ctx2, bool stx_err)
+{
+	ft_putstr_fd(prog_name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(ctx1, STDERR_FILENO);
+	if (!stx_err)
+	{
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(ctx2, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
+	}
+	else
+	{
+		ft_putstr_fd(" `", STDERR_FILENO);
+		ft_putstr_fd(ctx2, STDERR_FILENO);
+		ft_putstr_fd("'\n", STDERR_FILENO);
+	}
+}
+
+
 static void	handle_exit(t_msh **msh, bool is_on_exit)
 {
 	free((*msh)->err);

@@ -57,6 +57,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	print_errortrace("MINISHELL", "hghgh", "comand not found", false);
+	print_errortrace("MINISHELL", "incorrect token", "hui", true);
 	msh = (t_msh *) malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
