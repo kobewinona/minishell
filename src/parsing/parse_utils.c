@@ -88,21 +88,23 @@ char	*get_value(t_msh **msh, char **s)
 
 	if (!*s)
 		return (NULL);
+	value = NULL;
 	end_chr = ' ';
 	end = 0;
 	while (**s && ft_isspace(**s))
 		(*s)++;
 	value = (*s);
-	if (**s == T_DOUBLE_QUOTE || **s == T_SINGLE_QUOTE)
+	while (!ft_isspace((*s)[end]))
 	{
-		end_chr = *(*s)++;
-		end++;
-	}
-	while ((*s)[end])
-	{
+		if ((*s)[end] == T_DOUBLE_QUOTE || (*s)[end] == T_SINGLE_QUOTE)
+		{
+			end_chr = (*s)[end];
+			end++;
+		}
+		while ((*s)[end] && (*s)[end] != end_chr)
+			end++;
 		if ((*s)[end] == end_chr)
-			break ;
-		end++;
+			(*s)[end] = (*s)[end + 1];
 	}
 	if (nullterminate(msh, s, end, end_chr) == ERROR)
 		return (NULL);
@@ -110,6 +112,37 @@ char	*get_value(t_msh **msh, char **s)
 		return (value);
 	return (NULL);
 }
+
+//char	*get_value(t_msh **msh, char **s)
+//{
+//	char	*value;
+//	char	end_chr;
+//	int		end;
+//
+//	if (!*s)
+//		return (NULL);
+//	end_chr = ' ';
+//	end = 0;
+//	while (**s && ft_isspace(**s))
+//		(*s)++;
+//	value = (*s);
+//	if (**s == T_DOUBLE_QUOTE || **s == T_SINGLE_QUOTE)
+//	{
+//		end_chr = *(*s)++;
+//		end++;
+//	}
+//	while ((*s)[end])
+//	{
+//		if ((*s)[end] == end_chr)
+//			break ;
+//		end++;
+//	}
+//	if (nullterminate(msh, s, end, end_chr) == ERROR)
+//		return (NULL);
+//	if (!is_emptystr(value))
+//		return (value);
+//	return (NULL);
+//}
 
 int	populate_argv(t_msh **msh, char **argv, char *input)
 {

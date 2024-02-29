@@ -33,6 +33,7 @@ static void	run_minishell(t_msh **msh)
 	char	*input;
 	char	*temp;
 
+	cmd = NULL;
 	while (1)
 	{
 		input = readline(PRG_PROMPT);

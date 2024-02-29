@@ -30,4 +30,5 @@ void	cleanup_cmds(t_cmd *cmd)
 	if (cmd->type == T_REDIR)
 		cleanup_cmds(cmd->redir.subcmd);
 	free(cmd);
+	cmd = NULL;
 }
