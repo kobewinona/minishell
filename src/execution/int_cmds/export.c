@@ -78,7 +78,7 @@ void	export(char **argv, t_msh **msh)
 	{
 		if (!is_valid_varname(argv[i]))
 		{
-			print_errortrace(PRG_NAME, "not a valid identifier", argv[i], false);
+			print_errortrace("not a valid identifier", argv[i], false);
 			(*msh)->exit_code = T_EXEC;
 			return ;
 		}

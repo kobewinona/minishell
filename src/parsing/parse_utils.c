@@ -42,27 +42,6 @@ char	*collect_heredoc_input(t_msh **msh, const char *eof)
 	return (heredoc_input);
 }
 
-static int	nullterminate(t_msh **msh, char **s, int end, char end_chr)
-{
-	if (end_chr != ' ' && (*s)[end] != end_chr)
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_EOF_MSG, tokstr(end_chr));
-		return (ERROR);
-	}
-	if ((*s)[end] == end_chr)
-	{
-		(*s)[end] = '\0';
-		end++;
-	}
-	(*s) += end;
-	if (end_chr == T_DOUBLE_QUOTE || end_chr == T_SINGLE_QUOTE)
-	{
-		if ((**s) == end_chr)
-			(*s) += 1;
-	}
-	return (SUCCESS);
-}
-
 int	get_arb_fd(char **s)
 {
 	int	fd;
@@ -76,39 +55,10 @@ int	get_arb_fd(char **s)
 		fd = ft_atoi(&(*s)[i]);
 		if (fd > 0)
 			(*s)[i] = '\0';
+		else
+			fd = UNSPECIFIED;
 	}
 	return (fd);
-}
-
-char	*get_value(t_msh **msh, char **s)
-{
-	char	*value;
-	char	end_chr;
-	int		end;
-
-	if (!*s)
-		return (NULL);
-	end_chr = ' ';
-	end = 0;
-	while (**s && ft_isspace(**s))
-		(*s)++;
-	value = (*s);
-	if (**s == T_DOUBLE_QUOTE || **s == T_SINGLE_QUOTE)
-	{
-		end_chr = *(*s)++;
-		end++;
-	}
-	while ((*s)[end])
-	{
-		if ((*s)[end] == end_chr)
-			break ;
-		end++;
-	}
-	if (nullterminate(msh, s, end, end_chr) == ERROR)
-		return (NULL);
-	if (!is_emptystr(value))
-		return (value);
-	return (NULL);
 }
 
 int	populate_argv(t_msh **msh, char **argv, char *input)
@@ -125,7 +75,6 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 		argv[index] = get_value(msh, &input);
 		if (!argv[index])
 			return (ERROR);
-		argv[index] = ft_strtrim(argv[index], "\"\'");
 		if (!argv[index])
 		{
 			free_array(argv);

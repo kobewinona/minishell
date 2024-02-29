@@ -37,7 +37,7 @@ void	exit_cmd(char **argv, t_msh **msh)
 	else if (argv[1] != NULL && !is_number(argv[1]))
 	{
 		printf("exit\n");
-		print_errortrace(PRG_NAME, EXIT, "numeric argument required", false);
+		print_errortrace(EXIT, "numeric argument required", false);
 		exit(2);
 	}
 	exit(SUCCESS);

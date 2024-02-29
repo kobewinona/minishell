@@ -15,9 +15,7 @@
 static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
 	int	pid;
-	int	exit_status;
 
-	exit_status = 0;
 	pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
 	if (pid == ERROR)
 		process_err(msh, false);
@@ -43,17 +41,13 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 
 }
 
-
-
-
 int	handle_pipe(t_msh **msh, t_pipe *cmd)
 {
 	int	pipe_fds[2];
-
-	int ext_status_right;
+	int	ext_status_right;
 	int	right_pid;
 	int	left_pid;
-	
+
 	ext_status_right = 0;
 	if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
 		return (ERROR);
@@ -64,8 +58,6 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 	waitpid(left_pid, NULL, 0);
 	waitpid(right_pid, &ext_status_right, 0);
 	ext_status_right = WEXITSTATUS(ext_status_right);
-
 	(*msh)->exit_code = ext_status_right;
 	return (ext_status_right);
 }
-
