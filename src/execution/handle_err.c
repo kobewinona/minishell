@@ -12,22 +12,26 @@
 
 #include "minishell.h"
 
-void	print_errortrace(char *prog_name, char *ctx1, char *ctx2, bool stx_err)
+void	print_errortrace(char *ctx1, char *ctx2, bool stx_err)
 {
-	ft_putstr_fd(prog_name, STDERR_FILENO);
+	ft_putstr_fd(PRG_NAME, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putstr_fd(ctx1, STDERR_FILENO);
-	if (!stx_err)
+	if (ctx1)
+		ft_putstr_fd(ctx1, STDERR_FILENO);
+	if (ctx2)
 	{
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(ctx2, STDERR_FILENO);
-		ft_putchar_fd('\n', STDERR_FILENO);
-	}
-	else
-	{
-		ft_putstr_fd(" `", STDERR_FILENO);
-		ft_putstr_fd(ctx2, STDERR_FILENO);
-		ft_putstr_fd("'\n", STDERR_FILENO);
+		if (!stx_err)
+		{
+			ft_putstr_fd(": ", STDERR_FILENO);
+			ft_putstr_fd(ctx2, STDERR_FILENO);
+			ft_putchar_fd('\n', STDERR_FILENO);
+		}
+		else
+		{
+			ft_putstr_fd(" `", STDERR_FILENO);
+			ft_putstr_fd(ctx2, STDERR_FILENO);
+			ft_putstr_fd("'\n", STDERR_FILENO);
+		}
 	}
 }
 
@@ -42,24 +46,23 @@ static void	handle_exit(t_msh **msh, bool is_on_exit)
 
 static void	process_parsing_err(t_msh **msh, bool is_on_exit)
 {
-	int	org_fd;
+//	int	org_fd;
 
 	if (!(*msh)->err)
 		return ;
-	org_fd = dup(STDOUT_FILENO);
-	if (org_fd < 0)
-		handle_exit(msh, is_on_exit);
-	if (dup2(STDERR_FILENO, STDOUT_FILENO) == ERROR)
-		handle_exit(msh, is_on_exit);
+//	org_fd = dup(STDOUT_FILENO);
+//	if (org_fd < 0)
+//		handle_exit(msh, is_on_exit);
+//	if (dup2(STDERR_FILENO, STDOUT_FILENO) == ERROR)
+//		handle_exit(msh, is_on_exit);
 	if ((*msh)->err->type == T_SYNTAX_ERR)
-		print_errortrace(PRG_NAME, (*msh)->err->ctx1, (*msh)->err->ctx2, true);
-		//printf("%s: %s `%s'\n", PRG_NAME, (*msh)->err->ctx1, (*msh)->err->ctx2);
+		print_errortrace((*msh)->err->ctx1, (*msh)->err->ctx2, true);
+//		printf("%s: %s `%s'\n", PRG_NAME, (*msh)->err->ctx1, (*msh)->err->ctx2);
 	if ((*msh)->err->type == T_CMD_NOT_FOUND)
-		print_errortrace(PRG_NAME, (*msh)->err->ctx1, CMD_NOT_FOUND_MSG, false);
-		//printf("%s: %s: %s\n", PRG_NAME, (*msh)->err->ctx1, CMD_NOT_FOUND_MSG);
-	
-	dup2(STDOUT_FILENO, STDERR_FILENO);
-	close(org_fd);
+		print_errortrace((*msh)->err->ctx1, CMD_NOT_FOUND_MSG, false);
+//		printf("%s: %s: %s\n", PRG_NAME, (*msh)->err->ctx1, CMD_NOT_FOUND_MSG);
+//	dup2(STDOUT_FILENO, STDERR_FILENO);
+//	close(org_fd);
 	handle_exit(msh, is_on_exit);
 }
 
@@ -80,7 +83,7 @@ void	log_err(t_msh **msh, t_types err_type, char *ctx1, char *ctx2)
 	if (!(*msh)->err)
 	{
 		(*msh)->err = (t_err *)malloc(sizeof(t_err));
-		memset((*msh)->err, 0, sizeof(t_err));
+		ft_memset((*msh)->err, 0, sizeof(t_err));
 	}
 	if (err_type != T_SYS_ERR)
 		(*msh)->exit_code = err_type;

@@ -51,7 +51,7 @@ void	cd(char *path, t_msh **msh)
 	if (!is_dir_valid(path, msh))
 	{
 		(*msh)->exit_code = T_EXEC;
-		print_errortrace(PRG_NAME, path, "no such file or directory", false);
+		print_errortrace(path, "no such file or directory", false);
 		return ;
 	}
 	res_path = NULL;

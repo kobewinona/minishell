@@ -39,14 +39,16 @@ static void	run_minishell(t_msh **msh)
 		input = readline(PRG_PROMPT);
 		if (!input)
 			break ;
-		add_history(input);
-		temp = input;
-		cmd = parse_cmd(msh, temp);
-		process_err(msh, false);
+		if (!is_emptystr(input))
+		{
+			add_history(input);
+			temp = input;
+			cmd = parse_cmd(msh, temp);
+		}
 		if (cmd)
 		{
 			run_cmd(msh, cmd);
-			cleanup_cmds(cmd);
+			cleanup_cmds(&cmd);
 		}
 		free(input);
 	}
@@ -62,7 +64,7 @@ int	main(int argc, char **argv, char **envp)
 	msh = (t_msh *) malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
-	memset(msh, 0, sizeof(t_msh));
+	ft_memset(msh, 0, sizeof(t_msh));
 	msh->ppid = getpid();
 
 	msh->env_vars = copy_env_vars(envp);

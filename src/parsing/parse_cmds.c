@@ -100,5 +100,6 @@ t_cmd	*parse_cmd(t_msh **msh, char *input)
 	}
 	if (!is_emptystr(s))
 		cmd = parse_pipe(msh, s, &tok);
+	process_err(msh, false);
 	return (cmd);
 }

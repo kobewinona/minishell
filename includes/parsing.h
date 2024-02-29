@@ -23,8 +23,8 @@
 t_cmd	*constr_exec_cmd(t_msh **msh, char *input);
 t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2);
 t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f);
-int		prepare_fd(t_msh **msh, t_types redir_type, int mode, char *f);
-void	cleanup_cmds(t_cmd *cmd);
+int		prepare_fd(t_msh **msh, t_types redir_type, int mode, char **f);
+void	*cleanup_cmds(t_cmd **cmd);
 
 t_cmd	*parse_cmd(t_msh **msh, char *input);
 t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok);

@@ -90,9 +90,6 @@ int			handle_err(int ret_val, t_msh **msh,
 				t_types err_type, char *ctx1, char *ctx2);
 void		process_err(t_msh **msh, bool is_on_exit);
 
-
-
-
 //dollar expansion
 void		expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh);
 bool		is_char_there(char *arg, char c);
@@ -111,7 +108,7 @@ t_var_node	*copy_env_vars(char **envp);
 char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
-void		print_errortrace(char *prog_name, char *ctx1, char *ctx2, bool stx_err);
+void		print_errortrace(char *ctx1, char *ctx2, bool stx_err);
 
 
 

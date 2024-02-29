@@ -34,29 +34,31 @@ t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 	cmd = constr_cmd(msh, T_EXEC);
 	if (!cmd)
 		return (NULL);
-	memset(cmd->exec.argv, 0, sizeof(cmd->exec.argv));
+	ft_memset(cmd->exec.argv, 0, sizeof(cmd->exec.argv));
 	if (populate_argv(msh, cmd->exec.argv, input) == ERROR)
-	{
-		free(cmd);
-		return (NULL);
-	}
+		return (cleanup_cmds(&cmd));
 	return (cmd);
 }
 
-int	prepare_fd(t_msh **msh, t_types redir_type, int mode, char *f)
+int	prepare_fd(t_msh **msh, t_types redir_type, int mode, char **f)
 {
 	int	pipe_fds[2];
+	int	prepared_fd;
 
 	if (redir_type == T_HEREDOC)
 	{
 		if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
 			return (ERROR);
-		write(pipe_fds[1], f, strlen(f));
+		write(pipe_fds[1], (*f), strlen((*f)));
 		close(pipe_fds[1]);
-		free(f);
+		free((*f));
 		return (pipe_fds[0]);
 	}
-	return (handle_err(open(f, mode, RW_R_R_PERM), msh, T_SYS_ERR, f, NULL));
+	prepared_fd = handle_err(open((*f), mode, RW_R_R_PERM), msh, T_SYS_ERR, (*f), NULL);
+	free((*f));
+	if (prepared_fd < 0)
+		return (ERROR);
+	return (prepared_fd);
 }
 
 t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
@@ -67,10 +69,7 @@ t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
 		return (NULL);
 	cmd = constr_cmd(msh, T_REDIR);
 	if (!cmd)
-	{
-		cleanup_cmds(subcmd);
-		return (NULL);
-	}
+		return (cleanup_cmds(&subcmd));
 	cmd->redir.type = r_type;
 	cmd->redir.subcmd = subcmd;
 	if (r_type == T_REDIR_STDOUT)
@@ -79,12 +78,9 @@ t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
 		cmd->redir.mode = O_WRONLY | O_APPEND | O_CREAT;
 	if (r_type == T_REDIR_STDIN || r_type == T_HEREDOC)
 		cmd->redir.mode = O_RDONLY;
-	cmd->redir.fd[0] = prepare_fd(msh, cmd->redir.type, cmd->redir.mode, f);
-	if (cmd->redir.fd[0] < 0)
-	{
-		cleanup_cmds(cmd);
-		return (NULL);
-	}
+	cmd->redir.fd[0] = prepare_fd(msh, cmd->redir.type, cmd->redir.mode, &f);
+	if (cmd->redir.fd[0] == ERROR)
+		return (cleanup_cmds(&subcmd));
 	return (cmd);
 }
 
@@ -95,14 +91,11 @@ t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2)
 	if (!cmd1)
 	{
 		if (cmd2)
-			cleanup_cmds(cmd2);
+			cleanup_cmds(&cmd2);
 		return (NULL);
 	}
 	if (!cmd2)
-	{
-		cleanup_cmds(cmd1);
-		return (NULL);
-	}
+		return (cleanup_cmds(&cmd1));
 	cmd = constr_cmd(msh, T_PIPE);
 	if (!cmd)
 		return (NULL);
