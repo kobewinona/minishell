@@ -40,9 +40,6 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 	int ext_code;
 
 
-
-
-
 	ext_code = 0;
 	if (cmd->argv[0])
 	{
