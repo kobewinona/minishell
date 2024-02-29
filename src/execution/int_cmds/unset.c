@@ -12,15 +12,16 @@
 
 #include "minishell.h"
 
-int	unset(char **argv, t_var_node *env_vars)
+void	unset(char **argv, t_msh **msh)
 {
 	int	i;
 
 	i = 1;
 	while (argv[i])
 	{
-		set_var_deleted(env_vars, argv[i]);
+
+		set_var_deleted((*msh)->env_vars, argv[i]);
 		i++;
 	}
-	return (SUCCESS);
+	(*msh)->exit_code = 0;
 }

@@ -12,16 +12,19 @@
 
 #include "minishell.h"
 
-int	env_cmd(char **argv, t_var_node *env_vars)
+void	env_cmd(char **argv, t_msh **msh)
+
 {
 	t_var_node	*curr;
 
-	curr = env_vars;
+	curr =(*msh)->env_vars;
 	while (curr)
 	{
 		if (!curr->deleted && curr->key_val_str && curr->value_assigned)
 			printf("%s\n", curr->key_val_str);
 		curr = curr->next;
 	}
-	return (SUCCESS);
+
+	(*msh)->exit_code = 0;
+
 }

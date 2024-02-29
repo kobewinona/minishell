@@ -37,7 +37,7 @@ bool	is_wrapped_single_quotes(char **argv)
 }
 
 // make it add double quote at the end as it should
-void	expand_dollar(char **arg, t_var_node *env_vars)
+void	expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh)
 {
 	char	**split_arr;
 	char	*expanded_str;
@@ -54,8 +54,12 @@ void	expand_dollar(char **arg, t_var_node *env_vars)
 	}
 	while (split_arr[i])
 	{
-		
-		value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
+		if (split_arr[i][0] == '?')
+			value = ft_itoa((*msh)->exit_code);
+		else
+
+			value = get_env_var(env_vars, ft_strtrim(split_arr[i], "\""));
+
 		if (value && expanded_str)
 			expanded_str = ft_strjoin(expanded_str, value);
 		else if (value && expanded_str == NULL)
@@ -67,7 +71,7 @@ void	expand_dollar(char **arg, t_var_node *env_vars)
 	free_array(split_arr);
 }
 
-void	replace_dollar_sign(char **argv, t_var_node *env_vars)
+void	replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh)
 {
 	int	i;
 
@@ -75,7 +79,7 @@ void	replace_dollar_sign(char **argv, t_var_node *env_vars)
 	while (argv[i])
 	{
 		if (is_char_there(argv[i], '$'))
-			expand_dollar(&argv[i], env_vars);
+			expand_dollar(&argv[i], env_vars, msh);
 		i++;
 	}
 }

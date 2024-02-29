@@ -22,6 +22,8 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 		res = handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == T_REDIR)
 		res = handle_redir(msh, &(cmd->redir));
+	if (getpid() != (*msh)->ppid)
+		exit((*msh)->exit_code);
 	return (res);
 }
 
@@ -57,12 +59,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+
 	msh = (t_msh *) malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	msh->pid = getpid();
-	msh->exit_code = 0;
+	msh->ppid = getpid();
+
 	msh->env_vars = copy_env_vars(envp);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);

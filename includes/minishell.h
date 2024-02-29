@@ -25,8 +25,10 @@
 # include <stdbool.h>
 # include <string.h>
 # include <errno.h>
+# include <limits.h>
 # include "execution.h"
 # include "parsing.h"
+
 
 // utils
 bool	is_emptystr(const char *s);

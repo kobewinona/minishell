@@ -14,14 +14,16 @@
 
 //Dima's version
 
-int	echo(char **argv, t_var_node *env_vars)
+void	echo(char **argv,  t_msh **msh)
+
 {
 	int	is_with_n_flag;
 	int	i;
 
 	i = 1;
 	is_with_n_flag = false;
-	replace_dollar_sign(argv, env_vars);	
+	replace_dollar_sign(argv, (*msh)->env_vars, msh);
+
 	if (argv[i])
 		is_with_n_flag = !ft_strncmp(argv[i], "-n", 2);
 	if (is_with_n_flag == true)
@@ -35,5 +37,6 @@ int	echo(char **argv, t_var_node *env_vars)
 	}
 	if (is_with_n_flag == false)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	return (SUCCESS);
+	(*msh)->exit_code = 0;
+
 }

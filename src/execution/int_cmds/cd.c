@@ -33,26 +33,41 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 		(*res_path) = ft_strjoin(home_path, (path + 1));
 }
 
+static bool is_dir_valid(char *path, t_msh **msh)
+{
+	if (!access(path, F_OK | R_OK))
+		return (true);
+	return (false);
+}
 
-//
-// "cd -" should move us to OLDPWD
+void	cd(char *path, t_msh **msh)
 
-int	cd(char *path, t_var_node *env_vars)
 {
 	char	*res_path;
 	int		ret;
+	char	*curr_path;
 
+	
+	if (!is_dir_valid(path, msh))
+	{
+		(*msh)->exit_code = T_EXEC;
+		print_errortrace(PRG_NAME, path, "no such file or directory", false);
+		return ;
+	}
 	res_path = NULL;
+	curr_path = getcwd(NULL, 0);
 	if (path)
 		res_path = ft_strdup(path);
 	if (!path || !ft_strncmp(path, "~", 1))
-		handle_home_path(&res_path, path, env_vars);
-	update_var(env_vars, "OLDPWD", get_env_var(env_vars, "PWD"));
+		handle_home_path(&res_path, path, (*msh)->env_vars);
+	update_var((*msh)->env_vars, "OLDPWD", curr_path);
+	free(curr_path);
+
 	ret = chdir(res_path);
-	update_var(env_vars, "PWD", res_path); //update our pwd
+	curr_path =  getcwd(NULL, 0);
+	update_var((*msh)->env_vars, "PWD", curr_path);
 	if (res_path)
 		free(res_path);
-	return (ret);
-	// if (ret == ERROR)
-	// 	handle_err(ERROR, (t_err){T_SYS_ERR, CD, path}, false);
+	free(curr_path);
+	(*msh)->exit_code = 0;
 }
