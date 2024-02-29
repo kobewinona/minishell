@@ -24,9 +24,9 @@
 // (underscore) from the characters defined in Portable Character Set and do not begin with a digit. 
 // Other characters may be permitted by an implementation; applications shall tolerate the presence of such names
 
-static bool	is_valid_varname(char *varname)
+bool	is_valid_varname(char *varname)
 {
-	return (!ft_isdigit(*varname));
+	return (ft_isalpha(*varname) || *varname == '_');
 }
 
 bool	is_var_deleted(t_var_node *env_vars, char *varname)
@@ -64,7 +64,6 @@ static void	print_declared_vars(t_var_node *env_vars)
 
 
 void	export(char **argv, t_msh **msh)
-
 {
 	char	**keyval_arr;
 	int		i;
@@ -73,13 +72,16 @@ void	export(char **argv, t_msh **msh)
 	{
 		print_declared_vars((*msh)->env_vars);
 		return ;
-
 	}
 	i = 1;
 	while (argv[i])
 	{
 		if (!is_valid_varname(argv[i]))
-			return ; //need to add some message
+		{
+			print_errortrace(PRG_NAME, "not a valid identifier", argv[i], false);
+			(*msh)->exit_code = T_EXEC;
+			return ;
+		}
 		if (is_char_there(argv[i], '='))
 		{
 			keyval_arr = ft_split(argv[i], '=');
@@ -97,7 +99,5 @@ void	export(char **argv, t_msh **msh)
 		}
 		i++;
 	}
-
 	(*msh)->exit_code = 0;
-
 }

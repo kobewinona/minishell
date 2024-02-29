@@ -112,6 +112,8 @@ char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 void		print_errortrace(char *prog_name, char *ctx1, char *ctx2, bool stx_err);
+bool		is_valid_varname(char *varname);
+
 
 
 
