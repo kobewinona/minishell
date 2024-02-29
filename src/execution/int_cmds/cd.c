@@ -33,6 +33,13 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 		(*res_path) = ft_strjoin(home_path, (path + 1));
 }
 
+static bool is_dir_valid(char *path, t_msh **msh)
+{
+	if (!access(path, F_OK | R_OK))
+		return (true);
+	return (false);
+}
+
 void	cd(char *path, t_msh **msh)
 
 {
@@ -41,6 +48,12 @@ void	cd(char *path, t_msh **msh)
 	char	*curr_path;
 
 	
+	if (!is_dir_valid(path, msh))
+	{
+		(*msh)->exit_code = T_EXEC;
+		printf("%s: %s: %s\n", PRG_NAME, path, "no such file or directory");
+		return ;
+	}
 	res_path = NULL;
 	curr_path = getcwd(NULL, 0);
 	if (path)
@@ -49,6 +62,7 @@ void	cd(char *path, t_msh **msh)
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	free(curr_path);
+
 	ret = chdir(res_path);
 	curr_path =  getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);
