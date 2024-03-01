@@ -71,9 +71,9 @@ typedef struct s_err
 typedef struct s_msh
 {
 	int			exit_code;
-	pid_t		ppid;
 	t_var_node	*env_vars;
 	t_err		*err;
+	bool		is_parent;
 }	t_msh;
 
 // functions

@@ -23,6 +23,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 		process_err(msh, false);
 	if (pid == 0)
 	{
+		(*msh)->is_parent = false;
 		if (handle_err(dup2(pipe_fds[end], end),
 				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
 			process_err(msh, true);

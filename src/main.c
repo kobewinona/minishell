@@ -6,7 +6,7 @@
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/10 14:24:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:36:34 by sliashko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 		res = handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == T_REDIR)
 		res = handle_redir(msh, &(cmd->redir));
-	if (getpid() != (*msh)->ppid)
+	if (!(*msh)->is_parent)
 		exit((*msh)->exit_code);
 	return (res);
 }
+
+
 
 static void	run_minishell(t_msh **msh)
 {
@@ -64,8 +66,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	msh->ppid = getpid();
-
+	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);
