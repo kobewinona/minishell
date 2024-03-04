@@ -22,8 +22,6 @@
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSH1 "not a valid identifier"
 
-// sort << eof >> ls_wc.txt < sort -n | cat
-
 // constructors
 t_cmd	*constr_exec_cmd(t_msh **msh, char *input);
 t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2);
@@ -40,6 +38,8 @@ char	*smart_strtok(char *restrict str,
 
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
+int		exp_env_var(t_msh **msh, char **value, char *s, char end_char);
+int		join_values(t_msh **msh, char **value, const char *s, int len);
 int		get_arb_fd(char **s);
 
 #endif

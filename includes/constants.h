@@ -64,6 +64,7 @@ typedef enum e_types
 	T_CMD_NOT_FOUND = 127,
 	T_VAR_EXP = 36,
 	T_SPACE = 32,
+	T_UNDERSCORE = 95,
 }	t_types;
 
 #endif
