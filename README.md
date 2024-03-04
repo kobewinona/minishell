@@ -1,1 +1,4 @@
-# minishell
+temp2: 0x62865c41f830
+(*value): 0x62865c41f830
+temp2: 0x62865c41f850
+(*value): 0x62865c41f850

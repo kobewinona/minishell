@@ -44,10 +44,9 @@ void	cd(char *path, t_msh **msh)
 
 {
 	char	*res_path;
-	int		ret;
+//	int		ret;
 	char	*curr_path;
 
-	
 	if (!is_dir_valid(path, msh))
 	{
 		(*msh)->exit_code = T_EXEC;
@@ -62,8 +61,7 @@ void	cd(char *path, t_msh **msh)
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	free(curr_path);
-
-	ret = chdir(res_path);
+//	ret = chdir(res_path);
 	curr_path =  getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);
 	if (res_path)

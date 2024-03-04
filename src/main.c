@@ -27,15 +27,32 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 	return (res);
 }
 
+//int	run_cmd(t_msh **msh, t_cmd *cmd)
+//{
+//	int	res;
+//
+//	if (cmd->type == T_EXEC)
+//		res = handle_exec(msh, &(cmd->exec));
+//	else if (cmd->type == T_PIPE)
+//		res = handle_pipe(msh, &(cmd->pipe));
+//	else if (cmd->type == T_REDIR)
+//		res = handle_redir(msh, &(cmd->redir));
+//	if (getpid() != (*msh)->ppid)
+//		exit((*msh)->exit_code);
+//	return (res);
+//}
+
 static void	run_minishell(t_msh **msh)
 {
 	t_cmd	*cmd;
 	char	*input;
 	char	*temp;
 
-	cmd = NULL;
 	while (1)
 	{
+		cmd = NULL;
+		input = NULL;
+		temp = NULL;
 		input = readline(PRG_PROMPT);
 		if (!input)
 			break ;
@@ -60,13 +77,12 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-
-	msh = (t_msh *) malloc(sizeof(t_msh));
+	msh = (t_msh *)malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
 	ft_memset(msh, 0, sizeof(t_msh));
 	msh->ppid = getpid();
-
+	msh->curr_pid = msh->ppid;
 	msh->env_vars = copy_env_vars(envp);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);

@@ -21,8 +21,8 @@ void	*cleanup_cmds(t_cmd **cmd)
 		i = 0;
 		while ((*cmd)->exec.argv[i])
 		{
-			free((*cmd)->exec.argv[i++]);
-			(*cmd)->exec.argv[i] = NULL;
+			free((*cmd)->exec.argv[i]);
+			(*cmd)->exec.argv[i++] = NULL;
 		}
 	}
 	if ((*cmd)->type == T_PIPE)

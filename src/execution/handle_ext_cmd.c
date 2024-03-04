@@ -27,7 +27,7 @@ static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
 	return (cmd_path);
 }
 
-static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **env_path, char **argv)
+static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **argv)
 {
 	char		*cmd_path;
 
@@ -40,7 +40,6 @@ static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **env_path, char **argv
 	}
 	if (access(cmd_path, X_OK) == SUCCESS)
 	{
-		free(*env_path);
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
 		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
 		process_err(msh, true);
@@ -52,9 +51,6 @@ static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **env_path, char **argv
 
 //TODO: In case program found but no permission to execute
 // need to return 126!
-
-
-
 void	handle_ext_cmd(t_msh **msh, char **argv)
 {
 	char		*env_path;
@@ -75,11 +71,10 @@ void	handle_ext_cmd(t_msh **msh, char **argv)
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
-		if (exec_ext_cmd(msh, cmd_dir, &env_path, argv) == ERROR)
+		if (exec_ext_cmd(msh, cmd_dir, argv) == ERROR)
 			break ;
 		cmd_dir = ft_strtok(NULL, ":");
 	}
-	free(env_path);
 	log_err(msh, T_CMD_NOT_FOUND, argv[0], NULL);
 	process_err(msh, true);
 }

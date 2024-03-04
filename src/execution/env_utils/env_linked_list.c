@@ -65,7 +65,7 @@ t_var_node	*copy_env_vars(char **envp)
 	t_var_node	*head;
 
 	i = 1;
-	head = create_var_node(envp[i]);
+//	head = create_var_node(envp[i]);
 	head = NULL;
 	while (envp[i])
 	{

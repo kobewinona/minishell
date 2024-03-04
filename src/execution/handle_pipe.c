@@ -14,21 +14,16 @@
 
 static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
-	int	pid;
-
-	pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
-	if (pid == ERROR)
+	(*msh)->curr_pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
+	if ((*msh)->curr_pid == ERROR)
 		process_err(msh, false);
-	if (pid == 0)
+	if ((*msh)->curr_pid == 0)
 	{
 		if (handle_err(dup2(pipe_fds[end], end),
 				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
 			process_err(msh, true);
 		if (end == STDOUT_FILENO)
 			close(pipe_fds[STDIN_FILENO]);
-		if (handle_err(dup2(pipe_fds[end], end),
-				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
-			process_err(msh, true);
 		if (end == STDIN_FILENO)
 			close(pipe_fds[STDOUT_FILENO]);
 		close(pipe_fds[STDIN_FILENO]);
@@ -37,7 +32,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 			process_err(msh, true);
 		exit((*msh)->exit_code);
 	}
-	return (pid);
+	return ((*msh)->curr_pid);
 
 }
 

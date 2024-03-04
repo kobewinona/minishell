@@ -34,6 +34,7 @@ t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 	cmd = constr_cmd(msh, T_EXEC);
 	if (!cmd)
 		return (NULL);
+//	cmd->exec.argv = (char **)malloc(MAX_INPUT * sizeof(char *));
 	ft_memset(cmd->exec.argv, 0, sizeof(cmd->exec.argv));
 	if (populate_argv(msh, cmd->exec.argv, input) == ERROR)
 		return (cleanup_cmds(&cmd));

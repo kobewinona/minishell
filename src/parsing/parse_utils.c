@@ -77,7 +77,6 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 			return (ERROR);
 		if (!argv[index])
 		{
-			free_array(argv);
 			log_err(msh, T_SYS_ERR, MALLOC, NULL);
 			return (ERROR);
 		}

@@ -34,6 +34,7 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_exec
 {
 	char		*argv[MAX_INPUT + 1];
+//	char		**argv;
 }	t_exec;
 
 typedef struct s_pipe
@@ -72,8 +73,10 @@ typedef struct s_msh
 {
 	int			exit_code;
 	pid_t		ppid;
+	pid_t		curr_pid;
 	t_var_node	*env_vars;
 	t_err		*err;
+	t_cmd		*cmd;
 }	t_msh;
 
 // functions
