@@ -66,6 +66,11 @@ static void	run_minishell(t_msh **msh)
 
 //HINT: a cool idea to build ft_linked_malloc()
 // that allocates memory and keep it in a linked list to free easilly
+
+
+//GLobal var for 
+bool is_parent = true;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh		*msh;
@@ -74,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	track_signals();
+	is_parent = true;
 	msh = (t_msh *) malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);

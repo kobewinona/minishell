@@ -13,7 +13,11 @@
 #include "minishell.h"
 
 
-void parent_handler(int sig) {
+void parent_handler(int sig, siginfo_t *info, void *context) 
+{
+	printf("sipid = %d\n", info->si_pid);
+	printf("upid = %d\n", info->si_uid);
+
     if (sig == SIGINT) 
 	{
         write(1, "\n", 1);
@@ -44,7 +48,7 @@ void track_signals() {
 
     sigemptyset(&sa.sa_mask);
     sa.sa_handler = parent_handler; // Set the handler
-    sa.sa_flags = 0;
+    sa.sa_flags = SA_SIGINFO;
 
     // Correctly use sigaction
     if (sigaction(SIGINT, &sa, NULL) == -1) {

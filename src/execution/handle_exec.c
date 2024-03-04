@@ -60,14 +60,21 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 
 		else
 		{
-			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
+			if ((*msh)->is_parent)
 			{
-				(*msh)->is_parent = false;
+				if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
+				{
+					(*msh)->is_parent = false;
+					handle_ext_cmd(msh, cmd->argv);
+				}
+				wait(&ext_code);
+				(*msh)->exit_code = WEXITSTATUS(ext_code);
+			}
+			else
+			{
 				handle_ext_cmd(msh, cmd->argv);
 			}
-			wait(&ext_code);
-			(*msh)->exit_code = WEXITSTATUS(ext_code);
-
+			
 		}
 		
 	}
