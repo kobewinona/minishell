@@ -24,10 +24,8 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	*s = smart_strtok(NULL, "><", tok);
 	arb_fd = get_arb_fd(&input);
 	if (*s && is_emptystr(*s))
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(prev_tok));
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
 	if (prev_tok == T_HEREDOC)
 		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
 				collect_heredoc_input(msh, get_value(msh, s)));
@@ -53,19 +51,12 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 	else
 	{
 		cmd = parse_redir(msh, input, &s, tok);
-		if (s && !is_emptystr(s) && cmd && cmd->redir.subcmd && cmd->redir.subcmd->type == T_EXEC)
+		if (s && !is_emptystr(s) && cmd && cmd->redir.subcmd
+			&& cmd->redir.subcmd->type == T_EXEC)
 		{
 			if (populate_argv(msh, cmd->redir.subcmd->exec.argv, s) == ERROR)
 				return (NULL);
 		}
-//		else
-//		{
-//			if (cmd && cmd->redir.subcmd && cmd->redir.subcmd->type == T_EXEC)
-//			{
-//				if (!cmd->redir.subcmd->exec.argv[0])
-//					return (cleanup_cmds(&cmd));
-//			}
-//		}
 	}
 	return (cmd);
 }
@@ -84,10 +75,8 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 	if (s)
 		cmd = constr_pipe_cmd(msh, cmd, parse_pipe(msh, s, tok));
 	if ((!s || is_emptystr(s)) && prev_tok == T_PIPE)
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(prev_tok));
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
 	return (cmd);
 }
 
@@ -102,12 +91,9 @@ t_cmd	*parse_cmd(t_msh **msh, char *input)
 	s = NULL;
 	s = smart_strtok(input, "|", &tok);
 	if (is_emptystr(s) && tok != T_NO_TOK)
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(tok));
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(tok)}, false).t_null);
 	if (!is_emptystr(s))
 		cmd = parse_pipe(msh, s, &tok);
-	process_err(msh, false);
 	return (cmd);
 }

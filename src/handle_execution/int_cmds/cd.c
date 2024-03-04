@@ -24,7 +24,7 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 	home_path = get_env_var(env_vars, "HOME");
 	if (!home_path)
 	{
-//		handle_err(ERROR, (t_err){T_SYS_ERR, CD, GETENV}, false);
+//		handle_err(ERROR, (t_ret_err_val){T_SYS_ERR, CD, GETENV}, false);
 		return ;
 	}
 	if (!path)
@@ -44,13 +44,11 @@ void	cd(char *path, t_msh **msh)
 
 {
 	char	*res_path;
-//	int		ret;
 	char	*curr_path;
 
 	if (!is_dir_valid(path, msh))
 	{
-		(*msh)->exit_code = T_EXEC;
-		print_errortrace(path, "no such file or directory", false);
+		print_err(msh, (t_err){T_BAD_REQUEST_ERR, path}, false);
 		return ;
 	}
 	res_path = NULL;
@@ -61,8 +59,7 @@ void	cd(char *path, t_msh **msh)
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	free(curr_path);
-//	ret = chdir(res_path);
-	curr_path =  getcwd(NULL, 0);
+	curr_path = getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);
 	if (res_path)
 		free(res_path);

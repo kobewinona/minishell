@@ -27,21 +27,6 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 	return (res);
 }
 
-//int	run_cmd(t_msh **msh, t_cmd *cmd)
-//{
-//	int	res;
-//
-//	if (cmd->type == T_EXEC)
-//		res = handle_exec(msh, &(cmd->exec));
-//	else if (cmd->type == T_PIPE)
-//		res = handle_pipe(msh, &(cmd->pipe));
-//	else if (cmd->type == T_REDIR)
-//		res = handle_redir(msh, &(cmd->redir));
-//	if (getpid() != (*msh)->ppid)
-//		exit((*msh)->exit_code);
-//	return (res);
-//}
-
 static void	run_minishell(t_msh **msh)
 {
 	t_cmd	*cmd;

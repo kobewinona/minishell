@@ -28,10 +28,12 @@
 # include <limits.h>
 # include "execution.h"
 # include "parsing.h"
+# include "error.h"
 
 
 // utils
 bool	is_emptystr(const char *s);
 char	*tokstr(t_types tok);
+void	free_array(char **arr);
 
 #endif

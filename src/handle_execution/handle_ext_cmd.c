@@ -12,18 +12,19 @@
 
 #include "minishell.h"
 
-static char	*create_cmd_path_str(char *cmd_dir, char *cmd_name)
+static char	*create_cmd_path_str(t_msh **msh, char *cmd_dir, char *cmd_name)
 {
 	char	*temp;
 	char	*cmd_path;
 
 	temp = NULL;
-	cmd_path = NULL;
 	temp = ft_strjoin(cmd_dir, "/");
 	if (!temp)
-		return (NULL);
+		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	cmd_path = ft_strjoin(temp, cmd_name);
 	free(temp);
+	if (!cmd_path)
+		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	return (cmd_path);
 }
 
@@ -32,30 +33,24 @@ static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **argv)
 	char		*cmd_path;
 
 	if (is_emptystr(argv[0]))
-	{
-		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
-		return (ERROR);
-	}
+		return (print_err(msh, (t_err){T_SYS_ERR,
+				argv[0], argv[1]}, false).t_int);
 	cmd_path = NULL;
-	cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
+	cmd_path = create_cmd_path_str(msh, cmd_dir, argv[0]);
 	if (!cmd_path)
-	{
-		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
-		return (ERROR);
-	}
+		return (print_err(msh, (t_err){T_SYS_ERR,
+				argv[0], argv[1]}, false).t_int);
 	if (access(cmd_path, X_OK) == SUCCESS)
 	{
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
-		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
-		process_err(msh, true);
+		print_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
 	}
 	free(cmd_path);
 	cmd_path = NULL;
 	return (SUCCESS);
 }
 
-//TODO: In case program found but no permission to execute
-// need to return 126!
+// TODO: if program found but no permission to execute, return 126!
 void	handle_ext_cmd(t_msh **msh, char **argv)
 {
 	char		*env_path;
@@ -65,14 +60,10 @@ void	handle_ext_cmd(t_msh **msh, char **argv)
 	if (!access(argv[0], F_OK | X_OK))
 	{
 		execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
-		log_err(msh, T_SYS_ERR, argv[0], NULL);
-		process_err(msh, true);
+		print_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
 	}
 	if (!env_path)
-	{
-		log_err(msh, T_CMD_NOT_FOUND, argv[0], NULL);
-		process_err(msh, true);
-	}
+		print_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
@@ -80,6 +71,5 @@ void	handle_ext_cmd(t_msh **msh, char **argv)
 			break ;
 		cmd_dir = ft_strtok(NULL, ":");
 	}
-	log_err(msh, T_CMD_NOT_FOUND, argv[0], NULL);
-	process_err(msh, true);
+	print_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
 }

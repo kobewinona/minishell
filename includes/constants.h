@@ -13,12 +13,9 @@
 #ifndef CONSTANTS_H
 # define CONSTANTS_H
 
-// @ int_cmds = internal commands implemented in this project
-// @ ext_cmds = external builtin commands
-
 # define PRG_NAME "minishell"
 # define INPUT_PROMPT "> "
-# define PRG_PROMPT "minishel> "
+# define PRG_PROMPT "minishell> "
 
 // magic numbers
 # define UNSPECIFIED -2
@@ -62,7 +59,8 @@ typedef enum e_types
 	T_DOUBLE_QUOTE = 34,
 	T_SINGLE_QUOTE = 39,
 	T_SYS_ERR,
-	T_SYNTAX_ERR = 2,
+	T_BAD_REQUEST_ERR = 1,
+	T_OTHER_ERR = 2,
 	T_CMD_NOT_FOUND = 127,
 	T_VAR_EXP = 36,
 	T_SPACE = 32,

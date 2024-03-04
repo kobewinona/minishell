@@ -12,36 +12,6 @@
 
 #include "minishell.h"
 
-char	*collect_heredoc_input(t_msh **msh, const char *eof)
-{
-	char	*heredoc_input;
-	char	*tty_input;
-	char	*temp;
-
-	if (!eof)
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, NEWLINE);
-		return (NULL);
-	}
-	heredoc_input = ft_strdup("");
-	tty_input = readline(INPUT_PROMPT);
-	while (tty_input)
-	{
-		if (!ft_strncmp(tty_input, eof, ft_strlen(eof)))
-			break ;
-		temp = ft_strjoin(heredoc_input, tty_input);
-		free(heredoc_input);
-		heredoc_input = temp;
-		temp = ft_strjoin(heredoc_input, "\n");
-		free(heredoc_input);
-		heredoc_input = temp;
-		free(tty_input);
-		tty_input = readline(INPUT_PROMPT);
-	}
-	free(tty_input);
-	return (heredoc_input);
-}
-
 int	get_arb_fd(char **s)
 {
 	int	fd;
@@ -76,10 +46,7 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 		if (!argv[index])
 			return (ERROR);
 		if (!argv[index])
-		{
-			log_err(msh, T_SYS_ERR, MALLOC, NULL);
-			return (ERROR);
-		}
+			return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_int);
 		index++;
 	}
 	return (SUCCESS);

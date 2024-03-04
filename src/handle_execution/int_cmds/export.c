@@ -24,7 +24,7 @@
 // (underscore) from the characters defined in Portable Character Set and do not begin with a digit. 
 // Other characters may be permitted by an implementation; applications shall tolerate the presence of such names
 
-bool	is_valid_varname(char *varname)
+static bool	is_valid_varname(const char *varname)
 {
 	return (ft_isalpha(*varname) || *varname == '_');
 }
@@ -78,8 +78,7 @@ void	export(char **argv, t_msh **msh)
 	{
 		if (!is_valid_varname(argv[i]))
 		{
-			print_errortrace("not a valid identifier", argv[i], false);
-			(*msh)->exit_code = T_EXEC;
+			print_err(msh, (t_err){T_BAD_REQUEST_ERR, EXPORT_INVALID_ARG_MSH1, argv[i]}, false);
 			return ;
 		}
 		if (is_char_there(argv[i], '='))

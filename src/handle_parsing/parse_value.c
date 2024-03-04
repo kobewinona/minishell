@@ -61,10 +61,8 @@ static int	populate_value(t_msh **msh, char **value, char **s)
 			end_char = *(*s)++;
 		val_len = get_val(msh, value, (*s), end_char);
 		if (val_len == ERROR)
-		{
-			log_err(msh, T_SYNTAX_ERR, UNEXPECTED_EOF_MSG, tokstr(end_char));
-			return (ERROR);
-		}
+			return (print_err(msh, (t_err){T_OTHER_ERR,
+					UNEXPECTED_EOF_MSG, tokstr(end_char)}, false).t_int);
 		(*s) += val_len + is_in_quotes;
 	}
 	return (SUCCESS);
@@ -79,90 +77,8 @@ char	*get_value(t_msh **msh, char **s)
 	value = NULL;
 	value = ft_strdup("");
 	if (!value)
-	{
-		log_err(msh, T_SYS_ERR, MALLOC, NULL);
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	if (populate_value(msh, &value, s) == ERROR)
 		return (NULL);
-//	if (is_emptystr(value))
-//	{
-//		free(value);
-//		return (NULL);
-//	}
 	return (value);
 }
-
-//static void	move_chars(char *s)
-//{
-//	int	write;
-//	int	read;
-//
-//	write = 0;
-//	read = write + 1;
-//	while (s[read])
-//		s[write++] = s[read++];
-//	s[write] = '\0';
-//}
-//
-//static int	nullterminate(t_msh **msh, char **s, char end_char)
-//{
-//	int		i;
-//
-//	i = 0;
-//	while ((*s)[i] && (*s)[i] != end_char)
-//	{
-//		if ((*s)[i] == T_VAR_EXP && end_char == T_DOUBLE_QUOTE)
-//			expand_var(msh, &(*s)[i]);
-//		i++;
-//	}
-//	if (end_char != T_SPACE && (*s)[i] != end_char)
-//		return (ERROR);
-//	else
-//	{
-//		while ((*s)[i] && !ft_isspace((*s)[i]))
-//		{
-//			move_chars(&((*s)[i]));
-//			while ((*s)[i] && !ft_isspace((*s)[i]) && (*s)[i] != end_char)
-//				i++;
-//		}
-//		if (ft_isspace((*s)[i]))
-//			(*s)[i++] = '\0';
-//		(*s) += i;
-//	}
-//	return (SUCCESS);
-//}
-//
-//static char	*prepare_value(t_msh **msh, char **s)
-//{
-//	char	*value;
-//	char	end_char;
-//	bool	is_in_quotes;
-//
-//	while (*s && ft_isspace((**s)))
-//		(*s)++;
-//	while ((**s) && !ft_isspace((**s)))
-//	{
-//		end_char = T_SPACE;
-//		is_in_quotes = (**s) == T_DOUBLE_QUOTE || (**s) == T_SINGLE_QUOTE;
-//		if (is_in_quotes)
-//			end_char = *(*s)++;
-//		value = (*s);
-//		if (nullterminate(msh, s, end_char) == ERROR)
-//			return (NULL);
-//		return (value);
-//	}
-//	return ((*s));
-//}
-//
-//char	*get_value(t_msh **msh, char **s)
-//{
-//	char	*value;
-//
-//	if (!(*s) || is_emptystr((*s)))
-//		return (NULL);
-//	value = prepare_value(msh, s);
-//	if (is_emptystr(value))
-//		return (NULL);
-//	return (value);
-//}

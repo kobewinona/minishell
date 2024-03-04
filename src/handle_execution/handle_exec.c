@@ -60,9 +60,9 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 		{
 			if ((*msh)->curr_pid != 0)
 			{
-				(*msh)->curr_pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
+				(*msh)->curr_pid = fork();
 				if ((*msh)->curr_pid == ERROR)
-					process_err(msh, false);
+					return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
 				if ((*msh)->curr_pid == 0)
 					handle_ext_cmd(msh, cmd->argv);
 				waitpid((*msh)->curr_pid, &ext_code, 0);
