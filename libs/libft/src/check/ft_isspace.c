@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/16 12:50:25 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/16 12:50:27 by sliashko         ###   ########.fr       */
+/*   Created: 2023/09/14 18:00:37 by dklimkin          #+#    #+#             */
+/*   Updated: 2023/09/14 18:00:38 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	unset(char **argv, t_msh **msh)
+int	ft_isspace(int c)
 {
-	int	i;
-
-	i = 1;
-	while (argv[i])
-	{
-
-		set_var_deleted((*msh)->env_vars, argv[i]);
-		i++;
-	}
-	(*msh)->exit_code = 0;
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
 }

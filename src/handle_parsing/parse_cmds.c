@@ -18,14 +18,14 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	t_types	prev_tok;
 	int		arb_fd;
 
+	cmd = NULL;
 	prev_tok = *tok;
+	arb_fd = UNSPECIFIED;
 	*s = smart_strtok(NULL, "><", tok);
 	arb_fd = get_arb_fd(&input);
 	if (*s && is_emptystr(*s))
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(prev_tok));
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
 	if (prev_tok == T_HEREDOC)
 		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
 				collect_heredoc_input(msh, get_value(msh, s)));
@@ -33,7 +33,8 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	{
 		cmd = constr_redir_cmd(msh, prev_tok,
 				parse_exec(msh, input, tok), get_value(msh, s));
-		cmd->redir.fd[1] = arb_fd;
+		if (cmd)
+			cmd->redir.fd[1] = arb_fd;
 	}
 	return (cmd);
 }
@@ -43,13 +44,15 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 	t_cmd	*cmd;
 	char	*s;
 
+	cmd = NULL;
 	s = NULL;
 	if (*tok == T_NO_TOK || *tok == T_PIPE)
 		cmd = constr_exec_cmd(msh, input);
 	else
 	{
 		cmd = parse_redir(msh, input, &s, tok);
-		if (s && !is_emptystr(s) && cmd->redir.subcmd->type == T_EXEC)
+		if (s && !is_emptystr(s) && cmd && cmd->redir.subcmd
+			&& cmd->redir.subcmd->type == T_EXEC)
 		{
 			if (populate_argv(msh, cmd->redir.subcmd->exec.argv, s) == ERROR)
 				return (NULL);
@@ -64,6 +67,7 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 	char	*s;
 	t_types	prev_tok;
 
+	cmd = NULL;
 	s = NULL;
 	cmd = parse_exec(msh, smart_strtok(input, "><", tok), tok);
 	prev_tok = *tok;
@@ -71,10 +75,8 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 	if (s)
 		cmd = constr_pipe_cmd(msh, cmd, parse_pipe(msh, s, tok));
 	if ((!s || is_emptystr(s)) && prev_tok == T_PIPE)
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(prev_tok));
-		return (NULL);
-	}
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
 	return (cmd);
 }
 
@@ -84,14 +86,14 @@ t_cmd	*parse_cmd(t_msh **msh, char *input)
 	t_types		tok;
 	char		*s;
 
+	cmd = NULL;
 	tok = T_NO_TOK;
 	s = NULL;
 	s = smart_strtok(input, "|", &tok);
-	if (is_emptystr(s))
-	{
-		log_err(msh, T_SYNTAX_ERR, UNEXPECTED_TOK_MSG, tokstr(tok));
-		return (NULL);
-	}
-	cmd = parse_pipe(msh, s, &tok);
+	if (is_emptystr(s) && tok != T_NO_TOK)
+		return (print_err(msh, (t_err){T_OTHER_ERR,
+				UNEXPECTED_TOK_MSG, tokstr(tok)}, false).t_null);
+	if (!is_emptystr(s))
+		cmd = parse_pipe(msh, s, &tok);
 	return (cmd);
 }

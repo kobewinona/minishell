@@ -14,59 +14,44 @@
 
 static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
-	int	pid;
-	int	exit_status;
-
-	exit_status = 0;
-	pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
-	if (pid == ERROR)
-		process_err(msh, false);
-	if (pid == 0)
+	(*msh)->curr_pid = fork();
+	if ((*msh)->curr_pid == ERROR)
+		return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
+	if ((*msh)->curr_pid == 0)
 	{
-		(*msh)->is_parent = false;
-		if (handle_err(dup2(pipe_fds[end], end),
-				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
-			process_err(msh, true);
+		if (dup2(pipe_fds[end], end) == ERROR)
+			return (print_err(msh, (t_err){T_SYS_ERR, DUP2}, true).t_int);
 		if (end == STDOUT_FILENO)
 			close(pipe_fds[STDIN_FILENO]);
-		if (handle_err(dup2(pipe_fds[end], end),
-				msh, T_SYS_ERR, DUP2, NULL) == ERROR)
-			process_err(msh, true);
 		if (end == STDIN_FILENO)
 			close(pipe_fds[STDOUT_FILENO]);
 		close(pipe_fds[STDIN_FILENO]);
 		close(pipe_fds[STDOUT_FILENO]);
 		if (run_cmd(msh, cmd) == ERROR)
-			process_err(msh, true);
+			return (ERROR);
 		exit((*msh)->exit_code);
 	}
-	return (pid);
+	return ((*msh)->curr_pid);
 
 }
-
-
-
 
 int	handle_pipe(t_msh **msh, t_pipe *cmd)
 {
 	int	pipe_fds[2];
+	int	exit_code;
+	int	cmd_from_pid;
+	int	cmd_to_pid;
 
-	int ext_status_right;
-	int	right_pid;
-	int	left_pid;
-	
-	ext_status_right = 0;
-	if (handle_err(pipe(pipe_fds), msh, T_SYS_ERR, PIPE, NULL) != SUCCESS)
-		return (ERROR);
-	left_pid = run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
-	right_pid = run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO);
+	exit_code = 0;
+	if (pipe(pipe_fds) == ERROR)
+		return (print_err(msh, (t_err){T_SYS_ERR, PIPE}, false).t_int);
+	cmd_from_pid = run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
+	cmd_to_pid = run_pipe_end(msh, cmd->to, pipe_fds, STDIN_FILENO);
 	close(pipe_fds[STDIN_FILENO]);
 	close(pipe_fds[STDOUT_FILENO]);
-	waitpid(left_pid, NULL, 0);
-	waitpid(right_pid, &ext_status_right, 0);
-	ext_status_right = WEXITSTATUS(ext_status_right);
-
-	(*msh)->exit_code = ext_status_right;
-	return (ext_status_right);
+	waitpid(cmd_from_pid, NULL, 0);
+	waitpid(cmd_to_pid, &exit_code, 0);
+	exit_code = WEXITSTATUS(exit_code);
+	(*msh)->exit_code = exit_code;
+	return (exit_code);
 }
-

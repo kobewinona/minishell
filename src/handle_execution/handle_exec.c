@@ -37,41 +37,40 @@ bool	is_builtin(t_exec *cmd)
 
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
-	int ext_code;
-
+	int	ext_code;
 
 	ext_code = 0;
 	if (cmd->argv[0])
 	{
-		if (!ft_strncmp(cmd->argv[0], ECHO, 1000))
+		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
 			echo(cmd->argv, msh);
-		else if (!ft_strncmp(cmd->argv[0], CD, 1000))
+		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
 			cd(cmd->argv[1], msh);
-		else if (!ft_strncmp(cmd->argv[0], PWD, 1000))
+		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
 			pwd(msh);
-		else if (!ft_strncmp(cmd->argv[0], EXPORT, 1000))
+		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
 			export(cmd->argv, msh);
-		else if (!ft_strncmp(cmd->argv[0], UNSET, 1000))
+		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
 			unset(cmd->argv, msh);
-		else if (!ft_strncmp(cmd->argv[0], EXIT, 1000))
+		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
 			exit_cmd(cmd->argv, msh);
-		else if (!ft_strncmp(cmd->argv[0], ENV, 1000))
+		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
 			env_cmd(cmd->argv, msh);
-
 		else
 		{
-			if (handle_err(fork(), msh, T_SYS_ERR, FORK, NULL) == 0)
+			if ((*msh)->curr_pid != 0)
 			{
-				(*msh)->is_parent = false;
-				handle_ext_cmd(msh, cmd->argv);
+				(*msh)->curr_pid = fork();
+				if ((*msh)->curr_pid == ERROR)
+					return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
+				if ((*msh)->curr_pid == 0)
+					handle_ext_cmd(msh, cmd->argv);
+				waitpid((*msh)->curr_pid, &ext_code, 0);
+				(*msh)->exit_code = WEXITSTATUS(ext_code);
 			}
-			wait(&ext_code);
-			(*msh)->exit_code = WEXITSTATUS(ext_code);
-
+			else
+				handle_ext_cmd(msh, cmd->argv);
 		}
-		
 	}
-	if (!(*msh)->is_parent)
-		exit((*msh)->exit_code);
 	return ((*msh)->exit_code);
 }
