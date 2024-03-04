@@ -45,16 +45,15 @@ static void	update_end(char *start, char **end, const char *sep, t_types *tok)
 {
 	bool	is_in_single_quotes;
 	bool	is_in_double_quotes;
-	char	*end_trimmed;
 
 	*end = start;
 	is_in_single_quotes = false;
 	is_in_double_quotes = false;
 	while (**end)
 	{
-		if (**end == '\'' && !is_in_double_quotes)
+		if (**end == T_SINGLE_QUOTE && !is_in_double_quotes)
 			is_in_single_quotes = !is_in_single_quotes;
-		else if (**end == '\"' && !is_in_single_quotes)
+		else if (**end == T_DOUBLE_QUOTE && !is_in_single_quotes)
 			is_in_double_quotes = !is_in_double_quotes;
 		else if (!is_in_single_quotes && !is_in_double_quotes
 			&& ft_strchr(sep, **end))
