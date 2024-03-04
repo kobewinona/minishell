@@ -34,7 +34,6 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_exec
 {
 	char		*argv[MAX_INPUT + 1];
-//	char		**argv;
 }	t_exec;
 
 typedef struct s_pipe
@@ -48,6 +47,7 @@ typedef struct s_redir
 	t_types	type;
 	t_cmd	*subcmd;
 	int		fd[2];
+	char	*f;
 	int		mode;
 }	t_redir;
 

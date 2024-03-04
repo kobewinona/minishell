@@ -4,7 +4,7 @@ NAME			= minishell
 
 CC				= gcc
 #CFLAGS			= -g -Wall -Wextra -Werror -MMD
-CFLAGS			= -g -MMD #-fsanitize=address
+CFLAGS			= -g -MMD
 RM				= rm -rf
 
 INCLUDES		= ./includes

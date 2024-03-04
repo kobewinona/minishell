@@ -22,7 +22,8 @@ void	*cleanup_cmds(t_cmd **cmd)
 		while ((*cmd)->exec.argv[i])
 		{
 			free((*cmd)->exec.argv[i]);
-			(*cmd)->exec.argv[i++] = NULL;
+			(*cmd)->exec.argv[i] = NULL;
+			i++;
 		}
 	}
 	if ((*cmd)->type == T_PIPE)
@@ -32,8 +33,11 @@ void	*cleanup_cmds(t_cmd **cmd)
 	}
 	if ((*cmd)->type == T_REDIR)
 	{
-		close((*cmd)->redir.fd[0]);
-		close((*cmd)->redir.fd[1]);
+		if ((*cmd)->redir.fd[0] > 2)
+			close((*cmd)->redir.fd[0]);
+		if ((*cmd)->redir.fd[1] > 2)
+			close((*cmd)->redir.fd[1]);
+		free((*cmd)->redir.f);
 		cleanup_cmds(&(*cmd)->redir.subcmd);
 	}
 	free((*cmd));

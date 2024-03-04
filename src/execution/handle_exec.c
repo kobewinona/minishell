@@ -61,6 +61,8 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 			if ((*msh)->curr_pid != 0)
 			{
 				(*msh)->curr_pid = handle_err(fork(), msh, T_SYS_ERR, FORK, NULL);
+				if ((*msh)->curr_pid == ERROR)
+					process_err(msh, false);
 				if ((*msh)->curr_pid == 0)
 					handle_ext_cmd(msh, cmd->argv);
 				waitpid((*msh)->curr_pid, &ext_code, 0);

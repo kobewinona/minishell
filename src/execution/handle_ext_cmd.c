@@ -31,6 +31,11 @@ static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **argv)
 {
 	char		*cmd_path;
 
+	if (is_emptystr(argv[0]))
+	{
+		log_err(msh, T_SYS_ERR, argv[0], argv[1]);
+		return (ERROR);
+	}
 	cmd_path = NULL;
 	cmd_path = create_cmd_path_str(cmd_dir, argv[0]);
 	if (!cmd_path)

@@ -85,11 +85,11 @@ char	*get_value(t_msh **msh, char **s)
 	}
 	if (populate_value(msh, &value, s) == ERROR)
 		return (NULL);
-	if (is_emptystr(value))
-	{
-		free(value);
-		return (NULL);
-	}
+//	if (is_emptystr(value))
+//	{
+//		free(value);
+//		return (NULL);
+//	}
 	return (value);
 }
 

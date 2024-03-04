@@ -53,11 +53,19 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 	else
 	{
 		cmd = parse_redir(msh, input, &s, tok);
-		if (s && !is_emptystr(s) && cmd->redir.subcmd->type == T_EXEC)
+		if (s && !is_emptystr(s) && cmd && cmd->redir.subcmd && cmd->redir.subcmd->type == T_EXEC)
 		{
 			if (populate_argv(msh, cmd->redir.subcmd->exec.argv, s) == ERROR)
 				return (NULL);
 		}
+//		else
+//		{
+//			if (cmd && cmd->redir.subcmd && cmd->redir.subcmd->type == T_EXEC)
+//			{
+//				if (!cmd->redir.subcmd->exec.argv[0])
+//					return (cleanup_cmds(&cmd));
+//			}
+//		}
 	}
 	return (cmd);
 }

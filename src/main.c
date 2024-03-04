@@ -51,8 +51,6 @@ static void	run_minishell(t_msh **msh)
 	while (1)
 	{
 		cmd = NULL;
-		input = NULL;
-		temp = NULL;
 		input = readline(PRG_PROMPT);
 		if (!input)
 			break ;
@@ -61,6 +59,7 @@ static void	run_minishell(t_msh **msh)
 			add_history(input);
 			temp = input;
 			cmd = parse_cmd(msh, temp);
+			prepare_fds(msh, &cmd);
 		}
 		if (cmd)
 		{
