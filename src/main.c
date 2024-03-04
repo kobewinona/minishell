@@ -49,7 +49,7 @@ static void	run_minishell(t_msh **msh)
 			prepare_fds(msh, &cmd);
 		}
 		if (cmd)
-		{	(*msh)->state = EXEC_STATE;
+		{	
 			run_cmd(msh, cmd);
 			cleanup_cmds(&cmd);
 		}
