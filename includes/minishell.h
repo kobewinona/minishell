@@ -28,7 +28,7 @@
 # include <limits.h>
 # include "execution.h"
 # include "parsing.h"
-
+# include <signal.h>
 
 // utils
 bool	is_emptystr(const char *s);

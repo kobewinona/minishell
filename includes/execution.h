@@ -68,12 +68,21 @@ typedef struct s_err
 	char	*ctx2;
 }	t_err;
 
+typedef enum 
+{
+	READ_STATE,
+	EXEC_STATE,
+	HEREDOC_STATE,
+}	shell_state;
+
+
 typedef struct s_msh
 {
 	int			exit_code;
 	t_var_node	*env_vars;
 	t_err		*err;
 	bool		is_parent;
+	shell_state	state;
 }	t_msh;
 
 // functions
@@ -127,4 +136,7 @@ void	unset(char **argv, t_msh **msh);
 void	exit_cmd(char **argv, t_msh **msh);
 void	env_cmd(char **argv, t_msh **msh);
 
+//Signals
+
+void	track_signals();
 #endif

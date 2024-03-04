@@ -37,6 +37,7 @@ static void	run_minishell(t_msh **msh)
 
 	while (1)
 	{
+		(*msh)->state = READ_STATE;
 		input = readline(PRG_PROMPT);
 		if (!input)
 			break ;
@@ -45,13 +46,23 @@ static void	run_minishell(t_msh **msh)
 		cmd = parse_cmd(msh, temp);
 		process_err(msh, false);
 		if (cmd)
-		{
+		{	(*msh)->state = EXEC_STATE;
 			run_cmd(msh, cmd);
 			cleanup_cmds(cmd);
 		}
 		free(input);
 	}
 }
+
+// For signals
+//if (WIFEXITED(g_pid))
+// 		g_status = WEXITSTATUS(g_pid);
+// 	if (WIFSIGNALED(g_pid))
+// 	{
+// 		g_status = WTERMSIG(g_pid);
+// 		if (g_status != 131)
+// 			g_status += 128;
+// 	}
 
 //HINT: a cool idea to build ft_linked_malloc()
 // that allocates memory and keep it in a linked list to free easilly
@@ -62,6 +73,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
+	track_signals();
 	msh = (t_msh *) malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
