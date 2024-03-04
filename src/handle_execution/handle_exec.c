@@ -58,14 +58,14 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 			env_cmd(cmd->argv, msh);
 		else
 		{
-			if ((*msh)->curr_pid != 0)
+			if ((*msh)->chld_pid != 0)
 			{
-				(*msh)->curr_pid = fork();
-				if ((*msh)->curr_pid == ERROR)
+				(*msh)->chld_pid = fork();
+				if ((*msh)->chld_pid == ERROR)
 					return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
-				if ((*msh)->curr_pid == 0)
+				if ((*msh)->chld_pid == 0)
 					handle_ext_cmd(msh, cmd->argv);
-				waitpid((*msh)->curr_pid, &ext_code, 0);
+				waitpid((*msh)->chld_pid, &ext_code, 0);
 				(*msh)->exit_code = WEXITSTATUS(ext_code);
 			}
 			else

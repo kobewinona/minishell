@@ -67,6 +67,7 @@ typedef struct s_msh
 	t_var_node	*env_vars;
 	t_cmd		*cmd;
 	bool		is_parent;
+	int			chld_pid;
 }	t_msh;
 
 // functions
