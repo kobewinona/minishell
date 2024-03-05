@@ -91,3 +91,35 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	return (msh->exit_code);
 }
+
+
+
+//Checking leaks in env utils
+// Note:
+// better to set_var_deleted everytime we update it
+// to avoid leaks
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_var_node *env_vars;
+// 	t_var_node *env_vars2;
+
+// 	env_vars = copy_env_vars(envp);
+// 	env_vars2 = copy_env_vars(envp);
+// 	printf("path, %s\n", get_env_var(env_vars, "PATH"));
+// 	update_var(env_vars, "VAR", "WORLDDDDDDDD");
+	
+// 	update_var(env_vars, "VAR", "WOFDFDFD");
+
+// 	update_var(env_vars, "MYVAR", "GOOD");
+// 	update_var(env_vars, "MYVAR2", "BEBE");
+
+// 	printf("%s\n",get_env_var(env_vars, "MYVAR2"));
+
+// 	// increment_shlvl(env_vars);
+// 	//increment_shlvl(env_vars2);
+// 	free_envlist(env_vars);
+// 	free_envlist(env_vars2);
+	
+
+// 	return (0);
+// }
