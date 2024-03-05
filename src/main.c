@@ -74,25 +74,25 @@ static void	run_minishell(t_msh **msh)
 //GLobal var for 
 bool is_parent = true;
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_msh		*msh;
+int	main(int argc, char **argv, char **envp)
+{
+	t_msh		*msh;
 
-// 	(void)argc;
-// 	(void)argv;
-// 	track_signals(false);
-// 	msh = (t_msh *)malloc(sizeof(t_msh));
-// 	if (!msh)
-// 		return (EXIT_FAILURE);
-// 	memset(msh, 0, sizeof(t_msh));
-// 	msh->chld_pid = UNSPECIFIED;
-// 	msh->is_parent = true;
-// 	msh->env_vars = copy_env_vars(envp);
-// 	msh->script_name = get_env_var(msh->env_vars, "PWD");
-// 	increment_shlvl(msh->env_vars);
-// 	run_minishell(&msh);
-// 	return (msh->exit_code);
-// }
+	(void)argc;
+	(void)argv;
+	track_signals(false);
+	msh = (t_msh *)malloc(sizeof(t_msh));
+	if (!msh)
+		return (EXIT_FAILURE);
+	memset(msh, 0, sizeof(t_msh));
+	msh->chld_pid = UNSPECIFIED;
+	msh->is_parent = true;
+	msh->env_vars = copy_env_vars(envp);
+	msh->script_name = get_env_var(msh->env_vars, "PWD");
+	increment_shlvl(msh->env_vars);
+	run_minishell(&msh);
+	return (msh->exit_code);
+}
 
 
 
@@ -100,22 +100,28 @@ bool is_parent = true;
 // Note:
 // better to set_var_deleted everytime we update it
 // to avoid leaks
-int	main(int argc, char **argv, char **envp)
-{
-	t_var_node *env_vars;
-	t_var_node *env_vars2;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_var_node *env_vars;
+// 	t_var_node *env_vars2;
 
-	env_vars = copy_env_vars(envp);
-	env_vars2 = copy_env_vars(envp);
-	printf("path, %s\n", get_env_var(env_vars, "PATH"));
-	update_var(env_vars, "VAR", "WORLDDDDDDDD");
-	set_var_deleted(env_vars, "VAR");
-	update_var(env_vars, "VAR", "WOFDFDFD");
-	// increment_shlvl(env_vars);
-	//increment_shlvl(env_vars2);
-	free_envlist(env_vars);
-	free_envlist(env_vars2);
+// 	env_vars = copy_env_vars(envp);
+// 	env_vars2 = copy_env_vars(envp);
+// 	printf("path, %s\n", get_env_var(env_vars, "PATH"));
+// 	update_var(env_vars, "VAR", "WORLDDDDDDDD");
+	
+// 	update_var(env_vars, "VAR", "WOFDFDFD");
+
+// 	update_var(env_vars, "MYVAR", "GOOD");
+// 	update_var(env_vars, "MYVAR2", "BEBE");
+
+// 	printf("%s\n",get_env_var(env_vars, "MYVAR2"));
+
+// 	// increment_shlvl(env_vars);
+// 	//increment_shlvl(env_vars2);
+// 	free_envlist(env_vars);
+// 	free_envlist(env_vars2);
 	
 
-	return (0);
-}
+// 	return (0);
+// }
