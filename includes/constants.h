@@ -63,6 +63,7 @@ typedef enum e_types
 	T_BAD_REQUEST_ERR = 1,
 	T_OTHER_ERR = 2,
 	T_CMD_NOT_FOUND = 127,
+	T_CMD_FOUND_NO_EXEC = 126,
 	T_VAR_EXP = 36,
 	T_SPACE = 32,
 	T_UNDERSCORE = 95,

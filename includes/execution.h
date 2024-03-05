@@ -63,11 +63,11 @@ struct s_cmd
 typedef struct s_msh
 {
 	int			exit_code;
-	pid_t		ppid;
-	pid_t		curr_pid;
 	t_var_node	*env_vars;
 	char		*script_name;
 	t_cmd		*cmd;
+	bool		is_parent;
+	int			chld_pid;
 }	t_msh;
 
 // functions
@@ -105,4 +105,7 @@ void		unset(char **argv, t_msh **msh);
 void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
 
+//Signals
+
+void track_signals(bool is_child);
 #endif

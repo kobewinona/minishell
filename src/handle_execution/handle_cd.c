@@ -12,22 +12,22 @@
 
 #include "minishell.h"
 
-//void	handle_cd(const char *input, t_var_node *env_vars)
-//{
-//	char	**argv;
-//	int		i;
-//
-//	argv = NULL;
-//	argv = ft_split(input, ' ');
-//	if (!argv)
-//		return ;
-//	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
-//		cd(argv[1], env_vars);
-//	i = 0;
-//	while (argv[i])
-//	{
-//		free(argv[i]);
-//		i++;
-//	}
-//	free(argv);
-//}
+void	handle_cd(const char *input, t_var_node *env_vars)
+{
+	char	**argv;
+	int		i;
+
+	argv = NULL;
+	argv = ft_split(input, ' ');
+	if (!argv)
+		return ;
+	if (argv[0] && !ft_strncmp(argv[0], CD, ft_strlen(CD)))
+		cd(argv[1], env_vars);
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
