@@ -63,17 +63,16 @@ struct s_cmd
 typedef struct s_msh
 {
 	int			exit_code;
-	pid_t		ppid;
-	pid_t		curr_pid;
 	t_var_node	*env_vars;
 	char		*script_name;
 	t_cmd		*cmd;
+	bool		is_parent;
+	int			child_pid;
 }	t_msh;
 
 // functions
 int			run_cmd(t_msh **msh, t_cmd *cmd);
 void		handle_ext_cmd(t_msh **msh, char **argv);
-void		handle_cd(const char *input, t_var_node *env_vars);
 int			handle_exec(t_msh **msh, t_exec *cmd);
 int			handle_pipe(t_msh **msh, t_pipe *cmd);
 int			handle_redir(t_msh **msh, t_redir *cmd);
@@ -85,7 +84,7 @@ char		*ft_strslice(const char *str, int start, int end);
 int			ft_ind_char(const char *str, char c);
 void		replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh);
 
-// working with ENV
+// working with env
 t_var_node	*create_var_node(char *key_val_str);
 void		append_var_node(t_var_node **head, char *key_val_str);
 char		*get_env_var(t_var_node *head, char *varname);
@@ -104,5 +103,8 @@ void		export(char **argv, t_msh **msh);
 void		unset(char **argv, t_msh **msh);
 void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
+
+// signals
+void		track_signals(bool is_child);
 
 #endif
