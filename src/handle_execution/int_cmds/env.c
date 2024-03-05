@@ -20,8 +20,8 @@ void	env_cmd(char **argv, t_msh **msh)
 	curr =(*msh)->env_vars;
 	while (curr)
 	{
-		if (!curr->deleted && curr->key_val_str && curr->value_assigned)
-			printf("%s\n", curr->key_val_str);
+		if (curr->key_val_str && curr->value_assigned && curr->value)
+			printf("%s=%s\n",curr->name, curr->value);
 		curr = curr->next;
 	}
 	(*msh)->exit_code = 0;
