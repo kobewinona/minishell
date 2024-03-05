@@ -84,7 +84,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	msh->chld_pid = -3333;
+	msh->chld_pid = UNSPECIFIED;
 	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	increment_shlvl(msh->env_vars);
