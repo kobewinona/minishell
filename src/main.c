@@ -27,8 +27,6 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 	return (res);
 }
 
-
-
 static void	run_minishell(t_msh **msh)
 {
 	t_cmd	*cmd;
@@ -49,7 +47,7 @@ static void	run_minishell(t_msh **msh)
 			prepare_fds(msh, &cmd);
 		}
 		if (cmd)
-		{	
+		{
 			run_cmd(msh, cmd);
 			cleanup_cmds(&cmd);
 		}
@@ -71,8 +69,8 @@ static void	run_minishell(t_msh **msh)
 // that allocates memory and keep it in a linked list to free easilly
 
 
-//GLobal var for 
-bool is_parent = true;
+// Global var for
+bool	is_parent = true;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -85,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	msh->chld_pid = UNSPECIFIED;
+	msh->child_pid = UNSPECIFIED;
 	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	msh->script_name = get_env_var(msh->env_vars, "PWD");

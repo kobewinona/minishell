@@ -30,7 +30,6 @@
 # include "parsing.h"
 # include "error.h"
 
-
 // utils
 bool	is_emptystr(const char *s);
 char	*tokstr(t_types tok);

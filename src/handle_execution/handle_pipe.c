@@ -14,10 +14,10 @@
 
 static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
-	(*msh)->chld_pid = fork();
-	if ((*msh)->chld_pid == ERROR)
+	(*msh)->child_pid = fork();
+	if ((*msh)->child_pid == ERROR)
 		return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
-	if ((*msh)->chld_pid == 0)
+	if ((*msh)->child_pid == 0)
 	{
 		if (dup2(pipe_fds[end], end) == ERROR)
 			return (print_err(msh, (t_err){T_SYS_ERR, DUP2}, true).t_int);
@@ -31,7 +31,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 			return (ERROR);
 		exit((*msh)->exit_code);
 	}
-	return ((*msh)->chld_pid);
+	return ((*msh)->child_pid);
 
 }
 
