@@ -102,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	env_vars = copy_env_vars(envp);
 	env_vars2 = copy_env_vars(envp);
 	printf("path, %s\n", get_env_var(env_vars, "PATH"));
-	//update_var(env_vars, "VAR", "WORLDDDDDDDD");
+	update_var(env_vars, "VAR", "WORLDDDDDDDD");
 	set_var_deleted(env_vars, "VAR");
 	// increment_shlvl(env_vars);
 	//increment_shlvl(env_vars2);

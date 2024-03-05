@@ -35,8 +35,8 @@ void	set_var_deleted(t_var_node *head, char *varname)
 	t_var_node	*temp;
 	t_var_node	*prev;
 
-	prev = NULL;
-	curr = head;
+	prev = head;
+	curr = head->next;
 	while (curr)
 	{
 		if (!(ft_strncmp(varname, curr->name, 5000)))
@@ -45,11 +45,14 @@ void	set_var_deleted(t_var_node *head, char *varname)
 			temp = curr->next;
 			curr = prev;
 			//free content of node to delete
+			
 			free(curr->next->name);
 			free(curr->next->value);
+			//free(curr->key_val_str);
 			free(curr->next);
 			
 			curr->next = temp;
+			return ;
 			
 		}
 		prev = curr;
@@ -95,7 +98,9 @@ void	update_var(t_var_node *head, char *varname, char *value)
 		}
 		curr = curr->next;
 	}
+	printf("GOT HERE\n");
 	append_var_node(&head, key_val_str);
+	free(key_val_str);
 }
 
 void	increment_shlvl(t_var_node *env_vars)
