@@ -15,7 +15,6 @@
 # include "minishell.h"
 
 // structs
-
 typedef struct s_var_node
 {
 	char				*name;
@@ -78,14 +77,14 @@ int			handle_exec(t_msh **msh, t_exec *cmd);
 int			handle_pipe(t_msh **msh, t_pipe *cmd);
 int			handle_redir(t_msh **msh, t_redir *cmd);
 
-//dollar expansion
+// dollar expansion
 void		expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh);
 bool		is_char_there(char *arg, char c);
 char		*ft_strslice(const char *str, int start, int end);
 int			ft_ind_char(const char *str, char c);
 void		replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh);
 
-//working with ENV
+// working with ENV
 t_var_node	*create_var_node(char *key_val_str);
 void		append_var_node(t_var_node **head, char *key_val_str);
 char		*get_env_var(t_var_node *head, char *varname);
@@ -96,8 +95,7 @@ char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 
-// -src/int_cmds
-
+// -src/builtins
 void		echo(char **argv, t_msh **msh);
 void		cd(char *path, t_msh **msh);
 void		pwd(t_msh **msh);
