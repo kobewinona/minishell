@@ -87,12 +87,14 @@ void	update_var(t_var_node *head, char *varname, char *value)
 
 void	increment_shlvl(t_var_node *env_vars)
 {
-	int	new_shlvl;
+	char	*new_shlvl;
 
 	if (get_env_var(env_vars, "SHLVL"))
 	{
-		new_shlvl = ft_atoi(get_env_var(env_vars, "SHLVL")) + 1;
-		update_var(env_vars, "SHLVL", ft_itoa(new_shlvl));
+		
+		new_shlvl = ft_itoa(ft_atoi(get_env_var(env_vars, "SHLVL")) + 1);
+		update_var(env_vars, "SHLVL", new_shlvl);
+		free(new_shlvl);
 	}
 	else
 		update_var(env_vars, "SHLVL", "1");

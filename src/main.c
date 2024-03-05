@@ -74,24 +74,33 @@ static void	run_minishell(t_msh **msh)
 //GLobal var for 
 bool is_parent = true;
 
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_msh		*msh;
+
+// 	(void)argc;
+// 	(void)argv;
+// 	track_signals(false);
+// 	msh = (t_msh *)malloc(sizeof(t_msh));
+// 	if (!msh)
+// 		return (EXIT_FAILURE);
+// 	memset(msh, 0, sizeof(t_msh));
+// 	msh->chld_pid = UNSPECIFIED;
+// 	msh->is_parent = true;
+// 	msh->env_vars = copy_env_vars(envp);
+// 	msh->script_name = get_env_var(msh->env_vars, "PWD");
+// 	increment_shlvl(msh->env_vars);
+// 	run_minishell(&msh);
+// 	return (msh->exit_code);
+// }
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_msh		*msh;
+	t_var_node *env_vars;
 
-	(void)argc;
-	(void)argv;
-	track_signals(false);
-	msh = (t_msh *)malloc(sizeof(t_msh));
-	if (!msh)
-		return (EXIT_FAILURE);
-	memset(msh, 0, sizeof(t_msh));
-	msh->chld_pid = UNSPECIFIED;
-	msh->is_parent = true;
-	msh->env_vars = copy_env_vars(envp);
-	msh->script_name = get_env_var(msh->env_vars, "PWD");
-	printf("msh->ppid %d\n", msh->ppid);
-	printf("msh->script_name %s\n\n", msh->script_name);
-	increment_shlvl(msh->env_vars);
-	run_minishell(&msh);
-	return (msh->exit_code);
+	env_vars = copy_env_vars(envp);
+	increment_shlvl(env_vars);
+	free_envlist(env_vars);
+
+	return (0);
 }
