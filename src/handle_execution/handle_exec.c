@@ -64,7 +64,10 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 				if ((*msh)->chld_pid == ERROR)
 					return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
 				if ((*msh)->chld_pid == 0)
+				{	
+					track_signals(false);
 					handle_ext_cmd(msh, cmd->argv);
+				}
 				waitpid((*msh)->chld_pid, &ext_code, 0);
 				(*msh)->exit_code = WEXITSTATUS(ext_code);
 			}

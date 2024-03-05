@@ -106,5 +106,5 @@ void		env_cmd(char **argv, t_msh **msh);
 
 //Signals
 
-void	track_signals();
+void track_signals(bool is_child);
 #endif

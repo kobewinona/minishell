@@ -80,6 +80,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	track_signals(false);
 	msh = (t_msh *)malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
