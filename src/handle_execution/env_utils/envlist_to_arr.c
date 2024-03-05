@@ -63,9 +63,10 @@ void	free_envlist(t_var_node *env_vars)
 	while (curr)
 	{
 		next = curr->next;
-		free(curr->key_val_str);
+		
 		free(curr->name);
 		free(curr->value);
+		//free(curr->key_val_str);
 		free(curr);
 
 		curr = next;

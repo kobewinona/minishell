@@ -44,8 +44,13 @@ void	set_var_deleted(t_var_node *head, char *varname)
 		
 			temp = curr->next;
 			curr = prev;
+			//free content of node to delete
+			free(curr->next->name);
+			free(curr->next->value);
 			free(curr->next);
+			
 			curr->next = temp;
+			
 		}
 		prev = curr;
 		curr = curr->next;
@@ -73,8 +78,10 @@ void	update_var(t_var_node *head, char *varname, char *value)
 		if (!(ft_strncmp(varname, curr->name, 5000)))
 		{
 			curr->deleted = false;
-			if (value)
-			{
+			if (value) //need to update var 
+			{	
+				if (curr->value)
+					free(curr->value);
 				curr->value = ft_strdup(value);
 				curr->value_assigned = true;
 			}
