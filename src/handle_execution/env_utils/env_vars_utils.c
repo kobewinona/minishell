@@ -57,10 +57,16 @@ void	update_var(t_var_node *head, char *varname, char *value)
 {
 	t_var_node	*curr;
 	char		*key_val_str;
+	char 		*substr;
 
-	key_val_str = ft_strjoin(varname, "=");
+	substr = ft_strjoin(varname, "=");
 	if (value)
-		key_val_str = ft_strjoin(key_val_str, value);
+	{
+		key_val_str = ft_strjoin(substr, value);
+		free(substr);
+	}
+	else
+		key_val_str = substr;
 	curr = head;
 	while (curr)
 	{
