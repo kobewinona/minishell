@@ -75,7 +75,8 @@ ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char)
 	while (s[var_len] && (!ft_isspace(s[var_len]) || s[var_len] == end_char)
 		&& (ft_isalpha(s[var_len]) || s[var_len] == T_UNDERSCORE))
 		var_len++;
-	var_len = update_val(msh, value, (s + is_tok_included), (var_len - is_tok_included));
+	var_len = update_val(msh, value,
+			(s + is_tok_included), (var_len - is_tok_included));
 	if (var_len == ERROR)
 		return (ERROR);
 	return (var_len + is_tok_included);

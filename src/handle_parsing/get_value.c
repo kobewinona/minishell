@@ -12,23 +12,8 @@
 
 #include "minishell.h"
 
-static int	handle_env_var(t_msh **msh, char **value,
-		char **s, ssize_t *val_len, char end_char)
-{
-	if ((*val_len) > 0)
-	{
-		if (join_values(msh, value, (*s), (*val_len)) == ERROR)
-			return (ERROR);
-		(*s) += (*val_len);
-		(*val_len) = 0;
-	}
-	(*val_len) += exp_env_var(msh, value, (*s), end_char);
-	(*s) += (*val_len);
-	(*val_len) = 0;
-	return (SUCCESS);
-}
-
-static ssize_t	subtract_new_value(t_msh **msh, char **value, char **s, char end_char)
+static ssize_t	subtract_new_value(t_msh **msh,
+		char **value, char **s, char end_char)
 {
 	ssize_t	val_len;
 
@@ -39,8 +24,12 @@ static ssize_t	subtract_new_value(t_msh **msh, char **value, char **s, char end_
 		{
 			if (end_char == T_DOUBLE_QUOTE || end_char == T_SPACE)
 			{
-				if (handle_env_var(msh, value, s, &val_len, end_char) == ERROR)
+				if (join_values(msh, value, (*s), val_len) == ERROR)
 					return (ERROR);
+				(*s) += val_len;
+				val_len = exp_env_var(msh, value, (*s), end_char);
+				(*s) += val_len;
+				val_len = 0;
 				continue ;
 			}
 		}

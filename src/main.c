@@ -69,8 +69,6 @@ int	main(int argc, char **argv, char **envp)
 	msh->curr_pid = msh->ppid;
 	msh->env_vars = copy_env_vars(envp);
 	msh->script_name = get_env_var(msh->env_vars, "PWD");
-	printf("msh->ppid %d\n", msh->ppid);
-	printf("msh->script_name %s\n\n", msh->script_name);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);
 	return (msh->exit_code);
