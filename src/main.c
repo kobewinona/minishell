@@ -94,6 +94,12 @@ bool is_parent = true;
 // 	return (msh->exit_code);
 // }
 
+
+
+//Checking leaks in env utils
+// Note:
+// better to set_var_deleted everytime we update it
+// to avoid leaks
 int	main(int argc, char **argv, char **envp)
 {
 	t_var_node *env_vars;
@@ -104,6 +110,7 @@ int	main(int argc, char **argv, char **envp)
 	printf("path, %s\n", get_env_var(env_vars, "PATH"));
 	update_var(env_vars, "VAR", "WORLDDDDDDDD");
 	set_var_deleted(env_vars, "VAR");
+	update_var(env_vars, "VAR", "WOFDFDFD");
 	// increment_shlvl(env_vars);
 	//increment_shlvl(env_vars2);
 	free_envlist(env_vars);
