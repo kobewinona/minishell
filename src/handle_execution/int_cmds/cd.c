@@ -37,6 +37,8 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 
 static bool	is_dir_valid(char *path)
 {
+	if (!path)
+		return (true);
 	if (!ft_strncmp(path, "~", 1) || is_emptystr(path))
 		return (true);
 	if (!access(path, F_OK | R_OK))

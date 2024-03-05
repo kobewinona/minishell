@@ -38,8 +38,14 @@ char	*smart_strtok(char *restrict str,
 
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
-int		exp_env_var(t_msh **msh, char **value, char *s, char end_char);
-int		join_values(t_msh **msh, char **value, const char *s, int len);
+ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char);
+int		join_values(t_msh **msh, char **value, const char *s, size_t len);
 int		get_arb_fd(char **s);
+
+// 0x55555556bae0
+// 0x55555556bb20
+
+// 0x55555556bb00
+// 0x55555556bb60
 
 #endif
