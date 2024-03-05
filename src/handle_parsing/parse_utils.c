@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	join_values(t_msh **msh, char **value, const char *s, int len)
+int	join_values(t_msh **msh, char **value, const char *s, size_t len)
 {
 	char	*temp1;
 	char	*temp2;
@@ -23,6 +23,7 @@ int	join_values(t_msh **msh, char **value, const char *s, int len)
 	if (!temp1)
 		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_int);
 	temp2 = ft_strjoin((*value), temp1);
+	free((*value));
 	if (!temp2)
 	{
 		free(temp1);

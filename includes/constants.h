@@ -24,6 +24,7 @@
 # define FAILURE 1
 # define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
 # define RW_RW_RW_PERM 0666 // -rw-rw-rw- permission settings
+# define SPEC_VAR_CHARS "0?$"
 
 // command names
 # define ECHO "echo"
@@ -66,6 +67,7 @@ typedef enum e_types
 	T_VAR_EXP = 36,
 	T_SPACE = 32,
 	T_UNDERSCORE = 95,
+	T_QUESTION_MARK = 63,
 }	t_types;
 
 #endif

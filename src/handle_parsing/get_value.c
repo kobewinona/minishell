@@ -13,23 +13,24 @@
 #include "minishell.h"
 
 static int	handle_env_var(t_msh **msh, char **value,
-		char **s, int *val_len, char end_char)
+		char **s, ssize_t *val_len, char end_char)
 {
-	if (val_len > 0)
+	if ((*val_len) > 0)
 	{
 		if (join_values(msh, value, (*s), (*val_len)) == ERROR)
 			return (ERROR);
+		(*s) += (*val_len);
+		(*val_len) = 0;
 	}
-	(*s) += (*val_len);
 	(*val_len) += exp_env_var(msh, value, (*s), end_char);
 	(*s) += (*val_len);
 	(*val_len) = 0;
 	return (SUCCESS);
 }
 
-static int	subtract_new_value(t_msh **msh, char **value, char **s, char end_char)
+static ssize_t	subtract_new_value(t_msh **msh, char **value, char **s, char end_char)
 {
-	int		val_len;
+	ssize_t	val_len;
 
 	val_len = 0;
 	while ((*s)[val_len] && (*s)[val_len] != end_char)
@@ -55,7 +56,7 @@ static int	subtract_new_value(t_msh **msh, char **value, char **s, char end_char
 static int	extract_value(t_msh **msh, char **value, char **s)
 {
 	char	end_char;
-	int		val_len;
+	ssize_t	val_len;
 	bool	is_in_quotes;
 
 	while ((**s) && !ft_isspace((**s)))
@@ -86,6 +87,9 @@ char	*get_value(t_msh **msh, char **s)
 	while (*s && ft_isspace((**s)))
 		(*s)++;
 	if (extract_value(msh, &value, s) == ERROR)
+	{
+		free(value);
 		return (NULL);
+	}
 	return (value);
 }
