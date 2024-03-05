@@ -13,15 +13,19 @@
 #include "minishell.h"
 
 
+//use info about state READ/RUNNING to
+// redisplay promt correctly
+
 void interupt_handler(int sig) 
-{
+{	
+	signal(SIGINT, interupt_handler);
     if (sig == SIGINT) 
 	{
         write(1, "\n", 1);
 		
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
+		// rl_redisplay();
 		//need to update $? here
 		return ;
     }
@@ -30,6 +34,7 @@ void interupt_handler(int sig)
 void track_signals(bool is_child) 
 {
     struct sigaction sa;
+
 
     sigemptyset(&sa.sa_mask);
 	sa.sa_handler = interupt_handler;
