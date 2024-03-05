@@ -64,6 +64,7 @@ typedef struct s_msh
 {
 	int			exit_code;
 	t_var_node	*env_vars;
+	char		*script_name;
 	t_cmd		*cmd;
 	bool		is_parent;
 	int			chld_pid;
