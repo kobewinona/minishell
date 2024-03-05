@@ -13,52 +13,18 @@
 #include "minishell.h"
 
 
-void parent_handler(int sig) 
+void interupt_handler(int sig) 
 {
     if (sig == SIGINT) 
 	{
         write(1, "\n", 1);
-		rl_replace_line("", 0);
+		
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 		//need to update $? here
 		return ;
     }
-	if (sig == SIGQUIT)
-	{
-		//free shell
-		printf("Ctr + \\ does nothing \n");
-		//need to update $? here
-	}
-	if (sig == SIGTERM)
-	{
-		printf("DEFAULT behavior\n");
-		// need to exit with 128 + SIGTERM
-		exit(EXIT_SUCCESS);
-	}
-}
-
-
-void child_handler(int sig) 
-{
-    if (sig == SIGINT) 
-	{
-		exit(128 + sig);
-		//need to update $? here
-		return ;
-    }
-	if (sig == SIGQUIT)
-	{
-		//free shell
-		printf("Ctr + \\ does nothing \n");
-		//need to update $? here
-	}
-	if (sig == SIGTERM)
-	{
-	
-		// need to exit with 128 + SIGTERM
-		exit(128 + sig);
-	}
 }
 
 void track_signals(bool is_child) 
@@ -66,18 +32,14 @@ void track_signals(bool is_child)
     struct sigaction sa;
 
     sigemptyset(&sa.sa_mask);
-	if (is_child)
-    	sa.sa_handler = child_handler;
-	else
-		sa.sa_handler = parent_handler; // Set the handler
-    sa.sa_flags = SA_SIGINFO;
+	sa.sa_handler = interupt_handler;
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
 
-    // Correctly use sigaction
-    if (sigaction(SIGINT, &sa, NULL) == -1)
-        perror("sigaction failed");
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
-        perror("sigaction failed");
-	if (sigaction(SIGTERM, &sa, NULL) == -1)
-        perror("sigaction failed");
+
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGQUIT, &sa, NULL);
+
 
 }
