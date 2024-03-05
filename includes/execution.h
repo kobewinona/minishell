@@ -66,6 +66,7 @@ typedef struct s_msh
 	pid_t		ppid;
 	pid_t		curr_pid;
 	t_var_node	*env_vars;
+	char		*script_name;
 	t_cmd		*cmd;
 }	t_msh;
 
