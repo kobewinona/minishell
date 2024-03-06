@@ -32,6 +32,19 @@ bool	is_builtin(t_exec *cmd)
 	return (false);
 }
 
+
+void	collect_exit_code(t_msh **msh, int ext_code_encoded)
+{
+	if (WIFEXITED(ext_code_encoded))
+	{
+		(*msh)->exit_code = WEXITSTATUS(ext_code_encoded);
+	}
+	else if (WIFSIGNALED(ext_code_encoded))
+	{
+		(*msh)->exit_code = 128 + WTERMSIG(ext_code_encoded);
+	}
+}
+
 //in case of invalid options for builtins
 // need to return 2
 
@@ -69,7 +82,8 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 					handle_ext_cmd(msh, cmd->argv);
 				}
 				waitpid((*msh)->child_pid, &ext_code, 0);
-				(*msh)->exit_code = WEXITSTATUS(ext_code);
+				//(*msh)->exit_code = WEXITSTATUS(ext_code);
+				collect_exit_code(msh, ext_code);
 			}
 			else
 				handle_ext_cmd(msh, cmd->argv);

@@ -51,7 +51,6 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 	close(pipe_fds[STDOUT_FILENO]);
 	waitpid(cmd_from_pid, NULL, 0);
 	waitpid(cmd_to_pid, &exit_code, 0);
-	exit_code = WEXITSTATUS(exit_code);
-	(*msh)->exit_code = exit_code;
+	collect_exit_code(msh, exit_code);
 	return (exit_code);
 }

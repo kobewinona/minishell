@@ -55,22 +55,9 @@ static void	run_minishell(t_msh **msh)
 	}
 }
 
-// For signals
-//if (WIFEXITED(g_pid))
-// 		g_status = WEXITSTATUS(g_pid);
-// 	if (WIFSIGNALED(g_pid))
-// 	{
-// 		g_status = WTERMSIG(g_pid);
-// 		if (g_status != 131)
-// 			g_status += 128;
-// 	}
-
-//HINT: a cool idea to build ft_linked_malloc()
-// that allocates memory and keep it in a linked list to free easilly
-
 
 // Global var for
-bool	is_parent = true;
+//int g_signumber = 0;
 
 int	main(int argc, char **argv, char **envp)
 {

@@ -107,5 +107,8 @@ void		env_cmd(char **argv, t_msh **msh);
 
 // signals
 void		track_signals(bool is_child);
+void		collect_exit_code(t_msh **msh, int ext_code_encoded);
+extern int	g_signumber;
+
 
 #endif
