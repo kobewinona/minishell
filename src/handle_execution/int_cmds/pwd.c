@@ -19,9 +19,9 @@ void	pwd(t_msh **msh)
 
 	curr_dir = NULL;
 	curr_dir = get_env_var((*msh)->env_vars, "PWD");
-	ft_putstr_fd(curr_dir, STDOUT_FILENO);
+	if (curr_dir)
+		ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	//exit(EXIT_SUCCESS);
 	(*msh)->exit_code = 0;
 
 }
