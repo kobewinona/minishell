@@ -19,14 +19,14 @@
 
 void interupt_handler(int sig) 
 {	
-	g_signumber = 128 + sig;
-	signal(SIGINT, interupt_handler);
     if (sig == SIGINT) 
 	{
-        write(1, "\n", 1);
+       // write(1, "\n", 1);
 		
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_replace_line(" ", 0);
+		//rl_redisplay();
 		return ;
     }
 }
@@ -41,10 +41,18 @@ void track_signals(bool is_child)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 
+	sa.sa_handler = SIG_DFL;
+	sigaction(SIGTERM, &sa, NULL);
 
 	sa.sa_handler = SIG_IGN;
-	sigemptyset(&sa.sa_mask);
 	sigaction(SIGQUIT, &sa, NULL);
 
+	// sa.sa_handler = interupt_handler;
+	// sigemptyset(&sa.sa_mask);
+	// sigaction(SIGQUIT, &sa, NULL);
+
+	// sa.sa_handler = interupt_handler;
+	// sigemptyset(&sa.sa_mask);
+	// sigaction(SIGQUIT, &sa, NULL);
 
 }
