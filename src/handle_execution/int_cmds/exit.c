@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-// need to return exit code passed as arg / ext code of last executed cmdq
-
 static bool	is_number(char *s)
 {
 	while (*s)
@@ -27,8 +25,6 @@ static bool	is_number(char *s)
 
 void	exit_cmd(char **argv, t_msh **msh)
 {
-	//!!!!
-	//Need to free evrth before exiting
 	free_envlist((*msh)->env_vars);
 	if (argv[1] != NULL && is_number(argv[1]))
 	{
@@ -40,6 +36,5 @@ void	exit_cmd(char **argv, t_msh **msh)
 		printf("exit\n");
 		print_err(msh, (t_err){T_OTHER_ERR, EXIT, EXIT_INVALID_ARG_MSG1}, true);
 	}
-	//need to call something like: free_msh()
 	exit(SUCCESS);
 }
