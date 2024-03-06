@@ -76,8 +76,6 @@ void	update_var(t_var_node *head, char *varname, char *value)
 		key_val_str = substr;
 	curr = head;
 	set_var_deleted(head, varname); //experiment
-
-	printf("GOT HERE\n");
 	append_var_node(&head, key_val_str);
 	free(key_val_str);
 }

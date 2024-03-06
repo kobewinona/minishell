@@ -51,6 +51,8 @@ static void	run_minishell(t_msh **msh)
 			run_cmd(msh, cmd);
 			cleanup_cmds(&cmd);
 		}
+		printf("sig = %d\n", g_signumber);
+		g_signumber = 0; //reset
 		free(input);
 	}
 }
@@ -70,7 +72,7 @@ static void	run_minishell(t_msh **msh)
 
 
 // Global var for
-bool	is_parent = true;
+int g_signumber = 0;
 
 int	main(int argc, char **argv, char **envp)
 {

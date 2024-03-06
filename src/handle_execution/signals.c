@@ -16,8 +16,10 @@
 //use info about state READ/RUNNING to
 // redisplay promt correctly
 
+
 void interupt_handler(int sig) 
 {	
+	g_signumber = 128 + sig;
 	signal(SIGINT, interupt_handler);
     if (sig == SIGINT) 
 	{
@@ -25,8 +27,6 @@ void interupt_handler(int sig)
 		
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		// rl_redisplay();
-		//need to update $? here
 		return ;
     }
 }
