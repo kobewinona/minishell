@@ -56,10 +56,6 @@ void	cd(char *path, t_msh **msh)
 		return ((void)print_err(msh, (t_err){T_BAD_REQUEST_ERR, path}, false));
 	if (!is_dir_valid(path) && access(path, R_OK))
 		return ((void)print_err(msh, (t_err){T_BAD_REQUEST_ERR_PERM, path}, false));
-	
-	
-
-	printf("GOTHERE\n");
 	res_path = NULL;
 	curr_path = getcwd(NULL, 0);
 	if (path)
