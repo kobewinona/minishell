@@ -14,7 +14,6 @@
 
 static void	handle_other_err(t_msh **msh, t_err err)
 {
-	
 	(*msh)->exit_code = err.type;
 	if (err.type == T_OTHER_ERR)
 		printf("%s `%s'\n", err.ctx1, err.ctx2);
