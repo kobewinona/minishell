@@ -50,14 +50,15 @@ static int	exec_ext_cmd(t_msh **msh, char *cmd_dir, char **argv)
 	return (SUCCESS);
 }
 
-// TODO: if program found but no permission to execute, return 126!
 void	handle_ext_cmd(t_msh **msh, char **argv)
 {
 	char		*env_path;
 	char		*cmd_dir;
 
 	env_path = get_env_var((*msh)->env_vars, "PATH");
-	if (!access(argv[0], F_OK | X_OK))
+	if (!access(argv[0], F_OK) && access(argv[0], X_OK))
+		print_err(msh, (t_err){T_CMD_FOUND_NO_EXEC, argv[0]}, true);
+	else if (!access(argv[0], F_OK | X_OK))
 	{
 		execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
 		print_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);

@@ -32,7 +32,6 @@ t_var_node	*create_var_node(char *key_val_str)
 		new_element->value = NULL;
 		new_element->value_assigned = false;
 	}
-	//new_element->key_val_str = ft_strdup(key_val_str);
 	new_element->key_val_str = key_val_str;
 	new_element->is_numeric = false;
 	new_element->deleted = false;
@@ -66,7 +65,6 @@ t_var_node	*copy_env_vars(char **envp)
 	t_var_node	*head;
 
 	i = 1;
-//	head = create_var_node(envp[i]);
 	head = NULL;
 	while (envp[i])
 	{
