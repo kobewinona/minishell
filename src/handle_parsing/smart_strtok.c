@@ -89,8 +89,7 @@ static char	*get_tok(char **stash, const char *sep, t_types *tok)
 	return (start);
 }
 
-char	*smart_strtok(char *restrict str,
-		const char *restrict sep, t_types *tok)
+char	*smart_strtok(char *str, const char *sep, t_types *tok)
 {
 	static char	*pipe_stash;
 	static char	*redir_stash;

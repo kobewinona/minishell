@@ -18,7 +18,7 @@ static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->type = cmd_type;
 	return (cmd);
@@ -33,7 +33,7 @@ t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 		return (NULL);
 	ft_memset(cmd->exec.argv, 0, sizeof(char *));
 	if (populate_argv(msh, cmd->exec.argv, input) == ERROR)
-		return (cleanup_cmds(&cmd));
+		return (cleanup_cmds(&cmd), NULL);
 	return (cmd);
 }
 
@@ -45,7 +45,7 @@ t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
 		return (NULL);
 	cmd = constr_cmd(msh, T_REDIR);
 	if (!cmd)
-		return (cleanup_cmds(&subcmd));
+		return (cleanup_cmds(&subcmd), NULL);
 	cmd->redir.type = r_type;
 	cmd->redir.subcmd = subcmd;
 	if (r_type == T_REDIR_STDOUT)
@@ -69,7 +69,7 @@ t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2)
 		return (NULL);
 	}
 	if (!cmd2)
-		return (cleanup_cmds(&cmd1));
+		return (cleanup_cmds(&cmd1), NULL);
 	cmd = constr_cmd(msh, T_PIPE);
 	if (!cmd)
 		return (NULL);

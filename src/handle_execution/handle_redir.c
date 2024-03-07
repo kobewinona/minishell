@@ -27,7 +27,7 @@ static int	define_org_fd(t_msh **msh, t_redir *cmd, int *org_fd)
 	else
 		(*org_fd) = dup(STDIN_FILENO);
 	if ((*org_fd) < 0)
-		return (print_err(msh, (t_err){T_SYS_ERR, DUP}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, DUP}, false).t_int);
 	return (SUCCESS);
 }
 
@@ -47,7 +47,7 @@ static int	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 			res = dup2((*org_fd), STDIN_FILENO);
 	}
 	if (res == ERROR)
-		print_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
+		handle_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
 	close((*org_fd));
 	return (res);
 }
@@ -68,7 +68,7 @@ int	handle_redir(t_msh **msh, t_redir *cmd)
 	if (res != ERROR)
 		run_cmd(msh, cmd->subcmd);
 	else
-		print_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
+		handle_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
 	close(cmd->fd[0]);
 	return (restore_org_fd(msh, cmd, &org_fd));
 }

@@ -12,47 +12,87 @@
 
 #include "minishell.h"
 
-
-bool	is_builtin(t_exec *cmd)
+static void	exec_ext_cmd(t_msh **msh, char *cmd_path, char **argv)
 {
-	if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
-		return (true);
-	else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
-		return (true);
-	return (false);
+	if (access(cmd_path, X_OK) == SUCCESS)
+	{
+		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
+		handle_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
+	}
+	free(cmd_path);
+	cmd_path = NULL;
 }
 
-
-void	collect_exit_code(t_msh **msh, int ext_code_encoded)
+static char	*create_cmd_path_str(t_msh **msh, char *cmd_dir, char *cmd_name)
 {
-	if (WIFEXITED(ext_code_encoded))
-	{
-		(*msh)->exit_code = WEXITSTATUS(ext_code_encoded);
-	}
-	else if (WIFSIGNALED(ext_code_encoded))
-	{
-		(*msh)->exit_code = 128 + WTERMSIG(ext_code_encoded);
-	}
+	char	*temp;
+	char	*cmd_path;
+
+	temp = NULL;
+	temp = ft_strjoin(cmd_dir, "/");
+	if (!temp)
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+	cmd_path = ft_strjoin(temp, cmd_name);
+	free(temp);
+	if (!cmd_path)
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+	return (cmd_path);
 }
 
-//in case of invalid options for builtins
-// need to return 2
+static int	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
+{
+	char	*env_path;
+	char	*cmd_dir;
+
+	if (!access(argv[0], F_OK | X_OK))
+		return ((*cmd_path = argv[0]), SUCCESS);
+	env_path = get_env_var((*msh)->env_vars, "PATH");
+	if (!env_path)
+		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+	cmd_dir = ft_strtok(env_path, ":");
+	while (cmd_dir)
+	{
+		(*cmd_path) = create_cmd_path_str(msh, cmd_dir, argv[0]);
+		if (!(*cmd_path))
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					argv[0], argv[1]}, false).t_int);
+		if (access((*cmd_path), X_OK) == SUCCESS)
+			return (SUCCESS);
+		cmd_dir = ft_strtok(NULL, ":");
+	}
+	handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+}
+
+void	handle_exec_ext_cmd(t_msh **msh, char **argv)
+{
+	int		ext_code;
+	char	*cmd_path;
+
+	ext_code = 0;
+	if ((*msh)->child_pid != 0)
+	{
+		(*msh)->child_pid = fork2(msh);
+		if ((*msh)->child_pid == ERROR)
+			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
+		if ((*msh)->child_pid == 0)
+		{
+			if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
+				return ;
+			exec_ext_cmd(msh, cmd_path, argv);
+		}
+		waitpid((*msh)->child_pid, &ext_code, 0);
+		collect_exit_code(msh, ext_code);
+	}
+	else
+	{
+		if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
+			return ;
+		exec_ext_cmd(msh, cmd_path, argv);
+	}
+}
 
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
-	int	ext_code;
-
-	ext_code = 0;
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
@@ -70,24 +110,7 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
 			env_cmd(cmd->argv, msh);
 		else
-		{
-			if ((*msh)->child_pid != 0)
-			{
-				(*msh)->child_pid = fork();
-				if ((*msh)->child_pid == ERROR)
-					return (print_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
-				if ((*msh)->child_pid == 0)
-				{	
-					track_signals(false);
-					handle_ext_cmd(msh, cmd->argv);
-				}
-				waitpid((*msh)->child_pid, &ext_code, 0);
-				//(*msh)->exit_code = WEXITSTATUS(ext_code);
-				collect_exit_code(msh, ext_code);
-			}
-			else
-				handle_ext_cmd(msh, cmd->argv);
-		}
+			handle_exec_ext_cmd(msh, cmd->argv);
 	}
 	return ((*msh)->exit_code);
 }

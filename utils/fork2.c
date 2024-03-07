@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   fork2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/04 14:26:47 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/04 15:01:52 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/03/07 14:16:11 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/03/07 14:16:11 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
-# include "minishell.h"
+#include "minishell.h"
 
-typedef struct s_ret_err_val
+// same as default fork, but with custom setup of handling signals
+int	fork2(t_msh **msh)
 {
-	int		t_int;
-	void	*t_null;
-}	t_ret_err_val;
-
-typedef struct s_err
-{
-	t_types	type;
-	char	*ctx1;
-	char	*ctx2;
-}	t_err;
-
-t_ret_err_val	handle_err(t_msh **msh, t_err err, bool is_on_exit);
-
-#endif
+	(*msh)->child_pid = fork();
+	if ((*msh)->child_pid == ERROR)
+		return (ERROR);
+	if ((*msh)->child_pid == 0)
+	{
+		(*msh)->is_parent = false;
+		if (ignore_signals(msh) == ERROR)
+			exit(EXIT_FAILURE);
+	}
+	return ((*msh)->child_pid);
+}

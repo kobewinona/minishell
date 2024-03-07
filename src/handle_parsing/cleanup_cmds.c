@@ -35,10 +35,10 @@ static void	cleanup_redir_cmd(t_cmd **cmd)
 		free((*cmd)->redir.f);
 }
 
-void	*cleanup_cmds(t_cmd **cmd)
+void	cleanup_cmds(t_cmd **cmd)
 {
 	if (!(*cmd))
-		return (NULL);
+		return ;
 	if ((*cmd)->type == T_EXEC)
 		cleanup_exec_cmd(cmd);
 	if ((*cmd)->type == T_PIPE)
@@ -53,5 +53,4 @@ void	*cleanup_cmds(t_cmd **cmd)
 	}
 	free((*cmd));
 	(*cmd) = NULL;
-	return (NULL);
 }

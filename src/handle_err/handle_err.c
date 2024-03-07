@@ -16,7 +16,11 @@ static void	handle_other_err(t_msh **msh, t_err err)
 {
 	(*msh)->exit_code = err.type;
 	if (err.type == T_OTHER_ERR)
-		printf("%s `%s'\n", err.ctx1, err.ctx2);
+	{
+		if (err.ctx2)
+			return ((void)printf("%s `%s'\n", err.ctx1, err.ctx2));
+		printf("%s\n", err.ctx1);
+	}
 	if (err.type == T_CMD_NOT_FOUND)
 		printf("%s: %s\n", err.ctx1, CMD_NOT_FOUND_MSG);
 	if (err.type == T_BAD_REQUEST_ERR)
@@ -30,7 +34,7 @@ static void	handle_system_err(t_msh **msh, t_err err)
 		perror(err.ctx1);
 }
 
-t_ret_err_val	print_err(t_msh **msh, t_err err, bool is_on_exit)
+t_ret_err_val	handle_err(t_msh **msh, t_err err, bool is_on_exit)
 {
 	int	org_fd;
 

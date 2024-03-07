@@ -70,21 +70,13 @@ typedef struct s_msh
 	int			child_pid;
 }	t_msh;
 
-// functions
+// cmd execution
 int			run_cmd(t_msh **msh, t_cmd *cmd);
-void		handle_ext_cmd(t_msh **msh, char **argv);
 int			handle_exec(t_msh **msh, t_exec *cmd);
 int			handle_pipe(t_msh **msh, t_pipe *cmd);
 int			handle_redir(t_msh **msh, t_redir *cmd);
 
-// dollar expansion
-void		expand_dollar(char **arg, t_var_node *env_vars, t_msh **msh);
-bool		is_char_there(char *arg, char c);
-char		*ft_strslice(const char *str, int start, int end);
-int			ft_ind_char(const char *str, char c);
-void		replace_dollar_sign(char **argv, t_var_node *env_vars, t_msh **msh);
-
-// working with env
+// env
 t_var_node	*create_var_node(char *key_val_str);
 void		append_var_node(t_var_node **head, char *key_val_str);
 char		*get_env_var(t_var_node *head, char *varname);
@@ -96,7 +88,7 @@ void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 void		free_envlist(t_var_node *env_vars);
 
-// -src/builtins
+// builtins
 void		echo(char **argv, t_msh **msh);
 void		cd(char *path, t_msh **msh);
 void		pwd(t_msh **msh);
@@ -106,9 +98,7 @@ void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
 
 // signals
-void		track_signals(bool is_child);
-void		collect_exit_code(t_msh **msh, int ext_code_encoded);
-extern int	g_signumber;
-
+int			track_signals(t_msh **msh);
+int			ignore_signals(t_msh **msh);
 
 #endif

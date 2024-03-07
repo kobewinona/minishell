@@ -21,10 +21,7 @@
 # define UNSPECIFIED -2
 # define ERROR -1
 # define SUCCESS 0
-# define FAILURE 1
 # define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
-# define RW_RW_RW_PERM 0666 // -rw-rw-rw- permission settings
-# define SPEC_VAR_CHARS "0?$"
 
 // command names
 # define ECHO "echo"
@@ -39,12 +36,10 @@
 # define FORK "fork"
 # define DUP "dup"
 # define DUP2 "dup2"
-# define OPEN "open"
 # define PIPE "pipe"
-# define GETENV "getenv"
 # define MALLOC "malloc"
-# define WRITE "write"
 # define NEWLINE "newline"
+# define SIG "sigaction"
 
 // types
 typedef enum e_types

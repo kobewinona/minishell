@@ -29,13 +29,12 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 
 static void	run_minishell(t_msh **msh)
 {
-	t_cmd	*cmd;
 	char	*input;
 	char	*temp;
 
 	while (1)
 	{
-		cmd = NULL;
+		(*msh)->cmd = NULL;
 		input = readline(PRG_PROMPT);
 		if (!input)
 			break ;
@@ -43,21 +42,17 @@ static void	run_minishell(t_msh **msh)
 		{
 			add_history(input);
 			temp = input;
-			cmd = parse_cmd(msh, temp);
-			prepare_fds(msh, &cmd);
+			(*msh)->cmd = parse_cmd(msh, temp);
+			prepare_fds(msh, &(*msh)->cmd);
 		}
-		if (cmd)
+		if ((*msh)->cmd)
 		{
-			run_cmd(msh, cmd);
-			cleanup_cmds(&cmd);
+			(*msh)->exit_code = run_cmd(msh, (*msh)->cmd);
+			cleanup_cmds(&(*msh)->cmd);
 		}
 		free(input);
 	}
 }
-
-
-// Global var for
-//int g_signumber = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -65,50 +60,18 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	track_signals(false);
 	msh = (t_msh *)malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
+	printf("main parent pid: %d\n", getpid());
+	if (track_signals(&msh) == ERROR)
+		return (free(msh), EXIT_FAILURE);
 	msh->child_pid = UNSPECIFIED;
 	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	msh->script_name = get_env_var(msh->env_vars, "PWD");
-	// printf("msh->ppid %d\n", msh->ppid);
-	// printf("msh->script_name %s\n\n", msh->script_name);
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);
 	return (msh->exit_code);
 }
-
-
-
-//Checking leaks in env utils
-// Note:
-// better to set_var_deleted everytime we update it
-// to avoid leaks
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_var_node *env_vars;
-// 	t_var_node *env_vars2;
-
-// 	env_vars = copy_env_vars(envp);
-// 	env_vars2 = copy_env_vars(envp);
-// 	printf("path, %s\n", get_env_var(env_vars, "PATH"));
-// 	update_var(env_vars, "VAR", "WORLDDDDDDDD");
-	
-// 	update_var(env_vars, "VAR", "WOFDFDFD");
-
-// 	update_var(env_vars, "MYVAR", "GOOD");
-// 	update_var(env_vars, "MYVAR2", "BEBE");
-
-// 	printf("%s\n",get_env_var(env_vars, "MYVAR2"));
-
-// 	// increment_shlvl(env_vars);
-// 	//increment_shlvl(env_vars2);
-// 	free_envlist(env_vars);
-// 	free_envlist(env_vars2);
-	
-
-// 	return (0);
-// }

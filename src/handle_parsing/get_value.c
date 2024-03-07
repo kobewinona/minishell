@@ -57,7 +57,7 @@ static int	extract_value(t_msh **msh, char **value, char **s)
 		val_len = subtract_new_value(msh, value, s, end_char);
 		(*s) += val_len + is_in_quotes;
 		if (val_len == ERROR)
-			return (print_err(msh, (t_err){T_OTHER_ERR,
+			return (handle_err(msh, (t_err){T_OTHER_ERR,
 					UNEXPECTED_EOF_MSG, tokstr(end_char)}, false).t_int);
 	}
 	return (SUCCESS);
@@ -72,7 +72,7 @@ char	*get_value(t_msh **msh, char **s)
 	value = NULL;
 	value = ft_strdup("");
 	if (!value)
-		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	while (*s && ft_isspace((**s)))
 		(*s)++;
 	if (extract_value(msh, &value, s) == ERROR)

@@ -53,20 +53,20 @@ void	cd(char *path, t_msh **msh)
 	char	*curr_path;
 
 	if (!is_dir_valid(path))
-		return ((void)print_err(msh, (t_err){T_BAD_REQUEST_ERR, path}, false));
+		return ((void) handle_err(msh, (t_err) {T_BAD_REQUEST_ERR, path}, false));
 	res_path = NULL;
 	curr_path = getcwd(NULL, 0);
 	if (path)
 	{
 		res_path = ft_strdup(path);
 		if (!res_path)
-			return ((void)print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false));
+			return ((void) handle_err(msh, (t_err) {T_SYS_ERR, MALLOC}, false));
 	}
 	if (!path || is_emptystr(path) || !ft_strncmp(path, "~", 1))
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	if (chdir(res_path))
-		return ((void)print_err(msh, (t_err){T_SYS_ERR, CD}, false));
+		return ((void) handle_err(msh, (t_err) {T_SYS_ERR, CD}, false));
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);

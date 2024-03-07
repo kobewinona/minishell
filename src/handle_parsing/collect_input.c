@@ -39,11 +39,11 @@ char	*collect_heredoc_input(t_msh **msh, const char *eof)
 	char	*heredoc_input;
 
 	if (!eof)
-		return (print_err(msh, (t_err){T_OTHER_ERR,
+		return (handle_err(msh, (t_err){T_OTHER_ERR,
 				UNEXPECTED_TOK_MSG, NEWLINE}, false).t_null);
 	heredoc_input = ft_strdup("");
 	if (!heredoc_input)
-		return (print_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
 	collect_input(&heredoc_input, eof, INPUT_PROMPT);
 	return (heredoc_input);
 }

@@ -51,13 +51,9 @@ static void	print_declared_vars(t_var_node *env_vars)
 	while (curr)
 	{
 		if (!curr->deleted && curr->value_assigned)
-		{
 			printf("declare -x %s=\"%s\"\n", curr->name, curr->value);
-		}
 		else if (!curr->deleted && !curr->value_assigned)
-		{
 			printf("declare -x %s\n", curr->name);
-		}
 		curr = curr->next;
 	}
 }
@@ -65,37 +61,19 @@ static void	print_declared_vars(t_var_node *env_vars)
 
 void	export(char **argv, t_msh **msh)
 {
-	char	**keyval_arr;
+	char	*var_name;
 	int		i;
 
 	if (argv[1] == NULL)
-	{
-		print_declared_vars((*msh)->env_vars);
-		return ;
-	}
+		return (print_declared_vars((*msh)->env_vars));
 	i = 1;
 	while (argv[i])
 	{
-		if (!is_valid_varname(argv[i]))
-		{
-			print_err(msh, (t_err){T_BAD_REQUEST_ERR, EXPORT_INVALID_ARG_MSH1, argv[i]}, false);
-			return ;
-		}
-		if (is_char_there(argv[i], '='))
-		{
-			keyval_arr = ft_split(argv[i], '=');
-			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))
-			{
-				free_array(keyval_arr);
-				return ;
-			}
-			update_var((*msh)->env_vars, keyval_arr[0], keyval_arr[1]);
-		}
-		else
-		{
-			if (is_valid_varname(argv[i]) && is_var_deleted((*msh)->env_vars, argv[i]))
-				update_var((*msh)->env_vars, argv[i], NULL);
-		}
+		var_name = ft_strtok(argv[i], "=");
+		if (!is_valid_varname(var_name))
+			return ((void) handle_err(msh, (t_err) {T_BAD_REQUEST_ERR,
+													EXPORT_INVALID_ARG_MSG1, argv[i]}, false));
+		update_var((*msh)->env_vars, var_name, ft_strtok(NULL, "="));
 		i++;
 	}
 	(*msh)->exit_code = 0;
