@@ -12,8 +12,11 @@
 
 #include "minishell.h"
 
-static bool	is_valid_varname(const char *varname)
+static bool	is_valid_varname(char *varname, t_msh **msh)
 {
+	if (!(ft_isalpha(*varname) || *varname == '_'))
+		print_err(msh, (t_err){T_INV_VARNAME,
+			EXPORT_INVALID_ARG_MSH1, varname}, false);
 	return (ft_isalpha(*varname) || *varname == '_');
 }
 
@@ -39,13 +42,9 @@ static void	print_declared_vars(t_var_node *env_vars)
 	while (curr)
 	{
 		if (!curr->deleted && curr->value_assigned)
-		{
 			printf("declare -x %s=\"%s\"\n", curr->name, curr->value);
-		}
 		else if (!curr->deleted && !curr->value_assigned)
-		{
 			printf("declare -x %s\n", curr->name);
-		}
 		curr = curr->next;
 	}
 }
@@ -60,19 +59,16 @@ void	export(char **argv, t_msh **msh)
 	i = 1;
 	while (argv[i])
 	{
-		if (!is_valid_varname(argv[i]))
-		{
-			print_err(msh, (t_err){1, EXPORT_INVALID_ARG_MSH1, argv[i]}, false);
+		if (!is_valid_varname(argv[i], msh))
 			return ;
-		}
 		if (is_char_there(argv[i], '='))
 		{
 			keyval_arr = ft_split(argv[i], '=');
-			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0]))
+			if (keyval_arr == NULL || !is_valid_varname(keyval_arr[0], msh))
 				return (free_array(keyval_arr));
 			update_var((*msh)->env_vars, keyval_arr[0], keyval_arr[1]);
 		}
-		else if (is_valid_varname(argv[i]))
+		else if (is_valid_varname(argv[i], msh))
 			update_var((*msh)->env_vars, argv[i], NULL);
 		i++;
 	}

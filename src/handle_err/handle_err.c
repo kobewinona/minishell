@@ -17,17 +17,27 @@ static void	handle_other_err(t_msh **msh, t_err err)
 	(*msh)->exit_code = err.type;
 	if (err.type == T_OTHER_ERR)
 		printf("%s `%s'\n", err.ctx1, err.ctx2);
-	if (err.type == T_CMD_NOT_FOUND)
+	else if (err.type == T_CMD_NOT_FOUND)
 		printf("%s: %s\n", err.ctx1, CMD_NOT_FOUND_MSG);
-	if (err.type == T_CMD_FOUND_NO_EXEC)
+	else if (err.type == T_CMD_FOUND_NO_EXEC)
 		printf("%s: %s\n", err.ctx1, CMD_FOUND_NOT_EXEC_MSG);
-	if (err.type == T_BAD_REQUEST_ERR)
+	else if (err.type == T_BAD_REQUEST_ERR)
 		printf("%s: %s\n", err.ctx1, NO_FILE_OR_DIR_MSG);
+	else if (err.type == T_BAD_REQUEST_ERR_PERM)
+	{
+		printf("%s: %s\n", err.ctx1, CMD_FOUND_NOT_EXEC_MSG);
+		(*msh)->exit_code = T_BAD_REQUEST_ERR;
+	}
+	else if (err.type == T_INV_VARNAME)
+	{
+		printf("%s: %s\n", err.ctx1, err.ctx2);
+		(*msh)->exit_code = 1;
+	}
 }
 
 static void	handle_system_err(t_msh **msh, t_err err)
 {
-	(*msh)->exit_code = errno;
+	(*msh)->exit_code = (int) errno;
 	if (err.ctx1)
 		perror(err.ctx1);
 }
