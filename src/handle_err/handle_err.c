@@ -29,6 +29,11 @@ static void	handle_other_err(t_msh **msh, t_err err)
 		printf("%s: %s\n", err.ctx1, CMD_FOUND_NOT_EXEC_MSG);
 		(*msh)->exit_code = T_BAD_REQUEST_ERR;
 	}
+	else if (err.type == T_INV_VARNAME)
+	{
+		printf("%s: %s\n", err.ctx1, err.ctx2);
+		(*msh)->exit_code = 1;
+	}
 }
 
 static void	handle_system_err(t_msh **msh, t_err err)

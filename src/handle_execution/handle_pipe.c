@@ -32,7 +32,6 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 		exit((*msh)->exit_code);
 	}
 	return ((*msh)->child_pid);
-
 }
 
 int	handle_pipe(t_msh **msh, t_pipe *cmd)
