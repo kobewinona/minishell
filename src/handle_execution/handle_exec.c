@@ -44,8 +44,9 @@ static int	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 	char	*env_path;
 	char	*cmd_dir;
 
-	if (!access(argv[0], F_OK | X_OK))
-		return ((*cmd_path = argv[0]), SUCCESS);
+	if (!access(argv[0], F_OK) && access(argv[0], X_OK))
+		return (handle_err(msh, (t_err){
+				T_CMD_FOUND_NO_EXEC, argv[0]}, false).t_int);
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
 		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);

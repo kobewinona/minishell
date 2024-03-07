@@ -64,7 +64,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	printf("main parent pid: %d\n", getpid());
 	if (track_signals(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
 	msh->child_pid = UNSPECIFIED;

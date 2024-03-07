@@ -40,6 +40,7 @@
 # define MALLOC "malloc"
 # define NEWLINE "newline"
 # define SIG "sigaction"
+# define EXPORT "export"
 
 // types
 typedef enum e_types

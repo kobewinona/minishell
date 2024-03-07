@@ -56,20 +56,16 @@ char	**envlist_to_arr(t_var_node *env_vars)
 
 void	free_envlist(t_var_node *env_vars)
 {
-	t_var_node *curr;
-	t_var_node *next;
+	t_var_node	*curr;
+	t_var_node	*next;
 
 	curr = env_vars;
 	while (curr)
 	{
 		next = curr->next;
-		
 		free(curr->name);
 		free(curr->value);
-		//free(curr->key_val_str);
 		free(curr);
-
 		curr = next;
 	}
-	
 }

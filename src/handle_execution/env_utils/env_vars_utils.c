@@ -70,7 +70,7 @@ void	update_var(t_var_node *head, char *varname, char *value)
 	else
 		key_val_str = substr;
 	curr = head;
-	set_var_deleted(head, varname); //experiment
+	set_var_deleted(head, varname);
 	append_var_node(&head, key_val_str);
 	free(key_val_str);
 }

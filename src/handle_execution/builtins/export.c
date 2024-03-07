@@ -12,18 +12,6 @@
 
 #include "minishell.h"
 
-//handle export without args (prints declared vars in ascii order)
-//handle declaration without assignment
-
-//export VAR=: empty string as value
-//export VAR : declare var without assignment
-//check for correctness of name
-
-// Environment variable names used by the utilities in the Shell and Utilities volume of IEEE Std 1003.1-2001 consist
-//  solely of uppercase letters, digits, and the '_' 
-// (underscore) from the characters defined in Portable Character Set and do not begin with a digit. 
-// Other characters may be permitted by an implementation; applications shall tolerate the presence of such names
-
 static bool	is_valid_varname(const char *varname)
 {
 	return (ft_isalpha(*varname) || *varname == '_');
@@ -58,7 +46,6 @@ static void	print_declared_vars(t_var_node *env_vars)
 	}
 }
 
-
 void	export(char **argv, t_msh **msh)
 {
 	char	*var_name;
@@ -71,8 +58,8 @@ void	export(char **argv, t_msh **msh)
 	{
 		var_name = ft_strtok(argv[i], "=");
 		if (!is_valid_varname(var_name))
-			return ((void) handle_err(msh, (t_err) {T_BAD_REQUEST_ERR,
-													EXPORT_INVALID_ARG_MSG1, argv[i]}, false));
+			return ((void) handle_err(msh, (t_err){T_BAD_REQUEST_ERR,
+					EXPORT, var_name}, false));
 		update_var((*msh)->env_vars, var_name, ft_strtok(NULL, "="));
 		i++;
 	}
