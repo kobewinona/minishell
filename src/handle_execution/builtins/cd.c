@@ -46,27 +46,41 @@ static bool	is_dir_valid(char *path)
 	return (false);
 }
 
-void	cd(char *path, t_msh **msh)
+static bool	validate_dir(char *path, t_msh **msh)
+{
+	if (!is_dir_valid(path) && access(path, F_OK))
+	{
+		handle_err(msh, (t_err){T_BAD_REQUEST_ERR, path}, false);
+		return (false);
+	}
+	else if (!is_dir_valid(path) && access(path, R_OK))
+	{
+		handle_err(msh, (t_err){T_BAD_REQUEST_ERR_PERM, path}, false);
+		return (false);
+	}
+	return (true);
+}
 
+void	cd(char *path, t_msh **msh)
 {
 	char	*res_path;
 	char	*curr_path;
 
-	if (!is_dir_valid(path))
-		return ((void) handle_err(msh, (t_err) {T_BAD_REQUEST_ERR, path}, false));
 	res_path = NULL;
 	curr_path = getcwd(NULL, 0);
+	if (!validate_dir(path, msh))
+		return ;
 	if (path)
 	{
 		res_path = ft_strdup(path);
 		if (!res_path)
-			return ((void) handle_err(msh, (t_err) {T_SYS_ERR, MALLOC}, false));
+			return ((void)handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false));
 	}
 	if (!path || is_emptystr(path) || !ft_strncmp(path, "~", 1))
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	if (chdir(res_path))
-		return ((void) handle_err(msh, (t_err) {T_SYS_ERR, CD}, false));
+		return ((void)handle_err(msh, (t_err){T_SYS_ERR, CD}, false));
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);
