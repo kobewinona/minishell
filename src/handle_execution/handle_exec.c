@@ -82,7 +82,6 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 					handle_ext_cmd(msh, cmd->argv);
 				}
 				waitpid((*msh)->child_pid, &ext_code, 0);
-				//(*msh)->exit_code = WEXITSTATUS(ext_code);
 				collect_exit_code(msh, ext_code);
 			}
 			else

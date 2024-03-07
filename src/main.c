@@ -59,6 +59,10 @@ static void	run_minishell(t_msh **msh)
 // Global var for
 //int g_signumber = 0;
 
+
+//TODO
+//refact handle_exec to handle cases of permision
+// + abs path
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh		*msh;
