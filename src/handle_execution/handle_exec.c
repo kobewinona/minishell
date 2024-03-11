@@ -14,13 +14,19 @@
 
 static void	exec_ext_cmd(t_msh **msh, char *cmd_path, char **argv)
 {
+	extern char	**environ;
+
 	if (access(cmd_path, X_OK) == SUCCESS)
 	{
-		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
+		// execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
+		execve(cmd_path, argv, environ);
+		free(cmd_path);
+		cmd_path = NULL;
 		handle_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
 	}
 	free(cmd_path);
 	cmd_path = NULL;
+	handle_err(msh, (t_err){T_CMD_FOUND_NO_EXEC, argv[0]}, false);
 }
 
 static char	*create_cmd_path_str(t_msh **msh, char *cmd_dir, char *cmd_name)
@@ -44,9 +50,8 @@ static int	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 	char	*env_path;
 	char	*cmd_dir;
 
-	if (!access(argv[0], F_OK) && access(argv[0], X_OK))
-		return (handle_err(msh, (t_err){
-				T_CMD_FOUND_NO_EXEC, argv[0]}, false).t_int);
+	if (!access(argv[0], F_OK))
+		return ((*cmd_path) = argv[0], SUCCESS);
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
 		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
@@ -77,8 +82,6 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
 		if ((*msh)->child_pid == 0)
 		{
-			if (access(argv[0], F_OK | X_OK) == SUCCESS)
-				execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
 			if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
 				return ;
 			exec_ext_cmd(msh, cmd_path, argv);
