@@ -22,9 +22,9 @@ static void	handle_other_err(t_msh **msh, t_err err)
 		printf("%s\n", err.ctx1);
 	}
 	if (err.type == T_CMD_NOT_FOUND)
-		printf("%s: %s\n", err.ctx1, CMD_NOT_FOUND_MSG);
-	if (err.type == T_CMD_FOUND_NO_EXEC)
-		printf("%s: %s\n", err.ctx1, CMD_FOUND_NOT_EXEC_MSG);
+		printf("'%s': %s\n", err.ctx1, CMD_NOT_FOUND_MSG);
+	if (err.type == T_CMD_NOT_EXECUTABLE)
+		printf("%s: %s\n", err.ctx1, err.ctx2);
 	if (err.type == T_BAD_REQUEST_ERR)
 	{
 		if (!ft_strncmp(err.ctx1, EXPORT, ft_strlen(EXPORT)))
