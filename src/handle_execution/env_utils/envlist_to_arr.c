@@ -34,6 +34,7 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	t_var_node	*curr;
 	char		**arr;
 	int			i;
+	char		*substr;
 
 	i = 0;
 	len = len_list(env_vars);
@@ -41,11 +42,14 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	arr = (char **) malloc(sizeof(char *) * len);
 	if (arr == NULL)
 		return (NULL);
-	while (i < len - 1)
+	while (i < len)
 	{
-		if (curr->value && !curr->deleted)
+		if (curr->value)
 		{
-			arr[i] = curr->key_val_str;
+			substr = ft_strjoin(curr->name, "=");
+			arr[i] = ft_strjoin(substr, curr->value);
+			free(substr);
+			//printf("%s\n", arr[i]);
 			i++;
 		}
 		curr = curr->next;
