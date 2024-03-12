@@ -77,6 +77,11 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
 		if ((*msh)->child_pid == 0)
 		{
+			if (access(argv[0], F_OK | X_OK) == SUCCESS)
+			{
+				exec_ext_cmd(msh, argv[0], argv);
+				return ;
+			}
 			if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
 				return ;
 			exec_ext_cmd(msh, cmd_path, argv);
