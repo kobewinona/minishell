@@ -25,22 +25,23 @@ static bool	is_number(char *s)
 
 void	exit_cmd(char **argv, t_msh **msh)
 {
-	free_envlist((*msh)->env_vars);
-	cleanup_cmds(&(*msh)->cmd);
+	int	exit_code;
+
 	if (argv[1] != NULL && is_number(argv[1]))
 	{
-		free((*msh));
+		exit_code = ft_atoi(argv[1]);
 		printf("exit\n");
 		printf("Code = %s\n", argv[1]);
-		exit(ft_atoi(argv[1]));
+		cleanup(msh);
+		exit(exit_code);
 	}
 	else if (argv[1] != NULL && !is_number(argv[1]))
 	{
 		printf("exit\n");
-		handle_err(msh, (t_err){
-			T_OTHER_ERR, EXIT, EXIT_INVALID_ARG_MSG1}, true);
+		handle_err(msh, (t_err){T_OTHER_ERR,
+			EXIT, EXIT_INVALID_ARG_MSG1}, true);
 	}
-	free((*msh));
+	cleanup(msh);
 	printf("exit\n");
 	exit(SUCCESS);
 }

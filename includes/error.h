@@ -14,12 +14,6 @@
 # define ERROR_H
 # include "minishell.h"
 
-typedef struct s_ret_err_val
-{
-	int		t_int;
-	void	*t_null;
-}	t_ret_err_val;
-
 typedef struct s_err
 {
 	t_types	type;
@@ -27,6 +21,6 @@ typedef struct s_err
 	char	*ctx2;
 }	t_err;
 
-t_ret_err_val	handle_err(t_msh **msh, t_err err, bool is_on_exit);
+void	handle_err(t_msh **msh, t_err err, bool is_on_exit);
 
 #endif

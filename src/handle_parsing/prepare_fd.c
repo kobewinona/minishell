@@ -20,14 +20,14 @@ static int	prepare_fd(t_msh **msh, t_redir *cmd)
 	if (cmd->type == T_HEREDOC)
 	{
 		if (pipe(pipe_fds) == ERROR)
-			return (handle_err(msh, (t_err){T_SYS_ERR, PIPE}, false).t_int);
+			return (handle_err(msh, (t_err){T_SYS_ERR, PIPE}, false), ERROR);
 		write(pipe_fds[1], cmd->f, strlen(cmd->f));
 		close(pipe_fds[1]);
 		return (pipe_fds[0]);
 	}
 	prepared_fd = open(cmd->f, cmd->mode, RW_R_R_PERM);
 	if (prepared_fd < 0)
-		return (handle_err(msh, (t_err){T_SYS_ERR, cmd->f}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, cmd->f}, false), ERROR);
 	return (prepared_fd);
 }
 

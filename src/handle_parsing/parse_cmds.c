@@ -25,7 +25,7 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	arb_fd = get_arb_fd(&input);
 	if (!(*s) || is_emptystr(*s))
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, NEWLINE}, false).t_null);
+				UNEXPECTED_TOK_MSG, NEWLINE}, false), NULL);
 	if (prev_tok == T_HEREDOC)
 		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
 				collect_heredoc_input(msh, get_value(msh, s)));
@@ -76,7 +76,7 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 		cmd = constr_pipe_cmd(msh, cmd, parse_pipe(msh, s, tok));
 	if ((!s || is_emptystr(s)) && prev_tok == T_PIPE)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
+				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false), NULL);
 	return (cmd);
 }
 
@@ -92,7 +92,7 @@ t_cmd	*parse_cmd(t_msh **msh, char *input)
 	s = smart_strtok(input, "|", &tok);
 	if (is_emptystr(s) && tok != T_NO_TOK)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(tok)}, false).t_null);
+				UNEXPECTED_TOK_MSG, tokstr(tok)}, false), NULL);
 	if (!is_emptystr(s))
 		cmd = parse_pipe(msh, s, &tok);
 	return (cmd);

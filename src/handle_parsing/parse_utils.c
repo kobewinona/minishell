@@ -49,7 +49,7 @@ static ssize_t	update_val(t_msh **msh, char **value, char *s, ssize_t len)
 	}
 	var_key = ft_substr(s, 0, len);
 	if (!var_key)
-		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), ERROR);
 	var_value = get_env_var((*msh)->env_vars, var_key);
 	free(var_key);
 	if (var_value)
@@ -116,7 +116,7 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 		if (!argv[index])
 			return (ERROR);
 		if (!argv[index])
-			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_int);
+			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), ERROR);
 		index++;
 	}
 	return (SUCCESS);

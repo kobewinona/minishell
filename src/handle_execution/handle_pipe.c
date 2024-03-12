@@ -16,11 +16,11 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
 	(*msh)->child_pid = fork2(msh);
 	if ((*msh)->child_pid == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, FORK}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, FORK}, false), ERROR);
 	if ((*msh)->child_pid == 0)
 	{
 		if (dup2(pipe_fds[end], end) == ERROR)
-			return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true).t_int);
+			return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true), ERROR);
 		if (end == STDOUT_FILENO)
 			close(pipe_fds[STDIN_FILENO]);
 		if (end == STDIN_FILENO)
@@ -39,7 +39,7 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 
 	exit_code = 0;
 	if (pipe(pipe_fds) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, PIPE}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, PIPE}, false), ERROR);
 	cmd_from_pid = run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
 	if (cmd_from_pid == ERROR)
 		return ((*msh)->exit_code);

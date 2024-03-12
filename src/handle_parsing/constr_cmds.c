@@ -18,7 +18,7 @@ static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false).t_null);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->type = cmd_type;
 	return (cmd);

@@ -49,15 +49,11 @@ static bool	is_dir_valid(char *path)
 static bool	validate_dir(char *path, t_msh **msh)
 {
 	if (!is_dir_valid(path) && access(path, F_OK))
-	{
-		handle_err(msh, (t_err){T_BAD_REQUEST_ERR, path}, false);
-		return (false);
-	}
+		return (handle_err(msh,(t_err){T_BAD_REQUEST_ERR,
+				path}, false), false);
 	else if (!is_dir_valid(path) && access(path, R_OK))
-	{
-		handle_err(msh, (t_err){T_BAD_REQUEST_ERR_PERM, path}, false);
-		return (false);
-	}
+		return (handle_err(msh, (t_err){T_BAD_REQUEST_ERR_PERM,
+				path}, false), false);
 	return (true);
 }
 

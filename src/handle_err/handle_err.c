@@ -43,9 +43,10 @@ static void	handle_system_err(t_msh **msh, t_err err)
 		perror(err.ctx1);
 }
 
-t_ret_err_val	handle_err(t_msh **msh, t_err err, bool is_on_exit)
+void	handle_err(t_msh **msh, t_err err, bool is_on_exit)
 {
 	int	org_fd;
+	int	exit_code;
 
 	ft_putstr_fd(PRG_NAME, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
@@ -62,10 +63,8 @@ t_ret_err_val	handle_err(t_msh **msh, t_err err, bool is_on_exit)
 	close(org_fd);
 	if (is_on_exit)
 	{
-		free_envlist((*msh)->env_vars);
-		cleanup_cmds(&(*msh)->cmd);
-		free((*msh));
-		exit((*msh)->exit_code);
+		exit_code = (*msh)->exit_code;
+		cleanup(msh);
+		exit(exit_code);
 	}
-	return ((t_ret_err_val){ERROR, NULL});
 }

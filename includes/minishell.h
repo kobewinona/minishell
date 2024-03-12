@@ -12,8 +12,10 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define _POSIX_C_SOURCE 199309L
 # include "../libs/libft/includes/libft.h"
 # include "constants.h"
+# include <signal.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <readline/readline.h>

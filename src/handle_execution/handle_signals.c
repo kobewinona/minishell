@@ -32,13 +32,13 @@ int	track_signals(t_msh **msh)
 	sa.sa_sigaction = &interrupt_handler;
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGINT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	sa.sa_handler = SIG_DFL;
 	if (sigaction(SIGTERM, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	return (SUCCESS);
 }
 
@@ -57,12 +57,12 @@ int	ignore_signals(t_msh **msh)
 	sa.sa_sigaction = &idle_interrupt_handler;
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGINT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	sa.sa_handler = SIG_DFL;
 	if (sigaction(SIGTERM, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
 	return (SUCCESS);
 }

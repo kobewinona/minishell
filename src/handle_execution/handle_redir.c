@@ -27,7 +27,7 @@ static int	define_org_fd(t_msh **msh, t_redir *cmd, int *org_fd)
 	else
 		(*org_fd) = dup(STDIN_FILENO);
 	if ((*org_fd) < 0)
-		return (handle_err(msh, (t_err){T_SYS_ERR, DUP}, false).t_int);
+		return (handle_err(msh, (t_err){T_SYS_ERR, DUP}, false), ERROR);
 	return (SUCCESS);
 }
 

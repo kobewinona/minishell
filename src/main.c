@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+void	cleanup(t_msh **msh)
+{
+	free_envlist((*msh)->env_vars);
+	cleanup_cmds(&(*msh)->cmd);
+	free((*msh)->input);
+	free((*msh));
+}
+
 int	run_cmd(t_msh **msh, t_cmd *cmd)
 {
 	int	res;
@@ -30,19 +38,17 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 static void	run_minishell(t_msh **msh)
 {
 	char	*input;
-	char	*temp;
 
 	while (1)
 	{
 		(*msh)->cmd = NULL;
-		input = readline(PRG_PROMPT);
-		if (!input)
+		(*msh)->input = readline(PRG_PROMPT);
+		if (!(*msh)->input)
 			break ;
-		if (!is_emptystr(input))
+		if (!is_emptystr((*msh)->input))
 		{
-			add_history(input);
-			temp = input;
-			(*msh)->cmd = parse_cmd(msh, temp);
+			add_history((*msh)->input);
+			(*msh)->cmd = parse_cmd(msh, (*msh)->input);
 			prepare_fds(msh, &(*msh)->cmd);
 		}
 		if ((*msh)->cmd)
@@ -50,7 +56,7 @@ static void	run_minishell(t_msh **msh)
 			(*msh)->exit_code = run_cmd(msh, (*msh)->cmd);
 			cleanup_cmds(&(*msh)->cmd);
 		}
-		free(input);
+		free((*msh)->input);
 	}
 }
 
