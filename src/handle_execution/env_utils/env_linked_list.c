@@ -64,7 +64,7 @@ t_var_node	*copy_env_vars(char **envp)
 	int			i;
 	t_var_node	*head;
 
-	i = 1;
+	i = 0; //it was i = 1 before
 	head = NULL;
 	while (envp[i])
 	{

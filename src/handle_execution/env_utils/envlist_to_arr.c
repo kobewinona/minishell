@@ -44,15 +44,11 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	if (arr == NULL)
 		return (NULL);
 	//while (i < len - 1)
-	printf("envlist_to_arr()\n");
+	//printf("envlist_to_arr()\n");
 	while (i < len - 1)
 	{
-		if (curr->value)
+		if (curr->value_assigned && curr->value)
 		{
-			//arr[i] = curr->key_val_str;
-
-			if (!ft_strncmp(curr->name, "SHLVL", 20))
-				printf("SHLVL = %s\n", curr->value);
 			substr =  ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
