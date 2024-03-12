@@ -15,6 +15,7 @@
 static void	interrupt_handler(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
+	// printf("this pid %d handling it...", getpid());
 	write(1, "\n", 1);
 	if (signum == SIGINT && info->si_pid)
 	{

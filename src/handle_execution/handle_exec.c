@@ -84,7 +84,7 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	ext_code = 0;
 	if ((*msh)->child_pid != 0)
 	{
-		(*msh)->child_pid = fork2(msh);
+		(*msh)->child_pid = fork1(msh);
 		if ((*msh)->child_pid == ERROR)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
 		if ((*msh)->child_pid == 0)

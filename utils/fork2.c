@@ -13,16 +13,18 @@
 #include "minishell.h"
 
 // same as default fork, but with custom setup of handling signals
-int	fork2(t_msh **msh)
+int	fork1(t_msh **msh)
 {
-	(*msh)->child_pid = fork();
-	if ((*msh)->child_pid == ERROR)
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == ERROR)
 		return (ERROR);
-	if ((*msh)->child_pid == 0)
+	if (pid == 0)
 	{
 		(*msh)->is_parent = false;
-		if (ignore_signals(msh) == ERROR)
-			exit(EXIT_FAILURE);
+		// if (ignore_signals(msh) == ERROR)
+		// 	exit(EXIT_FAILURE);
 	}
-	return ((*msh)->child_pid);
+	return (pid);
 }

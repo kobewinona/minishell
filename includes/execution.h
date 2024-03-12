@@ -69,6 +69,7 @@ typedef struct s_msh
 	t_cmd		*cmd;
 	bool		is_parent;
 	int			child_pid;
+	int			org_fd;
 }	t_msh;
 
 // cleanup

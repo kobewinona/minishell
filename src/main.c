@@ -41,6 +41,9 @@ static void	run_minishell(t_msh **msh)
 
 	while (1)
 	{
+		(*msh)->org_fd = dup(STDIN_FILENO);
+		printf("org_fd_in: %d\n", (*msh)->org_fd);
+
 		(*msh)->cmd = NULL;
 		(*msh)->input = readline(PRG_PROMPT);
 		if (!(*msh)->input)
@@ -57,6 +60,7 @@ static void	run_minishell(t_msh **msh)
 			cleanup_cmds(&(*msh)->cmd);
 		}
 		free((*msh)->input);
+		close((*msh)->org_fd);
 	}
 }
 
@@ -66,6 +70,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	printf("parent pid %d\n", getpid());
 	msh = (t_msh *)malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);

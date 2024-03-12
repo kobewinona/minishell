@@ -37,7 +37,7 @@ bool	is_emptystr(const char *s);
 char	*tokstr(t_types tok);
 void	free_array(char **arr);
 void	collect_exit_code(t_msh **msh, int ext_code_encoded);
-int		fork2(t_msh **msh);
+int		fork1(t_msh **msh);
 int		join_values(t_msh **msh, char **value, const char *s, size_t len);
 
 #endif
