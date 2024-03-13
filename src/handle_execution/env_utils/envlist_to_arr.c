@@ -44,13 +44,14 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	arr = (char **) malloc(sizeof(char *) * (len + 1));
 	if (arr == NULL)
 		return (NULL);
-	while (i < len - 1)
+	while (i < len)
 	{
 		if (curr->value_assigned && curr->value)
 		{
 			substr =  ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
+
 			i++;
 		}
 		

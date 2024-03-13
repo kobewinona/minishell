@@ -7,10 +7,16 @@
 a.out
 minishell
 minishellv2
-#objects
+
+# objects
 obj
 
 # rest
 .DS_store
 *.txt
+*.py
+*.md
 tests
+
+# logs
+logs

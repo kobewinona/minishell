@@ -31,6 +31,7 @@ void	exit_cmd(char **argv, t_msh **msh)
 	{
 		free((*msh));
 		printf("exit\n");
+		printf("Code = %s\n", argv[1]);
 		exit(ft_atoi(argv[1]));
 	}
 	else if (argv[1] != NULL && !is_number(argv[1]))
@@ -40,5 +41,6 @@ void	exit_cmd(char **argv, t_msh **msh)
 			T_OTHER_ERR, EXIT, EXIT_INVALID_ARG_MSG1}, true);
 	}
 	free((*msh));
+	printf("exit\n");
 	exit(SUCCESS);
 }

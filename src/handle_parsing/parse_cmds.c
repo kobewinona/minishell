@@ -23,9 +23,9 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	arb_fd = UNSPECIFIED;
 	*s = smart_strtok(NULL, "><", tok);
 	arb_fd = get_arb_fd(&input);
-	if (*s && is_emptystr(*s))
+	if (!(*s) || is_emptystr(*s))
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false).t_null);
+				UNEXPECTED_TOK_MSG, NEWLINE}, false).t_null);
 	if (prev_tok == T_HEREDOC)
 		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
 				collect_heredoc_input(msh, get_value(msh, s)));

@@ -16,7 +16,8 @@
 
 // error messages
 # define CMD_NOT_FOUND_MSG "command not found"
-# define CMD_FOUND_NOT_EXEC_MSG "permission denied"
+# define PREMISSION_MSG "permission denied"
+# define IS_DIR_MSG "is a directory"
 # define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
 # define UNEXPECTED_EOF_MSG "unexpected EOF while looking for matching"
 # define NO_FILE_OR_DIR_MSG "No such file or directory"
