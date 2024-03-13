@@ -81,29 +81,33 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	char	*cmd_path;
 
 	ext_code = 0;
-	// if ((*msh)->child_pid != 0)
-	// {
-	// 	(*msh)->child_pid = fork2(msh);
-	// 	if ((*msh)->child_pid == ERROR)
-	// 		return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
-	// 	if ((*msh)->child_pid == 0)
-	// 	{
-	// 		if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
-	// 			return ;
-	// 		exec_ext_cmd(msh, cmd_path, argv);
-	// 	}
-	// 	waitpid((*msh)->child_pid, &ext_code, 0);
-	// 	collect_exit_code(msh, ext_code);
-	// }
-	// else
-	// {
-	// 	if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
-	// 		return ;
-	// 	exec_ext_cmd(msh, cmd_path, argv);
-	// }
-	if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
-		return;
-	exec_ext_cmd(msh, cmd_path, argv);
+
+	if ((*msh)->child_pid != 0)
+	{
+		(*msh)->child_pid = fork2(msh);
+		if ((*msh)->child_pid == ERROR)
+			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
+		if ((*msh)->child_pid == 0)
+		{
+			if (access(argv[0], F_OK | X_OK) == SUCCESS)
+			{
+				exec_ext_cmd(msh, argv[0], argv);
+				return ;
+			}
+			if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
+				return ;
+			exec_ext_cmd(msh, cmd_path, argv);
+		}
+		waitpid((*msh)->child_pid, &ext_code, 0);
+		collect_exit_code(msh, ext_code);
+	}
+	else
+	{
+		if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
+			return ;
+		exec_ext_cmd(msh, cmd_path, argv);
+	}
+
 }
 
 int	handle_exec(t_msh **msh, t_exec *cmd)

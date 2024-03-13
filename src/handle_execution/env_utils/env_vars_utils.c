@@ -20,7 +20,7 @@ char	*get_env_var(t_var_node *head, char *varname)
 	curr = head;
 	while (curr)
 	{
-		if (!((ft_strncmp(varname, curr->name, 5000)) | !curr->value_assigned))
+		if (!(ft_strncmp(varname, curr->name, 1000)) && curr->value_assigned && curr->value)
 		{
 			return (curr->value);
 		}
@@ -61,6 +61,11 @@ void	update_var(t_var_node *head, char *varname, char *value)
 	char		*key_val_str;
 	char		*substr;
 
+	if (is_in_env(head, varname))
+	{
+		update_var_value(head, varname, value);
+		return ;
+	}
 	substr = ft_strjoin(varname, "=");
 	if (value)
 	{
