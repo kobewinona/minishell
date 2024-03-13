@@ -74,3 +74,33 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	return (msh->exit_code);
 }
+
+
+//Test for leaks
+
+// int main(int argc, char **argv, char **envp)
+// {
+// 	(void)argc;
+// 	(void)argv;
+
+// 	t_var_node *head;
+
+// 	head = copy_env_vars(envp);
+
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+
+// 	set_var_deleted(head, "USER");
+// 	set_var_deleted(head, "HOME");
+// 	set_var_deleted(head, "PATH");
+
+// 	update_var(head, "MYVAR", "HUETA");
+// 	update_var(head, "MYVAR", "HUETA_DODO");
+// 	update_var(head, "VAR3", "KOLSFS");
+
+
+// 	free_envlist(head);
+// 	return (0);
+// }

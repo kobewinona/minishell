@@ -87,6 +87,8 @@ char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 void		free_envlist(t_var_node *env_vars);
+void		update_var_value(t_var_node *head, char *varname, char *new_val);
+bool		is_in_env(t_var_node *head, char *varname);
 
 // builtins
 void		echo(char **argv, t_msh **msh);

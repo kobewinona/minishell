@@ -64,11 +64,10 @@ t_var_node	*copy_env_vars(char **envp)
 	int			i;
 	t_var_node	*head;
 
-	i = 0; //it was i = 1 before
+	i = 0;
 	head = NULL;
 	while (envp[i])
 	{
-		//printf("%s\n", envp[i]);
 		append_var_node(&head, envp[i]);
 		i++;
 	}

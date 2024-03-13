@@ -44,9 +44,6 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	arr = (char **) malloc(sizeof(char *) * (len + 1));
 	if (arr == NULL)
 		return (NULL);
-	//while (i < len - 1)
-	//printf("envlist_to_arr()\n");
-	printf("VARS_TO_SEND\n\n\n");
 	while (i < len - 1)
 	{
 		if (curr->value_assigned && curr->value)
@@ -54,16 +51,12 @@ char	**envlist_to_arr(t_var_node *env_vars)
 			substr =  ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
-			printf("%s=%s\n", curr->name, curr->value);
-			printf("i=%d; arr[i] = %s\n", i, arr[i]);
 			i++;
 		}
 		
 		curr = curr->next;
 	}
 	arr[i] = NULL;
-	printf("i=%d; arr[i] = %s\n", i, arr[i]);
-	printf("DONE CONVESION\n\n\n");
 	return (arr);
 }
 

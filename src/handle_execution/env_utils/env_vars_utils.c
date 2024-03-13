@@ -20,7 +20,6 @@ char	*get_env_var(t_var_node *head, char *varname)
 	curr = head;
 	while (curr)
 	{
-		//if (!((ft_strncmp(varname, curr->name, 5000)) | !curr->value_assigned))
 		if (!(ft_strncmp(varname, curr->name, 1000)) && curr->value_assigned && curr->value)
 		{
 			return (curr->value);
@@ -28,41 +27,6 @@ char	*get_env_var(t_var_node *head, char *varname)
 		curr = curr->next;
 	}
 	return (NULL);
-}
-
-void	update_var_value(t_var_node *head, char *varname, char *new_val)
-{
-	t_var_node *curr;
-
-	curr = head;
-	while (curr)
-	{
-		if (!(ft_strncmp(varname, curr->name, 5000)))
-		{
-			
-			if (curr->value)
-				free(curr->value);
-			curr->value = ft_strdup(new_val);
-			return ;
-		}
-		curr = curr->next;
-	}
-	return ;
-}
-
-bool	is_in_env(t_var_node *head, char *varname)
-{
-	t_var_node *curr;
-
-	curr = head;
-	while (curr)
-	{
-		if (!(ft_strncmp(varname, curr->name, 5000)))
-			return (true);
-		
-		curr = curr->next;
-	}
-	return (false);
 }
 
 void	set_var_deleted(t_var_node *head, char *varname)
@@ -120,17 +84,12 @@ void	increment_shlvl(t_var_node *env_vars)
 {
 	char	*new_shlvl;
 
-	printf("shlvl  before = %s\n", get_env_var(env_vars, "SHLVL"));
 	if (get_env_var(env_vars, "SHLVL"))
 	{
-
-		
 		new_shlvl = ft_itoa(ft_atoi(get_env_var(env_vars, "SHLVL")) + 1);
 		update_var(env_vars, "SHLVL", new_shlvl);
 		free(new_shlvl);
-		
 	}
 	else
 		update_var(env_vars, "SHLVL", "1");
-	printf("shlvl  after = %s\n", get_env_var(env_vars, "SHLVL"));
 }
