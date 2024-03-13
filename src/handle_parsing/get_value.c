@@ -12,61 +12,67 @@
 
 #include "minishell.h"
 
+static bool	process_quotes(t_val *ctx, char *c, int i)
+{
+	if (!ctx->is_in_quotes)
+	{
+		(ctx->is_in_quotes) = (*c) == T_DOUBLE_QUOTE || (*c) == T_SINGLE_QUOTE;
+		if (ctx->is_in_quotes)
+		{
+			ctx->end_char = (*c);
+			return (ft_memmove(c, c + 1, ((ctx->s_len--) - i)) , true);
+		}
+	}
+	if (ctx->is_in_quotes && (*c) == ctx->end_char)
+	{
+		if (ctx->is_in_quotes)
+			(*ctx) = (t_val){ctx->s, ctx->s_len, false, T_SPACE};
+		return (ft_memmove(c, c + 1, ((ctx->s_len--) - i)), true);
+	}
+	return (false);
+}
+
+static size_t	extract_value(t_val *ctx)
+{
+	size_t	len;
+	size_t	i;
+
+	len = ft_strlen((*ctx->s));
+	i = 0;
+	while ((*ctx->s)[i])
+	{
+		if (process_quotes(ctx, &(*ctx->s)[i], i))
+			continue ;
+		if ((*ctx->s)[i] == ctx->end_char)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
 char	*get_value(t_msh **msh, char **s)
 {
-	int		s_len;
-	bool	is_in_quotes;
-	char	end_char;
+	t_val	ctx;
 	char	*value;
-	int		i;
+	int		len;
 
 	if (!(*s) || is_emptystr(*s))
 		return (NULL);
 	while ((*s) && ft_isspace((**s)))
 		(*s)++;
-	s_len = ft_strlen((*s));
-	end_char = T_SPACE;
-	is_in_quotes = false;
 	value = (*s);
-	i = 0;
-	while ((*s)[i])
-	{
-		if (!is_in_quotes)
-		{
-			is_in_quotes = (*s)[i] == T_DOUBLE_QUOTE || (*s)[i] == T_SINGLE_QUOTE;
-			if (is_in_quotes)
-			{
-				end_char = (*s)[i];
-				ft_memmove(&(*s)[i], &(*s)[i + 1], s_len - i);
-				s_len--;
-				continue ;
-			}
-		}
-		if (is_in_quotes && (*s)[i] == end_char)
-		{
-			ft_memmove(&(*s)[i], &(*s)[i + 1], s_len - i);
-			s_len--;
-			if (is_in_quotes)
-			{
-				is_in_quotes = false;
-				end_char = T_SPACE;
-			}
-			continue ;
-		}
-		if ((*s)[i] == end_char)
-			break ;
-		i++;
-	}
-	if (is_in_quotes)
+	ctx = (t_val){s, ft_strlen((*s)), false, T_SPACE};
+	len = extract_value(&ctx);
+	if (ctx.is_in_quotes)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(end_char)}, false), NULL);
-	if ((*s)[i])
-		(*s)[i++] = '\0';
-	(*s) += i;
+				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
+	if ((*s)[len])
+		(*s)[len++] = '\0';
+	(*s) += len;
 	return (value);
 }
 
-// static ssize_t	subtract_new_value(t_msh **msh,
+// static ssize_t	subtract_new_value(t_msh **msh,	
 // 		char **value, char **s, char end_char)
 // {
 // 	ssize_t	val_len;

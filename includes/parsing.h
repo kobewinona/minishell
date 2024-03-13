@@ -24,6 +24,14 @@
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
 
+typedef struct s_val
+{
+	char	**s;
+	size_t	s_len;
+	bool	is_in_quotes;
+	char	end_char;
+}	t_val;
+
 // parsing
 t_cmd	*parse_cmd(t_msh **msh, char *input);
 t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok);
