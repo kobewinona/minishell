@@ -30,6 +30,41 @@ char	*get_env_var(t_var_node *head, char *varname)
 	return (NULL);
 }
 
+void	update_var_value(t_var_node *head, char *varname, char *new_val)
+{
+	t_var_node *curr;
+
+	curr = head;
+	while (curr)
+	{
+		if (!(ft_strncmp(varname, curr->name, 5000)))
+		{
+			
+			if (curr->value)
+				free(curr->value);
+			curr->value = ft_strdup(new_val);
+			return ;
+		}
+		curr = curr->next;
+	}
+	return ;
+}
+
+bool	is_in_env(t_var_node *head, char *varname)
+{
+	t_var_node *curr;
+
+	curr = head;
+	while (curr)
+	{
+		if (!(ft_strncmp(varname, curr->name, 5000)))
+			return (true);
+		
+		curr = curr->next;
+	}
+	return (false);
+}
+
 void	set_var_deleted(t_var_node *head, char *varname)
 {
 	t_var_node	*curr;
@@ -63,7 +98,11 @@ void	update_var(t_var_node *head, char *varname, char *value)
 	char		*key_val_str;
 	char		*substr;
 
-	//printf("update_var()\n");
+	if (is_in_env(head, varname))
+	{
+		update_var_value(head, varname, value);
+		return ;
+	}
 	substr = ft_strjoin(varname, "=");
 	if (value)
 	{

@@ -68,6 +68,7 @@ t_var_node	*copy_env_vars(char **envp)
 	head = NULL;
 	while (envp[i])
 	{
+		printf("%s\n", envp[i]);
 		append_var_node(&head, envp[i]);
 		i++;
 	}

@@ -26,6 +26,7 @@ static int	len_list(t_var_node *env_vars)
 		curr_node = curr_node->next;
 		i++;
 	}
+	printf("Len of list %d\n", i);
 	return (i);
 }
 
@@ -40,7 +41,7 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	i = 0;
 	len = len_list(env_vars);
 	curr = env_vars;
-	arr = (char **) malloc(sizeof(char *) * (len + 1));
+	arr = (char **) malloc(sizeof(char *) * (len));
 	if (arr == NULL)
 		return (NULL);
 	//while (i < len - 1)
