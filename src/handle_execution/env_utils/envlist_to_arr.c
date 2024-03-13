@@ -24,9 +24,7 @@ static int	len_list(t_var_node *env_vars)
 		if (curr_node->value_assigned && curr_node->value)
 			i++;
 		curr_node = curr_node->next;
-		
 	}
-	printf("Len of list %d\n", i + 1);
 	return (i + 1);
 }
 
@@ -44,7 +42,7 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	arr = (char **) malloc(sizeof(char *) * (len + 1));
 	if (arr == NULL)
 		return (NULL);
-	while (i < len)
+	while (i < len - 1)
 	{
 		if (curr->value_assigned && curr->value)
 		{
@@ -54,7 +52,6 @@ char	**envlist_to_arr(t_var_node *env_vars)
 
 			i++;
 		}
-		
 		curr = curr->next;
 	}
 	arr[i] = NULL;

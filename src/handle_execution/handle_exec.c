@@ -18,8 +18,8 @@ static void	exec_ext_cmd(t_msh **msh, char *cmd_path, char **argv)
 
 	if (access(cmd_path, X_OK) == SUCCESS)
 	{
-		// execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
-		execve(cmd_path, argv, environ);
+		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
+		//execve(cmd_path, argv, environ);
 		free(cmd_path);
 		cmd_path = NULL;
 		handle_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
