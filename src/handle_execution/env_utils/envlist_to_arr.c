@@ -21,13 +21,13 @@ static int	len_list(t_var_node *env_vars)
 	curr_node = env_vars;
 	while (curr_node)
 	{
-		// if (!curr_node->deleted)
-		// 	i++;
+		if (curr_node->value_assigned && curr_node->value)
+			i++;
 		curr_node = curr_node->next;
-		i++;
+		
 	}
-	printf("Len of list %d\n", i);
-	return (i);
+	printf("Len of list %d\n", i + 1);
+	return (i + 1);
 }
 
 char	**envlist_to_arr(t_var_node *env_vars)
@@ -41,11 +41,12 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	i = 0;
 	len = len_list(env_vars);
 	curr = env_vars;
-	arr = (char **) malloc(sizeof(char *) * (len));
+	arr = (char **) malloc(sizeof(char *) * (len + 1));
 	if (arr == NULL)
 		return (NULL);
 	//while (i < len - 1)
 	//printf("envlist_to_arr()\n");
+	printf("VARS_TO_SEND\n\n\n");
 	while (i < len - 1)
 	{
 		if (curr->value_assigned && curr->value)
@@ -53,11 +54,16 @@ char	**envlist_to_arr(t_var_node *env_vars)
 			substr =  ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
+			printf("%s=%s\n", curr->name, curr->value);
+			printf("i=%d; arr[i] = %s\n", i, arr[i]);
 			i++;
 		}
+		
 		curr = curr->next;
 	}
 	arr[i] = NULL;
+	printf("i=%d; arr[i] = %s\n", i, arr[i]);
+	printf("DONE CONVESION\n\n\n");
 	return (arr);
 }
 

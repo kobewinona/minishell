@@ -73,7 +73,6 @@ void	set_var_deleted(t_var_node *head, char *varname)
 
 	prev = head;
 	curr = head->next;
-	//printf("set_vard_deleted()\n");
 	while (curr)
 	{
 		if (!(ft_strncmp(varname, curr->name, 5000)))
