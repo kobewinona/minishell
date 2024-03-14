@@ -96,11 +96,14 @@ int	main(int argc, char **argv, char **envp)
 
 // 	set_var_deleted(head, "USER");
 // 	set_var_deleted(head, "HOME");
+
+// 	update_var(head, "VAR3", "KOLSFS");
 // 	set_var_deleted(head, "PATH");
 
+// 	set_var_deleted(head, "VAR3");
 // 	update_var(head, "MYVAR", "HUETA");
 // 	update_var(head, "MYVAR", "HUETA_DODO");
-// 	update_var(head, "VAR3", "KOLSFS");
+	
 
 
 // 	free_envlist(head);

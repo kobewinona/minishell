@@ -51,5 +51,5 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 	waitpid(cmd_from_pid, NULL, 0);
 	waitpid(cmd_to_pid, &exit_code, 0);
 	collect_exit_code(msh, exit_code);
-	return (exit_code);
+	return ((*msh)->exit_code);
 }

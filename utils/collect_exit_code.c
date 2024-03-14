@@ -14,6 +14,7 @@
 
 void	collect_exit_code(t_msh **msh, int ext_code_encoded)
 {
+
 	if (WIFEXITED(ext_code_encoded))
 		(*msh)->exit_code = WEXITSTATUS(ext_code_encoded);
 	else if (WIFSIGNALED(ext_code_encoded))
