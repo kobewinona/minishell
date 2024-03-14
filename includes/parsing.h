@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/04 16:28:16 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 03:42:18 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define NO_FILE_OR_DIR_MSG "No such file or directory"
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
+# define BAD_SUBST_MSG "bad substitution"
 
 typedef struct s_val
 {
@@ -39,7 +40,8 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok);
 char	*smart_strtok(char *str, const char *sep, t_types *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
-ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char);
+// ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char);
+size_t	exp_env_var(t_msh **msh, char *s);
 int		get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 

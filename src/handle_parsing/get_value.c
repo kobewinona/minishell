@@ -32,17 +32,17 @@ static bool	process_quotes(t_val *ctx, char *c, int i)
 	return (false);
 }
 
-static size_t	extract_value(t_val *ctx)
+static size_t	extract_value(t_msh **msh, t_val *ctx)
 {
-	size_t	len;
 	size_t	i;
 
-	len = ft_strlen((*ctx->s));
 	i = 0;
 	while ((*ctx->s)[i])
 	{
 		if (process_quotes(ctx, &(*ctx->s)[i], i))
 			continue ;
+		if ((*ctx->s)[i] == T_VAR_EXP && ctx->end_char != T_SINGLE_QUOTE)
+			exp_env_var(msh, &((*ctx->s)[i]));
 		if ((*ctx->s)[i] == ctx->end_char)
 			break ;
 		i++;
@@ -58,11 +58,11 @@ char	*get_value(t_msh **msh, char **s)
 
 	if (!(*s) || is_emptystr(*s))
 		return (NULL);
-	while ((*s) && ft_isspace((**s)))
+	while (ft_isspace((**s)))
 		(*s)++;
 	value = (*s);
 	ctx = (t_val){s, ft_strlen((*s)), false, T_SPACE};
-	len = extract_value(&ctx);
+	len = extract_value(msh, &ctx);
 	if (ctx.is_in_quotes)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
 				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);

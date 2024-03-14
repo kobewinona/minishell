@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/27 17:08:11 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 01:52:31 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ static void	handle_other_err(t_msh **msh, t_err err)
 		if (!ft_strncmp(err.ctx1, EXPORT, ft_strlen(EXPORT)))
 			return ((void)printf("%s `%s': %s\n",
 					err.ctx1, err.ctx2, EXPORT_INVALID_ARG_MSG1));
-		if (err.ctx2)
-			return ((void)printf("%s `%s'\n", err.ctx1, err.ctx2));
-		printf("%s: %s\n", err.ctx1, NO_FILE_OR_DIR_MSG);
+		printf("%s: %s\n", err.ctx1, err.ctx2);
 	}
 }
 

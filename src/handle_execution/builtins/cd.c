@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/15 12:40:32 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 01:48:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ static bool	is_dir_valid(char *path)
 static bool	validate_dir(char *path, t_msh **msh)
 {
 	if (!is_dir_valid(path) && access(path, F_OK))
-		return (handle_err(msh,(t_err){T_BAD_REQUEST_ERR,
-				path}, false), false);
+		return (handle_err(msh, (t_err){T_BAD_REQUEST_ERR, path,
+				NO_FILE_OR_DIR_MSG}, false), false);
 	else if (!is_dir_valid(path) && access(path, R_OK))
 		return (handle_err(msh, (t_err){T_BAD_REQUEST_ERR_PERM,
-				path}, false), false);
+				path, NO_FILE_OR_DIR_MSG}, false), false);
 	return (true);
 }
 
