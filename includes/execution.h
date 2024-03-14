@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 04:52:23 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 19:05:23 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ char		**envlist_to_arr(t_var_node *env_vars);
 void		increment_shlvl(t_var_node *env_vars);
 bool		is_var_deleted(t_var_node *env_vars, char *varname);
 void		free_envlist(t_var_node *env_vars);
+void		update_var_value(t_var_node *head, char *varname, char *new_val);
+bool		is_in_env(t_var_node *head, char *varname);
 
 // builtins
 void		echo(char **argv, t_msh **msh);
@@ -103,7 +105,6 @@ void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
 
 // signals
-int			track_signals(t_msh **msh);
-int			ignore_signals(t_msh **msh);
+int			handle_signals(t_msh **msh);
 
 #endif

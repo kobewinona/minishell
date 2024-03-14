@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/22 21:49:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 19:04:32 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 			return (handle_err(msh, (t_err){T_CMD_NOT_EXECUTABLE,
 					argv[0], IS_DIR_MSG}, true));
 	}
-	if (!access(argv[0], F_OK))
+	if (access(argv[0], F_OK | X_OK) == SUCCESS)
 	{
 		(*cmd_path) = argv[0];
 		return ;
@@ -67,7 +67,7 @@ static void exec_ext_cmd(t_msh **msh, char **argv)
 	get_cmd_path(msh, &cmd_path, argv);
 	if (access(cmd_path, X_OK) == SUCCESS)
 	{
-		execve(cmd_path, argv, environ);
+		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
 		free(cmd_path);
 		cmd_path = NULL;
 		handle_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
@@ -82,9 +82,10 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	int		ext_code;
 
 	ext_code = 0;
+
 	if ((*msh)->child_pid != 0)
 	{
-		(*msh)->child_pid = fork1(msh);
+		(*msh)->child_pid = fork();
 		if ((*msh)->child_pid == ERROR)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
 		if ((*msh)->child_pid == 0)
@@ -94,6 +95,7 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	}
 	else
 		exec_ext_cmd(msh, argv);
+
 }
 
 int	handle_exec(t_msh **msh, t_exec *cmd)

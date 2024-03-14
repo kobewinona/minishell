@@ -29,7 +29,6 @@ static bool	is_valid_flag(char *s)
 }
 
 void	echo(char **argv, t_msh **msh)
-
 {
 	int	is_with_n_flag;
 	int	i;

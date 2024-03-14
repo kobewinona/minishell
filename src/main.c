@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 04:54:10 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 19:05:51 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ static void	run_minishell(t_msh **msh)
 	while (1)
 	{
 		(*msh)->org_fd = dup(STDIN_FILENO);
-		printf("org_fd_in: %d\n", (*msh)->org_fd);
-
 		(*msh)->cmd = NULL;
 		(*msh)->input = readline(PRG_PROMPT);
 		if (!(*msh)->input)
@@ -75,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	if (track_signals(&msh) == ERROR)
+	if (handle_signals(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
 	msh->child_pid = UNSPECIFIED;
 	msh->is_parent = true;
@@ -85,3 +83,36 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	return (msh->exit_code);
 }
+
+
+//Test for leaks
+
+// int main(int argc, char **argv, char **envp)
+// {
+// 	(void)argc;
+// 	(void)argv;
+
+// 	t_var_node *head;
+
+// 	head = copy_env_vars(envp);
+
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+// 	increment_shlvl(head);
+
+// 	set_var_deleted(head, "USER");
+// 	set_var_deleted(head, "HOME");
+
+// 	update_var(head, "VAR3", "KOLSFS");
+// 	set_var_deleted(head, "PATH");
+
+// 	set_var_deleted(head, "VAR3");
+// 	update_var(head, "MYVAR", "HUETA");
+// 	update_var(head, "MYVAR", "HUETA_DODO");
+	
+
+
+// 	free_envlist(head);
+// 	return (0);
+// }

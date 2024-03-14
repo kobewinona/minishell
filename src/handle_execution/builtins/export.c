@@ -14,7 +14,18 @@
 
 static bool	is_valid_varname(const char *varname)
 {
-	return (ft_isalpha(*varname) || *varname == '_');
+	int	i;
+	
+	if (!(ft_isalpha(varname[0]) || varname[0] == '_'))
+		return (false);
+	i = 0;
+	while (varname[i])
+	{
+		if (!ft_isalnum(varname[i]) && !(varname[i] == '_'))
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
 bool	is_var_deleted(t_var_node *env_vars, char *varname)

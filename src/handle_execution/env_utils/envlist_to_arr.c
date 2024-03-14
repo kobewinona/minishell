@@ -21,15 +21,15 @@ static int	len_list(t_var_node *env_vars)
 	curr_node = env_vars;
 	while (curr_node)
 	{
-		if (!curr_node->deleted)
+		if (curr_node->value_assigned && curr_node->value)
 			i++;
 		curr_node = curr_node->next;
 	}
-	return (i);
+	return (i + 1);
 }
 
 char	**envlist_to_arr(t_var_node *env_vars)
-{
+{	
 	int			len;
 	t_var_node	*curr;
 	char		**arr;
@@ -39,17 +39,17 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	i = 0;
 	len = len_list(env_vars);
 	curr = env_vars;
-	arr = (char **) malloc(sizeof(char *) * len);
+	arr = (char **) malloc(sizeof(char *) * (len + 1));
 	if (arr == NULL)
 		return (NULL);
-	while (i < len)
+	while (i < len - 1)
 	{
-		if (curr->value)
+		if (curr->value_assigned && curr->value)
 		{
-			substr = ft_strjoin(curr->name, "=");
+			substr =  ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
-			//printf("%s\n", arr[i]);
+
 			i++;
 		}
 		curr = curr->next;
