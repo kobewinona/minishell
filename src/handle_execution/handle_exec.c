@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 19:04:32 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:05:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,20 @@ static char	*create_cmd_path_str(t_msh **msh, char *env_path, char *cmd_name)
 	char	*cmd_dir;
 	char	*temp;
 
+	cmd_path = NULL;
 	temp = NULL;
 	cmd_dir = ft_strtok(env_path, ":");
 	while (cmd_dir)
 	{
 		temp = ft_strjoin(cmd_dir, "/");
 		cmd_path = ft_strjoin(temp, cmd_name);
+		if (!cmd_path)
+			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
 		free(temp);
 		if (access(cmd_path, X_OK) == SUCCESS)
 			return (cmd_path);
+		free(cmd_path);
+		cmd_path = NULL;
 		cmd_dir = ft_strtok(NULL, ":");
 	}
 	return (NULL);
@@ -79,10 +84,9 @@ static void exec_ext_cmd(t_msh **msh, char **argv)
 
 void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 {
-	int		ext_code;
+	int		exit_code;
 
-	ext_code = 0;
-
+	exit_code = 0;
 	if ((*msh)->child_pid != 0)
 	{
 		(*msh)->child_pid = fork();
@@ -90,14 +94,14 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
 		if ((*msh)->child_pid == 0)
 			exec_ext_cmd(msh, argv);
-		waitpid((*msh)->child_pid, &ext_code, 0);
-		collect_exit_code(msh, ext_code);
+		waitpid((*msh)->child_pid, &exit_code, 0);
+		collect_exit_code(msh, exit_code);
 	}
 	else
 		exec_ext_cmd(msh, argv);
-
 }
 
+// TODO builtins leak if they run in a child process (created in pipe handler) and don't cleanup and exit
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
 	if (cmd->argv[0])

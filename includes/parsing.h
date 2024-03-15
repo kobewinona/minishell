@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 03:42:18 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 08:40:40 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,30 @@
 # define CMD_NOT_FOUND_MSG "command not found"
 # define PREMISSION_MSG "permission denied"
 # define IS_DIR_MSG "is a directory"
+# define SYNTAX_ERR_MSG "syntax error"
+# define UNEXPECTED_EOF_MSH "unexpected enf of file"
 # define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
-# define UNEXPECTED_EOF_MSG "unexpected EOF while looking for matching"
+# define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
 # define NO_FILE_OR_DIR_MSG "No such file or directory"
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
 # define BAD_SUBST_MSG "bad substitution"
 
+// old_size 8
+// new_size 17
+// $HOME00000000000\0
+// "'$HOME'" offset 9
+// ""$TERM_PROGRAM 15
+// ls"'$HOME'" 11
+
+// 0x55555557b620 "echo "
+// 0x55555557b640 "wc"
+
 typedef struct s_val
 {
 	char	**s;
-	size_t	s_len;
+	size_t	len;
+	int		offset;
 	bool	is_in_quotes;
 	char	end_char;
 }	t_val;
@@ -41,7 +54,8 @@ char	*smart_strtok(char *str, const char *sep, t_types *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
 // ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char);
-size_t	exp_env_var(t_msh **msh, char *s);
+// size_t	exp_env_var(t_msh **msh, char *s);
+int		exp_env_var(t_msh **msh, t_val *ctx, int offset);
 int		get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 

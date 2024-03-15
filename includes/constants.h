@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constants.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/06 19:53:53 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 01:20:35 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ typedef enum e_types
 	T_NO_TOK,
 	T_EXEC,
 	T_PIPE = 124,
+	T_BRACKET_OPEN = 40,
+	T_BRACKET_CLOSE = 41,
+	T_CURLY_OPEN = 123,
+	T_CURLY_CLOSE = 125,
+	T_SQUARE_OPEN = 91,
+	T_SQUARE_CLOSE = 93,
 	T_REDIR,
 	T_HEREDOC,
 	T_REDIR_STDOUT = 62,

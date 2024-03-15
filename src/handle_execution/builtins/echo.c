@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/12 11:05:23 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 08:59:02 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,9 @@ void	echo(char **argv, t_msh **msh)
 	if (!is_with_n_flag)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	(*msh)->exit_code = 0;
+	if ((*msh)->child_pid == 0)
+	{
+		cleanup(msh);
+		exit(EXIT_SUCCESS);
+	}
 }

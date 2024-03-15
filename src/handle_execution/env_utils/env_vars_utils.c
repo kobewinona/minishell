@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_linked_list.c                                  :+:      :+:    :+:   */
+/*   env_vars_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:44:53 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/14 16:45:06 by sliashko         ###   ########.fr       */
+/*   Updated: 2024/03/14 23:18:25 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_env_var(t_var_node *head, char *varname)
 		}
 		curr = curr->next;
 	}
-	return (NULL);
+	return ("");
 }
 
 void	set_var_deleted(t_var_node *head, char *varname)

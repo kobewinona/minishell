@@ -19,22 +19,23 @@ static bool	process_quotes(t_val *ctx, char *c, int i)
 		(ctx->is_in_quotes) = (*c) == T_DOUBLE_QUOTE || (*c) == T_SINGLE_QUOTE;
 		if (ctx->is_in_quotes)
 		{
-			ctx->end_char = (*c);
-			return (ft_memmove(c, c + 1, ((ctx->s_len--) - i)) , true);
+			(*ctx) = (t_val){ctx->s, ctx->len, ++(ctx->offset), true, (*c)};
+			return (ft_memmove(c, c + 1, ((ctx->len--) - i)), true);
 		}
 	}
 	if (ctx->is_in_quotes && (*c) == ctx->end_char)
 	{
 		if (ctx->is_in_quotes)
-			(*ctx) = (t_val){ctx->s, ctx->s_len, false, T_SPACE};
-		return (ft_memmove(c, c + 1, ((ctx->s_len--) - i)), true);
+			(*ctx) = (t_val){ctx->s, ctx->len, ++(ctx->offset), false, T_SPACE};
+		return (ft_memmove(c, c + 1, ((ctx->len--) - i)), true);
 	}
 	return (false);
 }
 
 static size_t	extract_value(t_msh **msh, t_val *ctx)
 {
-	size_t	i;
+	int	len;
+	int	i;
 
 	i = 0;
 	while ((*ctx->s)[i])
@@ -42,12 +43,22 @@ static size_t	extract_value(t_msh **msh, t_val *ctx)
 		if (process_quotes(ctx, &(*ctx->s)[i], i))
 			continue ;
 		if ((*ctx->s)[i] == T_VAR_EXP && ctx->end_char != T_SINGLE_QUOTE)
-			exp_env_var(msh, &((*ctx->s)[i]));
-		if ((*ctx->s)[i] == ctx->end_char)
+		{
+			len = exp_env_var(msh, ctx, i);
+			if (len == ERROR)
+				return (ERROR);
+			i += len;
+			if (!(*ctx->s)[i])
+				break ;
+			if (process_quotes(ctx, &(*ctx->s)[i], i))
+				continue ;
+		}
+		if ((*ctx->s)[i] && (*ctx->s)[i] == ctx->end_char)
 			break ;
+		ctx->offset++;
 		i++;
 	}
-	return (i);
+	return (ctx->len = i, i);
 }
 
 char	*get_value(t_msh **msh, char **s)
@@ -60,15 +71,22 @@ char	*get_value(t_msh **msh, char **s)
 		return (NULL);
 	while (ft_isspace((**s)))
 		(*s)++;
-	value = (*s);
-	ctx = (t_val){s, ft_strlen((*s)), false, T_SPACE};
+	value = ft_strdup((*s));
+	if (!value)
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
+	ctx = (t_val){&value, ft_strlen(value), 0, false, T_SPACE};
 	len = extract_value(msh, &ctx);
+	if (len == ERROR)
+		return (free(value), NULL);
 	if (ctx.is_in_quotes)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
 				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
-	if ((*s)[len])
-		(*s)[len++] = '\0';
-	(*s) += len;
+	(*s) += ctx.offset;
+	if (value[ctx.len])
+	{
+		value[ctx.len] = '\0';
+		(*s) += 1;
+	}
 	return (value);
 }
 

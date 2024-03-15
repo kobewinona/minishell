@@ -6,103 +6,116 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 04:24:31 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:33:20 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_env_var_valid(t_msh **msh, const char *s)
+static int	validate_env_var(t_msh **msh, const char *s, char end_char)
 {
-	char	end_char;
 	int		i;
 
-	end_char = T_SPACE;
 	i = (*s) == T_VAR_EXP;
-	if (s[i] == '{')
+	if (s[i] == T_CURLY_OPEN || s[i] == T_SQUARE_OPEN || s[i] == T_BRACKET_OPEN)
 	{
-		end_char = '}';
+		end_char = (s[i] + 2) - (s[i] == T_BRACKET_OPEN);
 		i++;
 	}
-	if (!ft_isalpha(s[i]) && s[i] != '_')
-		return (handle_err(msh, (t_err){T_BAD_REQUEST_ERR,
-				(char *)s, BAD_SUBST_MSG}, false), false);
-	i++;
+	if (s[i])
+	{
+		if (end_char == T_CURLY_CLOSE && !ft_isalpha(s[i]) && s[i++] != '_')
+			return (handle_err(msh, (t_err){T_BAD_REQUEST_ERR,
+					(char *)s, BAD_SUBST_MSG}, false), ERROR);
+	}
 	while (s[i] && s[i] != end_char)
-	{
-		if (!ft_isalnum(s[i]) && s[i] != '_')
-			return (false);
 		i++;
+	if (end_char != T_SPACE && s[i] != end_char)
+	{
+		handle_err(msh, (t_err){T_OTHER_ERR,
+			UNEXPECTED_EOF_TOK_MSG, tokstr(end_char)}, false);
+		return (handle_err(msh, (t_err){T_OTHER_ERR,
+				SYNTAX_ERR_MSG, UNEXPECTED_EOF_MSH}, false), ERROR);
 	}
-	return (!(end_char == '}' && s[i] != end_char));
+	return (!(end_char != T_SPACE && s[i] != end_char));
 }
 
-// 10
-// 14
-// s $HOME e" // 10
-// s /home/dklimkin e" // 19
-
-// $HOME e" // 8
-// /home/dklimkin e" // 17
-
-// $HOME e"000000
-
-static size_t	extract_env_var(t_msh **msh, t_val *ctx)
+static size_t	extract_env_var(t_msh **msh, t_val *ectx, t_val *sctx)
 {
 	size_t	start;
 	size_t	end;
 	char	*var_name;
+	size_t	var_name_len;
 	char	*var_value;
 	size_t	var_value_len;
+	size_t	old_size;
+	size_t	new_size;
 
-	start = *(*ctx->s) == T_VAR_EXP;
-	if ((*ctx->s)[start] == '{')
+	start = ectx->offset + ((*ectx->s)[ectx->offset] == T_VAR_EXP);
+	if ((*ectx->s)[start] == '{')
 	{
-		ctx->end_char = '}';
+		ectx->end_char = '}';
 		start++;
 	}
 	end = start;
-	while ((*ctx->s)[end])
+	while ((*ectx->s)[end])
 	{
-		if ((*ctx->s)[end] == ctx->end_char)
+		if (!ft_isalnum((*ectx->s)[end]) && (*ectx->s)[end] != '_')
 			break ;
 		end++;
 	}
-	var_name = ft_substr((*ctx->s), start, (end - start));
+	if (ectx->end_char != T_SPACE && (*ectx->s)[end] == ectx->end_char)
+		ft_memmove(&(*ectx->s)[end], &((*ectx->s)[end + 1]), sctx->len);
+	var_name = ft_substr((*ectx->s), start, (end - start));
+	var_name_len = end - ectx->offset;
 	var_value = get_env_var((*msh)->env_vars, var_name);
 	var_value_len = ft_strlen(var_value);
-	size_t old_size = ft_strlen((*msh)->input);
-	size_t new_size = (old_size + (var_value_len - end));
-	int offset = (*ctx->s) - (*msh)->input;
-	(*msh)->input = ft_realloc((*msh)->input, old_size, (new_size + 1));
-	(*msh)->input[new_size] = '\0';
-	(*ctx->s) = (*msh)->input + offset;
-	if (!(*ctx->s))
+	// if (var_value_len == 0)
+	// 	var_value_len++;
+	old_size = ft_strlen((*ectx->s));
+	new_size = (old_size + (var_value_len - (end - ectx->offset)));
+	if (new_size > old_size)
 	{
-		free(var_name);
-		return (ERROR);
+		char *new_value = ft_realloc((*ectx->s), old_size, (new_size + 1));
+		(*ectx->s) = new_value;
+		if (!(*ectx->s))
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					MALLOC}, false), free(var_name), ERROR);
 	}
-	ft_memmove(((*ctx->s) + (var_value_len - end)), (*ctx->s), ft_strlen((*ctx->s)));
-	ft_memcpy((*ctx->s), var_value, var_value_len);
+	(*ectx->s)[new_size] = '\0';
+	ft_memmove(((*ectx->s) + ectx->offset + var_value_len), (*ectx->s) + end, old_size - end);
+	ft_memcpy((*ectx->s) + ectx->offset, var_value, var_value_len);
 	free(var_name);
+	sctx->len = ft_strlen((*ectx->s));
+	// if (var_value_len > (end - ectx->offset))
+	// 	sctx->offset += var_value_len;
+	// else
+	// 	sctx->offset += end - ectx->offset;
+	// sctx->offset = (end - ectx->offset);
+	sctx->offset += end - ectx->offset;
 	return (var_value_len);
+	// return (end);
 }
 
-size_t	exp_env_var(t_msh **msh, char *s)
-{
-	t_val	ctx;
-	size_t	len;
+// "s $TERM_PROGRAM e" = 18
+// s vscode e" = 11
 
-	if (!s || is_emptystr(s))
+int	exp_env_var(t_msh **msh, t_val *sctx, int offset)
+{
+	t_val	ectx;
+	int		is_env_var_valid;
+
+	if (!(*sctx->s) || is_emptystr((*sctx->s)))
+		return (0);
+	ectx = (t_val){(sctx->s), ft_strlen((*sctx->s)), offset, false, T_SPACE};
+	is_env_var_valid = validate_env_var(msh, &(*sctx->s)[offset], T_SPACE);
+	if (!is_env_var_valid)
+		return (0);
+	if (is_env_var_valid == ERROR)
 		return (ERROR);
-	while (ft_isspace((*s)))
-		s++;
-	if (!is_env_var_valid(msh, s))
+	ectx = (t_val){(sctx->s), ft_strlen((*sctx->s)), offset, false, T_SPACE};
+	offset = extract_env_var(msh, &ectx, sctx);
+	if (offset == ERROR)
 		return (ERROR);
-	ctx = (t_val){&s, ft_strlen(s), false, T_SPACE};
-	len = extract_env_var(msh, &ctx);
-	if (len == ERROR)
-		return (ERROR);
-	s += len;
-	return (len);
+	return (offset);
 }

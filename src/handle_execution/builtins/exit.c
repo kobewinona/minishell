@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:03:06 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/14 18:54:41 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 07:35:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	exit_cmd(char **argv, t_msh **msh)
 {
 	int	exit_code;
 
+	exit_code = 0;
 	if (argv[1] != NULL && is_number(argv[1]))
 	{
 		exit_code = ft_atoi(argv[1]);
@@ -42,6 +43,7 @@ void	exit_cmd(char **argv, t_msh **msh)
 			EXIT, EXIT_INVALID_ARG_MSG1}, true);
 	}
 	cleanup(msh);
+	rl_clear_history();
 	printf("exit\n");
 	exit(exit_code);
 }

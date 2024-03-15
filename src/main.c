@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 19:05:51 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:02:18 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	cleanup(t_msh **msh)
 	cleanup_cmds(&(*msh)->cmd);
 	free((*msh)->input);
 	free((*msh));
+	rl_clear_history();
 }
 
 int	run_cmd(t_msh **msh, t_cmd *cmd)
@@ -37,15 +38,16 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 
 static void	run_minishell(t_msh **msh)
 {
-	char	*input;
-
 	while (1)
 	{
 		(*msh)->org_fd = dup(STDIN_FILENO);
 		(*msh)->cmd = NULL;
 		(*msh)->input = readline(PRG_PROMPT);
 		if (!(*msh)->input)
+		{
+			printf("exit\n");
 			break ;
+		}
 		if (!is_emptystr((*msh)->input))
 		{
 			add_history((*msh)->input);
@@ -73,7 +75,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!msh)
 		return (EXIT_FAILURE);
 	memset(msh, 0, sizeof(t_msh));
-	if (handle_signals(&msh) == ERROR)
+	if (init_signals_handle(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
 	msh->child_pid = UNSPECIFIED;
 	msh->is_parent = true;

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 19:05:23 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 08:55:09 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,6 @@ void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
 
 // signals
-int			handle_signals(t_msh **msh);
+int			init_signals_handle(t_msh **msh);
 
 #endif

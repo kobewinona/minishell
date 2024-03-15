@@ -6,13 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/14 19:06:24 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 01:11:36 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_interrupt_signal(int signum, siginfo_t *info, void *context)
+static void	handle_signals(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
 	write(STDOUT_FILENO, "\n", 1);
@@ -24,12 +24,12 @@ static void	handle_interrupt_signal(int signum, siginfo_t *info, void *context)
 	}
 }
 
-int	handle_signals(t_msh **msh)
+int	init_signals_handle(t_msh **msh)
 {
 	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);
-	sa.sa_sigaction = &handle_interrupt_signal;
+	sa.sa_sigaction = &handle_signals;
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGINT, &sa, NULL) == ERROR)
 		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);

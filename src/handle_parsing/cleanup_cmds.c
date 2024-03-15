@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup_cmds.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 23:19:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/22 23:19:17 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:32:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static void	cleanup_exec_cmd(t_cmd **cmd)
-// {
-// 	int	i;
+static void	cleanup_exec_cmd(t_cmd **cmd)
+{
+	int	i;
 
-// 	i = 0;
-// 	while ((*cmd)->exec.argv[i])
-// 	{
-// 		free((*cmd)->exec.argv[i]);
-// 		(*cmd)->exec.argv[i] = NULL;
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while ((*cmd)->exec.argv[i])
+	{
+		free((*cmd)->exec.argv[i]);
+		(*cmd)->exec.argv[i] = NULL;
+		i++;
+	}
+}
 
 static void	cleanup_redir_cmd(t_cmd **cmd)
 {
@@ -39,8 +39,8 @@ void	cleanup_cmds(t_cmd **cmd)
 {
 	if (!(*cmd))
 		return ;
-	// if ((*cmd)->type == T_EXEC)
-	// 	cleanup_exec_cmd(cmd);
+	if ((*cmd)->type == T_EXEC)
+		cleanup_exec_cmd(cmd);
 	if ((*cmd)->type == T_PIPE)
 	{
 		cleanup_cmds(&(*cmd)->pipe.from);
