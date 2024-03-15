@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 09:02:18 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:41:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	memset(msh, 0, sizeof(t_msh));
 	if (init_signals_handle(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
-	msh->child_pid = UNSPECIFIED;
+	msh->curr_pid = UNSPECIFIED;
 	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	msh->script_name = get_env_var(msh->env_vars, "PWD");

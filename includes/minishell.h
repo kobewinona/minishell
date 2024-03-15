@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 19:04:22 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:39:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ bool	is_emptystr(const char *s);
 char	*tokstr(t_types tok);
 void	free_array(char **arr);
 void	collect_exit_code(t_msh **msh, int ext_code_encoded);
-int		join_values(t_msh **msh, char **value, const char *s, size_t len);
+// int		join_values(t_msh **msh, char **value, const char *s, size_t len);
 
 #endif

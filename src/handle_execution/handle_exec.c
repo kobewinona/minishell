@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 09:05:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:24:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,14 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	int		exit_code;
 
 	exit_code = 0;
-	if ((*msh)->child_pid != 0)
+	if ((*msh)->curr_pid != 0)
 	{
-		(*msh)->child_pid = fork();
-		if ((*msh)->child_pid == ERROR)
+		(*msh)->curr_pid = fork();
+		if ((*msh)->curr_pid == ERROR)
 			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
-		if ((*msh)->child_pid == 0)
+		if ((*msh)->curr_pid == 0)
 			exec_ext_cmd(msh, argv);
-		waitpid((*msh)->child_pid, &exit_code, 0);
+		waitpid((*msh)->curr_pid, &exit_code, 0);
 		collect_exit_code(msh, exit_code);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 08:10:02 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:24:45 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
 	if (cmd->type != T_PIPE)
 	{
-		(*msh)->child_pid = fork();
-		if ((*msh)->child_pid == ERROR)
+		(*msh)->curr_pid = fork();
+		if ((*msh)->curr_pid == ERROR)
 			return (handle_err(msh, (t_err){T_SYS_ERR, FORK}, false), ERROR);
-		if ((*msh)->child_pid == 0)
+		if ((*msh)->curr_pid == 0)
 		{
 			if (dup2(pipe_fds[end], end) == ERROR)
 				return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true), ERROR);
@@ -29,7 +29,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 				close(pipe_fds[STDOUT_FILENO]);
 			exit(run_cmd(msh, cmd));
 		}
-		return ((*msh)->child_pid);
+		return ((*msh)->curr_pid);
 	}
 	else
 	{
@@ -37,7 +37,7 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 			return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true), ERROR);
 		close(pipe_fds[STDIN_FILENO]);
 		run_cmd(msh, cmd);
-		return ((*msh)->child_pid);
+		return ((*msh)->curr_pid);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 08:59:02 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:33:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,21 @@ static bool	is_valid_flag(char *s)
 	return (true);
 }
 
+static void	handle_exit(t_msh **msh, bool is_with_n_flag, int exit_code)
+{
+	if (!is_with_n_flag)
+	{
+		if (write(STDOUT_FILENO, "\n", 1) == ERROR)
+			exit_code = EXIT_FAILURE;
+	}
+	if ((*msh)->curr_pid == 0)
+	{
+		cleanup(msh);
+		exit(exit_code);
+	}
+	(*msh)->exit_code = EXIT_SUCCESS;
+}
+
 void	echo(char **argv, t_msh **msh)
 {
 	int	is_with_n_flag;
@@ -43,17 +58,14 @@ void	echo(char **argv, t_msh **msh)
 			i++;
 			continue ;
 		}
-		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		if (write(STDOUT_FILENO, argv[i], ft_strlen(argv[i])) == ERROR)
+			handle_exit(msh, is_with_n_flag, EXIT_FAILURE);
 		i++;
 		if (argv[i])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+		{
+			if (write(STDOUT_FILENO, " ", 1) == ERROR)
+				handle_exit(msh, is_with_n_flag, EXIT_FAILURE);
+		}
 	}
-	if (!is_with_n_flag)
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	(*msh)->exit_code = 0;
-	if ((*msh)->child_pid == 0)
-	{
-		cleanup(msh);
-		exit(EXIT_SUCCESS);
-	}
+	handle_exit(msh, is_with_n_flag, EXIT_SUCCESS);
 }

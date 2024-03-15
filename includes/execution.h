@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 08:55:09 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:24:22 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_msh
 	char		*script_name;
 	t_cmd		*cmd;
 	bool		is_parent;
-	int			child_pid;
+	int			curr_pid;
 	int			org_fd;
 }	t_msh;
 

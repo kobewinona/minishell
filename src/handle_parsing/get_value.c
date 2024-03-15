@@ -81,12 +81,8 @@ char	*get_value(t_msh **msh, char **s)
 	if (ctx.is_in_quotes)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
 				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
-	(*s) += ctx.offset;
-	if (value[ctx.len])
-	{
-		value[ctx.len] = '\0';
-		(*s) += 1;
-	}
+	(*s) += ctx.offset + !!value[ctx.len];
+	value[ctx.len] = '\0';
 	return (value);
 }
 

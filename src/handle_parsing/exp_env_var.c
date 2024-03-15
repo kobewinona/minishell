@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 07:33:20 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:37:31 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ static size_t	extract_env_var(t_msh **msh, t_val *ectx, t_val *sctx)
 	var_name_len = end - ectx->offset;
 	var_value = get_env_var((*msh)->env_vars, var_name);
 	var_value_len = ft_strlen(var_value);
-	// if (var_value_len == 0)
-	// 	var_value_len++;
 	old_size = ft_strlen((*ectx->s));
 	new_size = (old_size + (var_value_len - (end - ectx->offset)));
 	if (new_size > old_size)
@@ -87,18 +85,9 @@ static size_t	extract_env_var(t_msh **msh, t_val *ectx, t_val *sctx)
 	ft_memcpy((*ectx->s) + ectx->offset, var_value, var_value_len);
 	free(var_name);
 	sctx->len = ft_strlen((*ectx->s));
-	// if (var_value_len > (end - ectx->offset))
-	// 	sctx->offset += var_value_len;
-	// else
-	// 	sctx->offset += end - ectx->offset;
-	// sctx->offset = (end - ectx->offset);
 	sctx->offset += end - ectx->offset;
 	return (var_value_len);
-	// return (end);
 }
-
-// "s $TERM_PROGRAM e" = 18
-// s vscode e" = 11
 
 int	exp_env_var(t_msh **msh, t_val *sctx, int offset)
 {
