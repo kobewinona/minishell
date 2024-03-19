@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 02:51:31 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:20:18 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,35 +85,3 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	return (msh->exit_code);
 }
-
-//Test for leaks
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	(void)argc;
-// 	(void)argv;
-
-// 	t_var_node *head;
-
-// 	head = copy_env_vars(envp);
-
-// 	increment_shlvl(head);
-// 	increment_shlvl(head);
-// 	increment_shlvl(head);
-// 	increment_shlvl(head);
-
-// 	set_var_deleted(head, "USER");
-// 	set_var_deleted(head, "HOME");
-
-// 	update_var(head, "VAR3", "KOLSFS");
-// 	set_var_deleted(head, "PATH");
-
-// 	set_var_deleted(head, "VAR3");
-// 	update_var(head, "MYVAR", "HUETA");
-// 	update_var(head, "MYVAR", "HUETA_DODO");
-	
-
-
-// 	free_envlist(head);
-// 	return (0);
-// }

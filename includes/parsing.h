@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 01:20:41 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:21:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
 # define BAD_SUBST_MSG "bad substitution"
 
-// "$HOME \"str $SHELL e\" $TERM" - move_len 22
-// "/home/dklimkin \"str $SHELL e\" $TERM" - move_len 10
-// "/home/dklimkin \"str /bin/zsh e\" $TERM"
-// "'"$SHELL"'" $??? = 12
-
 typedef struct s_val
 {
 	char	**s;
@@ -46,7 +41,6 @@ typedef struct s_ctx
 	char	**input;
 	size_t	input_len;
 	char	*s;
-	size_t	s_len;
 	int		offset;
 	int		index;
 	char	*name;
@@ -58,8 +52,8 @@ int		parse_cmd(t_msh **msh);
 char	*smart_strtok(char *str, const char *sep, t_types *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
-int 	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed);
-int 	get_arb_fd(char **s);
+int		exp_env_var(t_msh **msh, char **input, bool is_input_enclosed);
+int		get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 
 // fd handlers
