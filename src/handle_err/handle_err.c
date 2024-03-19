@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 11:29:17 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:49:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	handle_other_err(t_msh **msh, t_err err)
 	(*msh)->exit_code = err.type;
 	if (err.type == T_OTHER_ERR)
 	{
-		printf("strerror %s\n", strerror(2));
 		if (!ft_strncmp(err.ctx1, SYNTAX_ERR_MSG, ft_strlen(SYNTAX_ERR_MSG)))
 			return ((void)printf("%s: %s\n", err.ctx1, err.ctx2));
 		if (err.ctx2)
