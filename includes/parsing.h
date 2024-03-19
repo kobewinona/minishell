@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:14:49 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:25:45 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		parse_cmd(t_msh **msh);
 char	*smart_strtok(char *str, const char *sep, t_types *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
-int 	exp_env_var(t_msh **msh, bool is_input_enclosed);
+int 	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed);
 int 	get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 

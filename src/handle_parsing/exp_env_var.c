@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:10:04 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:32:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,12 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	return (SUCCESS);
 }
 
-int	exp_env_var(t_msh **msh, bool is_input_enclosed)
+int	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed)
 {
 	t_ctx	ectx;
 
-	ectx = (t_ctx){(&(*msh)->input), 0, (*msh)->input, 0, 0, 0, NULL, NULL};
-	ectx.input_len = ft_strlen((*msh)->input);
+	ectx = (t_ctx){input, 0, (*input), 0, 0, 0, NULL, NULL};
+	ectx.input_len = ft_strlen((*input));
 	ectx.s_len = ectx.input_len;
 	if (is_input_enclosed)
 		return (process_enclosed_input(msh, &ectx, T_SPACE));
