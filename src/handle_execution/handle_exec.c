@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:15:07 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:18:43 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 		exec_ext_cmd(msh, argv);
 }
 
-// TODO builtins leak if they run in a child process (created in pipe handler) and don't cleanup and exit
+// @todo builtins leak if they run in a child process
+// (created in pipe handler) and don't cleanup and exit
 int	handle_exec(t_msh **msh, t_exec *cmd)
 {
 	if (cmd->argv[0])

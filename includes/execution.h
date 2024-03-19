@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 09:24:22 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:21:41 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_msh
 void		cleanup(t_msh **msh);
 
 // cmd execution
-int 		run_cmd(t_msh **msh, t_cmd *cmd);
+int			run_cmd(t_msh **msh, t_cmd *cmd);
 int			handle_exec(t_msh **msh, t_exec *cmd);
 int			handle_pipe(t_msh **msh, t_pipe *cmd);
 int			handle_redir(t_msh **msh, t_redir *cmd);
