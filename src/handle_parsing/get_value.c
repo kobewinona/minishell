@@ -40,15 +40,6 @@ static size_t	extract_value(t_msh **msh, t_val *ctx)
 	i = 0;
 	while ((*ctx->s)[i])
 	{
-		// if ((*ctx->s)[i] == T_VAR_EXP && ctx->end_char != T_SINGLE_QUOTE)
-		// {
-		// 	len = exp_env_var(msh, ctx, i);
-		// 	if (len == ERROR)
-		// 		return (ERROR);
-		// 	i += len;
-		// 	if (!(*ctx->s)[i])
-		// 		break ;
-		// }
 		if (process_quotes(ctx, &(*ctx->s)[i], i))
 			continue ;
 		if ((*ctx->s)[i] && (*ctx->s)[i] == ctx->end_char)
@@ -69,23 +60,13 @@ char	*get_value(t_msh **msh, char **s)
 		return (NULL);
 	while (ft_isspace((**s)))
 		(*s)++;
-	// value = ft_strdup((*s));
-	// value = (*s);
-	// if (!value)
-	// 	return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
-	// ctx = (t_val){&value, ft_strlen(value), 0, false, T_SPACE};
 	ctx = (t_val){s, ft_strlen((*s)), 0, false, T_SPACE};
 	len = extract_value(msh, &ctx);
 	if (len == ERROR)
-		// return (free(value), NULL);
 		return (NULL);
 	if (ctx.is_in_quotes)
-	{
-		// free(value);
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
 				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
-	}
-	// (*s) += ctx.offset + !!value[ctx.len];
 	value = (*s);
 	(*s) += ctx.offset + (value[ctx.len] != '\0');
 	value[ctx.len] = '\0';

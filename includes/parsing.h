@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 09:02:19 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:25:45 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,6 @@
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
 # define BAD_SUBST_MSG "bad substitution"
-
-// offset = 1
-// end = 6
-// var_value_len = 14
-// old_size - end = 1
-// ectx->s "\"$HOME\""
-// old_size 7
-// new_size 16
-// (old_size + (var_value_len - (end - ectx->offset))) (7 + (14 - (6 - 1)))
-
-// "$HOME"0 = 8
-// "/home/dklimkin"0 = 17
 
 typedef struct s_val
 {
@@ -62,16 +50,10 @@ typedef struct s_ctx
 
 // parsing
 int		parse_cmd(t_msh **msh);
-// t_cmd	*parse_cmd(t_msh **msh, char *input);
-// t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok);
-
 char	*smart_strtok(char *str, const char *sep, t_types *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
-// ssize_t	exp_env_var(t_msh **msh, char **value, char *s, char end_char);
-// size_t	exp_env_var(t_msh **msh, char *s);
-// int		exp_env_var(t_msh **msh, t_val *ctx, int offset);
-int 	exp_env_var(t_msh **msh, bool is_input_enclosed);
+int 	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed);
 int 	get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 

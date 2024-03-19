@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 11:27:11 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:15:07 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
 }
 
-static void exec_ext_cmd(t_msh **msh, char **argv)
+static void	exec_ext_cmd(t_msh **msh, char **argv)
 {
-	extern char **environ;
 	char		*cmd_path;
 
 	get_cmd_path(msh, &cmd_path, argv);

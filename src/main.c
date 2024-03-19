@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/18 20:42:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 11:56:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ static void	run_minishell(t_msh **msh)
 			break ;
 		}
 		if (parse_cmd(msh) == ERROR)
+		{
+			free((*msh)->input);
 			continue ;
+		}
 		prepare_fds(msh, &(*msh)->cmd);
 		if ((*msh)->cmd)
 		{
