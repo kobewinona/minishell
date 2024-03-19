@@ -19,14 +19,14 @@ static bool	process_quotes(t_val *ctx, char *c, int i)
 		(ctx->is_in_quotes) = (*c) == T_DOUBLE_QUOTE || (*c) == T_SINGLE_QUOTE;
 		if (ctx->is_in_quotes)
 		{
-			(*ctx) = (t_val){ctx->s, ctx->len, ++(ctx->offset), true, (*c)};
+			(*ctx) = (t_val){ctx->s, ctx->len, ctx->offset, true, (*c)};
 			return (ft_memmove(c, c + 1, ((ctx->len--) - i)), true);
 		}
 	}
 	if (ctx->is_in_quotes && (*c) == ctx->end_char)
 	{
 		if (ctx->is_in_quotes)
-			(*ctx) = (t_val){ctx->s, ctx->len, ++(ctx->offset), false, T_SPACE};
+			(*ctx) = (t_val){ctx->s, ctx->len, ctx->offset, false, T_SPACE};
 		return (ft_memmove(c, c + 1, ((ctx->len--) - i)), true);
 	}
 	return (false);

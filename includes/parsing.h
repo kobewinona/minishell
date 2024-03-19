@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:25:45 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 01:20:41 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@
 # define EXIT_INVALID_ARG_MSG1 "numeric argument required"
 # define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
 # define BAD_SUBST_MSG "bad substitution"
+
+// "$HOME \"str $SHELL e\" $TERM" - move_len 22
+// "/home/dklimkin \"str $SHELL e\" $TERM" - move_len 10
+// "/home/dklimkin \"str /bin/zsh e\" $TERM"
+// "'"$SHELL"'" $??? = 12
 
 typedef struct s_val
 {
