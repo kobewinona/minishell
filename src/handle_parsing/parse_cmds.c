@@ -6,13 +6,15 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 20:54:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/19 02:28:52 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
+t_cmd *parse_exec(t_msh **msh, char *input, t_types *tok);
+
+static t_cmd *parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 {
 	t_cmd	*cmd;
 	t_types	prev_tok;
@@ -80,20 +82,24 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 	return (cmd);
 }
 
-t_cmd	*parse_cmd(t_msh **msh, char *input)
+int parse_cmd(t_msh **msh)
 {
-	t_cmd		*cmd;
-	t_types		tok;
-	char		*s;
+	t_cmd	*cmd;
+	t_types	tok;
+	char	*s;
 
-	cmd = NULL;
+	if (is_emptystr((*msh)->input))
+		return (ERROR);
+	if (exp_env_var(msh, false) == ERROR)
+		return (ERROR);
+	(*msh)->cmd = NULL;
 	tok = T_NO_TOK;
 	s = NULL;
-	s = smart_strtok(input, "|", &tok);
+	s = smart_strtok((*msh)->input, "|", &tok);
 	if (is_emptystr(s) && tok != T_NO_TOK)
 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(tok)}, false), NULL);
+				UNEXPECTED_TOK_MSG, tokstr(tok)}, false), ERROR);
 	if (!is_emptystr(s))
-		cmd = parse_pipe(msh, s, &tok);
-	return (cmd);
+		(*msh)->cmd = parse_pipe(msh, s, &tok);
+	return (SUCCESS);
 }

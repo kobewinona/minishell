@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 23:19:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 21:32:57 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/18 20:10:03 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	cleanup_cmds(t_cmd **cmd)
 {
 	if (!(*cmd))
 		return ;
-	if ((*cmd)->type == T_EXEC)
-		cleanup_exec_cmd(cmd);
+	// if ((*cmd)->type == T_EXEC)
+	// 	cleanup_exec_cmd(cmd);
 	if ((*cmd)->type == T_PIPE)
 	{
 		cleanup_cmds(&(*cmd)->pipe.from);
