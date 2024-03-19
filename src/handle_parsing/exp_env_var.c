@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 03:16:16 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 04:07:43 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	process_env_var(t_msh **msh, t_ctx *ectx, char end_char)
 			return (free(ectx->value), ERROR);
 		return (free(ectx->value), SUCCESS);
 	}
-	while (ectx->s[end] && ft_isalnum(ectx->s[end]))
+	while (ectx->s[end] && (ft_isalnum(ectx->s[end]) || ectx->s[end] == '_'))
 		end++;
 	ectx->name = ft_substr(ectx->s, start, end - start);
 	ectx->value = get_env_var((*msh)->env_vars, ectx->name);
