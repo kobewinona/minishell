@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare_fd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/04 15:03:43 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/18 20:21:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ void	prepare_fds(t_msh **msh, t_cmd **cmd)
 	{
 		(*cmd)->redir.fd[0] = prepare_fd(msh, &(*cmd)->redir);
 		if ((*cmd)->redir.fd[0] == ERROR)
-		{
-			cleanup_cmds(&(*cmd));
-			return ;
-		}
+			return (cleanup_cmds(&(*cmd)));
 		if ((*cmd)->redir.subcmd->type == T_REDIR)
 			prepare_fds(msh, &(*cmd)->redir.subcmd);
 	}
