@@ -23,7 +23,10 @@ void	update_var_value(t_var_node *head, char *varname, char *new_val)
 		{
 			if (curr->value)
 				free(curr->value);
-			curr->value = ft_strdup(new_val);
+			if (new_val)
+				curr->value = ft_strdup(new_val);
+			else
+				curr->value = ft_strdup("");
 			return ;
 		}
 		curr = curr->next;
