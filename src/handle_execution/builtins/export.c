@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/16 12:30:33 by sliashko         ###   ########.fr       */
+/*   Updated: 2024/03/20 05:39:54 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool	is_valid_varname(const char *varname)
 {
 	int	i;
-	
+
 	if (!(ft_isalpha(varname[0]) || varname[0] == '_'))
 		return (false);
 	i = 0;

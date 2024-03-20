@@ -3,7 +3,7 @@ MACHINE 		:= $(shell uname -m)
 NAME			= minishell
 
 CC				= gcc
-#CFLAGS			= -g -Wall -Wextra -Werror -MMD
+# CFLAGS			= -g -Wall -Wextra -Werror -MMD
 CFLAGS			= -g -MMD
 RM				= rm -rf
 

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 03:11:34 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:21:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 	{
 		(*msh)->curr_pid = fork();
 		if ((*msh)->curr_pid == ERROR)
-			return (handle_err(msh, (t_err){T_SYS_ERR, FORK}, false), ERROR);
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					FORK, NULL}, false), ERROR);
 		if ((*msh)->curr_pid == 0)
 		{
 			if (dup2(pipe_fds[end], end) == ERROR)
-				return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true), ERROR);
+				return (handle_err(msh, (t_err){T_SYS_ERR,
+						DUP2, NULL}, true), ERROR);
 			close(pipe_fds[STDIN_FILENO]);
 			close(pipe_fds[STDOUT_FILENO]);
 			exit(run_cmd(msh, cmd));
@@ -32,7 +34,8 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 	else
 	{
 		if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
-			return (handle_err(msh, (t_err){T_SYS_ERR, DUP2}, true), ERROR);
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					DUP2, NULL}, true), ERROR);
 		close(pipe_fds[STDIN_FILENO]);
 		close(pipe_fds[STDOUT_FILENO]);
 		run_cmd(msh, cmd);
@@ -49,7 +52,7 @@ int	handle_pipe(t_msh **msh, t_pipe *cmd)
 
 	exit_code = 0;
 	if (pipe(pipe_fds) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, PIPE}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR, PIPE, NULL}, false), ERROR);
 	cmd_from_pid = run_pipe_end(msh, cmd->from, pipe_fds, STDOUT_FILENO);
 	if (cmd_from_pid == ERROR)
 		return ((*msh)->exit_code);

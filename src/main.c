@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 04:01:26 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 05:37:50 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	run_cmd(t_msh **msh, t_cmd *cmd)
 {
 	int	res;
 
+	if (!cmd)
+		return (0);
 	if (cmd->type == T_EXEC)
 		res = handle_exec(msh, &(cmd->exec));
 	else if (cmd->type == T_PIPE)
@@ -53,12 +55,10 @@ static void	run_minishell(t_msh **msh)
 			free((*msh)->input);
 			continue ;
 		}
-		prepare_fds(msh, &(*msh)->cmd);
-		if ((*msh)->cmd)
-		{
-			(*msh)->exit_code = run_cmd(msh, (*msh)->cmd);
+		if (prepare_fds(msh, &(*msh)->cmd) == ERROR)
 			cleanup_cmds(&(*msh)->cmd);
-		}
+		(*msh)->exit_code = run_cmd(msh, (*msh)->cmd);
+		cleanup_cmds(&(*msh)->cmd);
 		free((*msh)->input);
 		close((*msh)->org_fd);
 	}

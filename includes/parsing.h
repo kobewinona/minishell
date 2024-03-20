@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 05:09:23 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:09:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_ctx
 	int		index;
 	char	*name;
 	char	*value;
+	bool	iseof;
 }	t_ctx;
 
 // parsing
@@ -57,7 +58,7 @@ int		get_arb_fd(char **s);
 char	*collect_heredoc_input(t_msh **msh, const char *eof);
 
 // fd handlers
-void	prepare_fds(t_msh **msh, t_cmd **cmd);
+int		prepare_fds(t_msh **msh, t_cmd **cmd);
 
 // constructors
 t_cmd	*constr_exec_cmd(t_msh **msh, char *input);

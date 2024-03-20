@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/02/27 11:28:22 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:22:58 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	define_org_fd(t_msh **msh, t_redir *cmd, int *org_fd)
 	else
 		(*org_fd) = dup(STDIN_FILENO);
 	if ((*org_fd) < 0)
-		return (handle_err(msh, (t_err){T_SYS_ERR, DUP}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR, DUP, NULL}, false), ERROR);
 	return (SUCCESS);
 }
 
@@ -35,6 +35,7 @@ static int	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 {
 	int	res;
 
+	res = UNSPECIFIED;
 	if ((*org_fd) != UNSPECIFIED)
 	{
 		if (cmd->fd[1] > 1)
@@ -47,7 +48,7 @@ static int	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 			res = dup2((*org_fd), STDIN_FILENO);
 	}
 	if (res == ERROR)
-		handle_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
+		handle_err(msh, (t_err){T_SYS_ERR, DUP2, NULL}, false);
 	close((*org_fd));
 	return (res);
 }
@@ -68,7 +69,7 @@ int	handle_redir(t_msh **msh, t_redir *cmd)
 	if (res != ERROR)
 		run_cmd(msh, cmd->subcmd);
 	else
-		handle_err(msh, (t_err){T_SYS_ERR, DUP2}, false);
+		handle_err(msh, (t_err){T_SYS_ERR, DUP2, NULL}, false);
 	close(cmd->fd[0]);
 	return (restore_org_fd(msh, cmd, &org_fd));
 }

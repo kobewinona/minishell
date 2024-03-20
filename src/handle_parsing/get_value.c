@@ -32,9 +32,8 @@ static bool	process_quotes(t_val *ctx, char *c, int i)
 	return (false);
 }
 
-static size_t	extract_value(t_msh **msh, t_val *ctx)
+static size_t	extract_value(t_val *ctx)
 {
-	int	len;
 	int	i;
 
 	i = 0;
@@ -61,7 +60,7 @@ char	*get_value(t_msh **msh, char **s)
 	while (ft_isspace((**s)))
 		(*s)++;
 	ctx = (t_val){s, ft_strlen((*s)), 0, false, T_SPACE};
-	len = extract_value(msh, &ctx);
+	len = extract_value(&ctx);
 	if (len == ERROR)
 		return (NULL);
 	if (ctx.is_in_quotes)

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 12:26:56 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:24:07 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:26:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	get_arb_fd(char **s)
 	int	fd;
 	int	i;
 
+	fd = UNSPECIFIED;
 	i = (int)ft_strlen(*s) - 1;
 	if ((*s) && !is_emptystr(*s))
 	{
@@ -25,8 +26,6 @@ int	get_arb_fd(char **s)
 		fd = ft_atoi(&(*s)[i]);
 		if (fd > 0)
 			(*s)[i] = '\0';
-		else
-			fd = UNSPECIFIED;
 	}
 	return (fd);
 }
@@ -46,7 +45,8 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 		if (!argv[index])
 			return (ERROR);
 		if (!argv[index])
-			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), ERROR);
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					MALLOC, NULL}, false), ERROR);
 		index++;
 	}
 	return (SUCCESS);

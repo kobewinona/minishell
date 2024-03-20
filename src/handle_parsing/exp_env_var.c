@@ -6,22 +6,11 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 04:07:43 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:25:01 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*get_env_var_input(t_ctx *ectx, char end_char)
-{
-	int	i;
-
-	i = 0;
-	while (ectx->s[i] && ectx->s[i] != end_char)
-		i++;
-	ectx->s[i] = '\0';
-	return (ectx->s);
-}
 
 static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 {
@@ -38,7 +27,8 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 	{
 		new_input = ft_realloc((*ectx->input), (old_size + 1), (new_size + 1));
 		if (!new_input)
-			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), ERROR);
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					MALLOC, NULL}, false), ERROR);
 		new_input[new_size] = '\0';
 		ectx->input_len = new_size;
 		(*ectx->input) = new_input;
@@ -52,11 +42,13 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 	return (SUCCESS);
 }
 
-static int	process_env_var(t_msh **msh, t_ctx *ectx, char end_char)
+static int	process_env_var(t_msh **msh, t_ctx *ectx)
 {
 	int	start;
 	int	end;
 
+	if (ectx->iseof)
+		return (ectx->iseof = false, ++(ectx->index), ++(ectx->s), SUCCESS);
 	start = ectx->offset + (ectx->s[ectx->offset] == T_VAR_EXP);
 	end = start;
 	if (!ft_isalnum(ectx->s[end]) && ectx->s[end] != '?')
@@ -89,11 +81,9 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 		{
 			ectx->offset = i;
 			ectx->index += i;
-			if (process_env_var(msh, ectx, end_char) == ERROR)
+			if (process_env_var(msh, ectx) == ERROR)
 				return (ERROR);
-			i = 0;
-			if (!ectx->s[i])
-				break ;
+			i = -1;
 		}
 		i++;
 	}
@@ -107,20 +97,20 @@ int	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed)
 {
 	t_ctx	ectx;
 
-	ectx = (t_ctx){input, ft_strlen((*input)), (*input), 0, 0, NULL, NULL};
+	ectx = (t_ctx){input, ft_strlen((*input)), (*input), 0, 0, NULL, NULL, 0};
 	if (is_input_enclosed)
 		return (process_enclosed_input(msh, &ectx, T_SPACE));
 	while ((*ectx.s))
 	{
+		ectx.iseof = ((*ectx.s) == '<' && (*(ectx.s + 1)) == '<') - ectx.iseof;
 		if ((*ectx.s) == T_SINGLE_QUOTE || (*ectx.s) == T_DOUBLE_QUOTE)
 		{
 			if (process_enclosed_input(msh, &ectx, (*ectx.s)) == ERROR)
 				return (ERROR);
-			continue ;
 		}
 		if ((*ectx.s) == T_VAR_EXP)
 		{
-			if (process_env_var(msh, &ectx, T_SPACE) == ERROR)
+			if (process_env_var(msh, &ectx) == ERROR)
 				return (ERROR);
 			continue ;
 		}

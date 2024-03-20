@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 04:01:36 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:25:58 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 
 int	parse_cmd(t_msh **msh)
 {
-	t_cmd	*cmd;
 	t_types	tok;
 	char	*s;
 

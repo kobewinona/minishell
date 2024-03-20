@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:44:53 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/14 23:18:25 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:19:27 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	set_var_deleted(t_var_node *head, char *varname)
 // updates value of env VAR or creates a new one
 void	update_var(t_var_node *head, char *varname, char *value)
 {
-	t_var_node	*curr;
 	char		*key_val_str;
 	char		*substr;
 
@@ -74,7 +73,6 @@ void	update_var(t_var_node *head, char *varname, char *value)
 	}
 	else
 		key_val_str = substr;
-	curr = head;
 	set_var_deleted(head, varname);
 	append_var_node(&head, key_val_str);
 	free(key_val_str);

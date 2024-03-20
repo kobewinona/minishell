@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 03:18:43 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:21:01 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static char	*create_cmd_path_str(t_msh **msh, char *env_path, char *cmd_name)
 		temp = ft_strjoin(cmd_dir, "/");
 		cmd_path = ft_strjoin(temp, cmd_name);
 		if (!cmd_path)
-			return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
+			return (handle_err(msh, (t_err){T_SYS_ERR,
+					MALLOC, NULL}, false), NULL);
 		free(temp);
 		if (access(cmd_path, X_OK) == SUCCESS)
 			return (cmd_path);
@@ -41,10 +42,9 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 {
 	struct stat	path_stat;
 	char		*env_path;
-	char		*cmd_dir;
 
 	if (is_emptystr(argv[0]))
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
 	if (stat(argv[0], &path_stat) == SUCCESS)
 	{
 		if (S_ISDIR(path_stat.st_mode))
@@ -58,10 +58,10 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 	}
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
 	(*cmd_path) = create_cmd_path_str(msh, env_path, argv[0]);
 	if ((*cmd_path) == NULL)
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0]}, true);
+		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
 }
 
 static void	exec_ext_cmd(t_msh **msh, char **argv)
@@ -78,7 +78,7 @@ static void	exec_ext_cmd(t_msh **msh, char **argv)
 	}
 	free(cmd_path);
 	cmd_path = NULL;
-	handle_err(msh, (t_err){T_CMD_NOT_EXECUTABLE, argv[0]}, true);
+	handle_err(msh, (t_err){T_CMD_NOT_EXECUTABLE, argv[0], NULL}, true);
 }
 
 void	handle_exec_ext_cmd(t_msh **msh, char **argv)
@@ -90,7 +90,8 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	{
 		(*msh)->curr_pid = fork();
 		if ((*msh)->curr_pid == ERROR)
-			return ((void) handle_err(msh, (t_err){T_SYS_ERR, FORK}, false));
+			return ((void) handle_err(msh, (t_err){T_SYS_ERR,
+					FORK, NULL}, false));
 		if ((*msh)->curr_pid == 0)
 			exec_ext_cmd(msh, argv);
 		waitpid((*msh)->curr_pid, &exit_code, 0);

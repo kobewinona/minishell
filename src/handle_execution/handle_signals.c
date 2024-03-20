@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/19 11:24:22 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:23:42 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	init_signals_handle(t_msh **msh)
 	sa.sa_sigaction = &handle_signals;
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGINT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
 	sa.sa_handler = SIG_DFL;
 	if (sigaction(SIGTERM, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
 	sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
 	return (SUCCESS);
 }

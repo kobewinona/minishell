@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/14 01:48:55 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:18:43 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ void	cd(char *path, t_msh **msh)
 	{
 		res_path = ft_strdup(path);
 		if (!res_path)
-			return ((void)handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false));
+			return ((void)handle_err(msh, (t_err){T_SYS_ERR, MALLOC, NULL}, false));
 	}
 	if (!path || is_emptystr(path) || !ft_strncmp(path, "~", 1))
 		handle_home_path(&res_path, path, (*msh)->env_vars);
 	update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	if (chdir(res_path))
-		return ((void)handle_err(msh, (t_err){T_SYS_ERR, CD}, false));
+		return ((void)handle_err(msh, (t_err){T_SYS_ERR, CD, NULL}, false));
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
 	update_var((*msh)->env_vars, "PWD", curr_path);

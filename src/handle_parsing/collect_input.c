@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:56:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:26:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:23:51 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*collect_heredoc_input(t_msh **msh, const char *eof)
 				UNEXPECTED_TOK_MSG, NEWLINE}, false), NULL);
 	heredoc_input = ft_strdup("");
 	if (!heredoc_input)
-		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC, NULL}, false), NULL);
 	collect_input(&heredoc_input, eof, INPUT_PROMPT);
 	if (exp_env_var(msh, &heredoc_input, true) == ERROR)
 		return (NULL);

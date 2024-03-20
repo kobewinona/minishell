@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/19 12:35:19 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:26:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,32 @@ static int	prepare_fd(t_msh **msh, t_redir *cmd)
 	}
 	prepared_fd = open(cmd->f, cmd->mode, RW_R_R_PERM);
 	if (prepared_fd < 0)
-		return (handle_err(msh, (t_err){T_SYS_ERR, cmd->f}, false), ERROR);
+		return (handle_err(msh, (t_err){T_SYS_ERR,
+				cmd->f, NULL}, false), ERROR);
 	return (prepared_fd);
 }
 
-void	prepare_fds(t_msh **msh, t_cmd **cmd)
+int	prepare_fds(t_msh **msh, t_cmd **cmd)
 {
 	if (!(*cmd))
-		return ;
+		return (ERROR);
 	if ((*cmd)->type == T_PIPE)
 	{
-		prepare_fds(msh, &(*cmd)->pipe.from);
-		prepare_fds(msh, &(*cmd)->pipe.to);
+		if (prepare_fds(msh, &(*cmd)->pipe.from) == ERROR)
+			return (ERROR);
+		if (prepare_fds(msh, &(*cmd)->pipe.to) == ERROR)
+			return (ERROR);
 	}
 	if ((*cmd)->type == T_REDIR)
 	{
 		(*cmd)->redir.fd[0] = prepare_fd(msh, &(*cmd)->redir);
 		if ((*cmd)->redir.fd[0] == ERROR)
-			return (cleanup_cmds(&(*cmd)));
+			return (ERROR);
 		if ((*cmd)->redir.subcmd->type == T_REDIR)
-			prepare_fds(msh, &(*cmd)->redir.subcmd);
+		{
+			if (prepare_fds(msh, &(*cmd)->redir.subcmd))
+				return (ERROR);
+		}
 	}
+	return (SUCCESS);
 }

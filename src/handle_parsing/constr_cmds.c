@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:09:19 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 05:08:27 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:24:01 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
-		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
+		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC, NULL}, false), NULL);
 	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->type = cmd_type;
 	return (cmd);
