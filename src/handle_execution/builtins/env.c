@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:53:33 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 01:41:29 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:21:17 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ void	env_cmd(char **argv, t_msh **msh)
 			printf("%s=%s\n", curr->name, curr->value);
 		curr = curr->next;
 	}
-	handle_exit(msh, EXIT_SUCCESS);
+	handle_exit(msh, EXIT_SUCCESS, true);
 }

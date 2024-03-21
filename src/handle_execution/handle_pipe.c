@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 08:05:12 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:20:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 		if ((*msh)->curr_pid == 0)
 		{
 			if (setup_signal(SIGINT, SIG_DFL) == ERROR)
-				handle_exit(msh, EXIT_FAILURE);
+				handle_exit(msh, EXIT_FAILURE, true);
 			if (dup2(pipe_fds[end], end) == ERROR)
 				return (handle_err(msh, SYSTEM, DUP2, 1), ERROR);
 			close(pipe_fds[STDIN_FILENO]);
 			close(pipe_fds[STDOUT_FILENO]);
 			run_cmd(msh, cmd);
-			handle_exit(msh, (*msh)->exit_code);
+			handle_exit(msh, (*msh)->exit_code, true);
 		}
 		return ((*msh)->curr_pid);
 	}

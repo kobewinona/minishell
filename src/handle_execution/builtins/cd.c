@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 03:57:13 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:35:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,22 @@ static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
 		(*res_path) = ft_strjoin(home_path, (path + 1));
 }
 
-static bool	is_dir_valid(char *path)
+static bool	is_dir_valid(char *path, t_msh **msh)
 {
-	if (!path)
-		return (true);
-	if (!ft_strncmp(path, "~", 1) || is_emptystr(path))
-		return (true);
-	if (!access(path, F_OK | R_OK))
-		return (true);
-	return (false);
-}
+	bool	is_dir_valid;
 
-// @todo wtf is this double validation??
-static bool	validate_dir(char *path, t_msh **msh)
-{
-	if (!is_dir_valid(path) && access(path, F_OK))
+	is_dir_valid = false;
+	if (!path)
+		is_dir_valid = true;
+	else if (!ft_strncmp(path, "~", 1) || is_emptystr(path))
+		is_dir_valid = true;
+	else if (!access(path, F_OK | R_OK))
+		is_dir_valid = true;
+	if (!is_dir_valid && access(path, F_OK))
 		return (handle_err(msh, CD_NO_FILE_OR_DIR, path, 1), false);
-	else if (!is_dir_valid(path) && access(path, R_OK))
+	else if (!is_dir_valid && access(path, R_OK))
 		return (handle_err(msh, CD_PERM_DENIED, path, 1), false);
-	return (true);
+	return (is_dir_valid);
 }
 
 void	cd(char *path, t_msh **msh)
@@ -63,7 +60,7 @@ void	cd(char *path, t_msh **msh)
 
 	res_path = NULL;
 	curr_path = getcwd(NULL, 0);
-	if (!validate_dir(path, msh))
+	if (!is_dir_valid(path, msh))
 		return ;
 	if (path)
 	{
@@ -82,5 +79,5 @@ void	cd(char *path, t_msh **msh)
 	if (res_path)
 		free(res_path);
 	free(curr_path);
-	handle_exit(msh, EXIT_SUCCESS);
+	handle_exit(msh, EXIT_SUCCESS, true);
 }

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 10:16:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:12:03 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define BAD_SUBST_MSG "bad substitution"
 # define INVALID_EXPORT_ARG_MSG "not a valid identifier"
 # define INVALID_EXIT_ARG_MSG "numberic argument required"
-# define TOO_MANY_ARG_MSG "too many arguments"
+# define TOO_MANY_ARGS_MSG "too many arguments"
 
 // command names
 # define ECHO "echo"
@@ -94,6 +94,7 @@ typedef enum e_err
 	UNEXPECTED_EOF,
 	EXPORT_INVALID_ARG,
 	EXIT_INVALID_ARG,
+	TOO_MANY_ARGS,
 }	t_err;
 
 #endif

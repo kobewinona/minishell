@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 10:46:10 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:19:51 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,23 @@ void	cleanup(t_msh **msh)
 	rl_clear_history();
 }
 
-void	handle_exit(t_msh **msh, int exit_code)
+void	handle_exit(t_msh **msh, int exit_code, bool is_safe)
 {
-	if ((*msh)->curr_pid == 0)
+	if (is_safe)
+	{
+		if ((*msh)->curr_pid == 0)
+		{
+			cleanup(msh);
+			exit(exit_code);
+		}
+		(*msh)->exit_code = exit_code;
+	}
+	else
 	{
 		cleanup(msh);
 		exit(exit_code);
 	}
-	(*msh)->exit_code = exit_code;
+
 }
 
 void	run_cmd(t_msh **msh, t_cmd *cmd)

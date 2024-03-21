@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 07:59:41 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:20:37 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 		if ((*msh)->curr_pid == 0)
 		{
 			if (setup_signal(SIGINT, SIG_DFL) == ERROR)
-				handle_exit(msh, EXIT_FAILURE);
+				handle_exit(msh, EXIT_FAILURE, true);
 			exec_ext_cmd(msh, argv);
 		}
 		waitpid((*msh)->curr_pid, &exit_code, 0);

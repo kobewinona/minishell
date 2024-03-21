@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 03:59:34 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:21:21 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,5 @@ void	export(char **argv, t_msh **msh)
 		update_var((*msh)->env_vars, var_name, ft_strtok(NULL, "="));
 		i++;
 	}
-	handle_exit(msh, EXIT_SUCCESS);
+	handle_exit(msh, EXIT_SUCCESS, true);
 }

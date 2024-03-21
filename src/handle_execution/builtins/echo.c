@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:01:15 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:21:12 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ static void	handle_print(t_msh **msh, char **argv, int i, bool is_with_newline)
 	if (is_with_newline)
 	{
 		if (write(STDOUT_FILENO, argv[i], ft_strlen(argv[i])) == ERROR)
-			handle_exit(msh, EXIT_FAILURE);
+			handle_exit(msh, EXIT_FAILURE, true);
 		if (argv[i + 1])
 		{
 			if (write(STDOUT_FILENO, " ", 1) == ERROR)
-				handle_exit(msh, EXIT_FAILURE);
+				handle_exit(msh, EXIT_FAILURE, true);
 		}
 	}
 	else
 	{
 		if (update_prompt(msh, argv, i) == ERROR)
-			handle_exit(msh, EXIT_FAILURE);
+			handle_exit(msh, EXIT_FAILURE, true);
 	}
 }
 
@@ -70,7 +70,7 @@ void	echo(char **argv, t_msh **msh)
 	if (is_with_newline)
 	{
 		if (write(STDOUT_FILENO, "\n", 1) == ERROR)
-			handle_exit(msh, EXIT_FAILURE);
+			handle_exit(msh, EXIT_FAILURE, true);
 	}
-	handle_exit(msh, EXIT_SUCCESS);
+	handle_exit(msh, EXIT_SUCCESS, true);
 }
