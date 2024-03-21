@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 08:32:29 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 11:04:33 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	handle_interrupt(int signum)
 	if (g_state == IS_IDLE)
 	{
 		rl_on_new_line();
-		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
