@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:03:06 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 03:59:26 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 09:04:03 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	exit_cmd(char **argv, t_msh **msh)
 		handle_err(msh, EXIT_INVALID_ARG, argv[1], 2);
 	}
 	cleanup(msh);
-	rl_clear_history();
 	printf("exit\n");
 	exit(exit_code);
 }

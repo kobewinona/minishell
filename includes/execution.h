@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 08:07:37 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:54:51 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define EXECUTION_H
 # include "minishell.h"
 
-extern int	g_state;
+extern int				g_state;
 
 // structs
 typedef struct s_var_node
@@ -26,7 +26,6 @@ typedef struct s_var_node
 	bool				deleted;
 	bool				value_assigned;
 	struct s_var_node	*next;
-
 }	t_var_node;
 
 typedef struct s_cmd	t_cmd;
@@ -71,6 +70,7 @@ typedef struct s_msh
 	t_cmd		*cmd;
 	int			curr_pid;
 	int			org_fd;
+	char		*prompt;
 }	t_msh;
 
 // cleanup
@@ -112,5 +112,9 @@ int			setup_signal(int signum, void (*handler)(int));
 
 // errors
 void		handle_err(t_msh **msh, t_err err, char *ctx, int exit_code);
+
+// prompt
+void		put_prompt(t_msh **msh);
+int			update_prompt(t_msh **msh, char **argv, int i);
 
 #endif

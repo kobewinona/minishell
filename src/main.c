@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 08:00:42 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 10:46:10 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	run_minishell(t_msh **msh)
 		(*msh)->org_fd = dup(STDIN_FILENO);
 		if ((*msh)->input)
 			free((*msh)->input);
-		(*msh)->input = readline(PRG_PROMPT);
+		put_prompt(msh);
 		if (!(*msh)->input)
 		{
 			printf("exit\n");
