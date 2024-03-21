@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 11:04:33 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:01:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 static void	handle_interrupt(int signum)
 {
 	(void)signum;
-	write(STDOUT_FILENO, "\n", 1);
+	if (write(STDOUT_FILENO, "\n", 1) == ERROR)
+		return ;
 	if (g_state == IS_IDLE)
 	{
 		rl_on_new_line();
 		rl_redisplay();
+		return ;
 	}
+	if (g_state == IS_HEREDOC)
+		close(STDIN_FILENO);
 }
 
 int	setup_signal(int signum, void (*handler)(int))

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:47:40 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 00:59:19 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		populate_argv(t_msh **msh, char **argv, char *input);
 char	*get_value(t_msh **msh, char **s);
 int		exp_env_var(t_msh **msh, char **input, bool is_input_enclosed);
 int		get_arb_fd(char **s);
-char	*collect_heredoc_input(t_msh **msh, const char *eof);
+char	*collect_heredoc_input(t_msh **msh, char *eof);
 
 // fd handlers
 int		prepare_fds(t_msh **msh, t_cmd **cmd);

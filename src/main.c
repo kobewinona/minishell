@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:19:51 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 00:31:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ static void	run_minishell(t_msh **msh)
 		put_prompt(msh);
 		if (!(*msh)->input)
 		{
-			printf("exit\n");
-			break ;
+			printf("\nexit\n");
+			return (cleanup(msh));
 		}
 		add_history((*msh)->input);
 		if (parse_cmd(msh) == ERROR || !(*msh)->cmd)

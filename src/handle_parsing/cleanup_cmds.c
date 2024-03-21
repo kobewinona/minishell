@@ -6,19 +6,11 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 23:19:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 02:09:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 23:35:07 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	cleanup_redir_cmd(t_cmd **cmd)
-{
-	if ((*cmd)->redir.fd[0] > 2)
-		close((*cmd)->redir.fd[0]);
-	if ((*cmd)->redir.fd[1] > 2)
-		close((*cmd)->redir.fd[1]);
-}
 
 void	cleanup_cmds(t_cmd **cmd)
 {
@@ -31,7 +23,10 @@ void	cleanup_cmds(t_cmd **cmd)
 	}
 	if ((*cmd)->type == T_REDIR)
 	{
-		cleanup_redir_cmd(cmd);
+		if ((*cmd)->redir.fd[0] > 2)
+			close((*cmd)->redir.fd[0]);
+		if ((*cmd)->redir.fd[1] > 2)
+			close((*cmd)->redir.fd[1]);
 		cleanup_cmds(&(*cmd)->redir.subcmd);
 	}
 	free((*cmd));

@@ -6,13 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:45:29 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 10:54:18 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:02:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	join_value(t_msh **msh, char *value)
+static int	join_values(t_msh **msh, char *value)
 {
 	char	*temp;
 
@@ -30,7 +30,7 @@ int	update_prompt(t_msh **msh, char **argv, int i)
 
 	if ((*msh)->prompt)
 	{
-		if (join_value(msh, argv[i]) == ERROR)
+		if (join_values(msh, argv[i]) == ERROR)
 			return (ERROR);
 	}
 	else
@@ -41,12 +41,12 @@ int	update_prompt(t_msh **msh, char **argv, int i)
 	}
 	if (argv[i + 1])
 	{
-		if (join_value(msh, " ") == ERROR)
+		if (join_values(msh, " ") == ERROR)
 			return (ERROR);
 	}
 	else
 	{
-		if (join_value(msh, PRG_PROMPT) == ERROR)
+		if (join_values(msh, PRG_PROMPT) == ERROR)
 			return (ERROR);
 	}
 	return (SUCCESS);
