@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 04:19:14 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 04:24:00 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ typedef struct s_msh
 	char	*input;
 	int		exit_code;
 	t_env	*env_vars;
-	char	*script_name;
 	t_cmd	*cmd;
 	int		curr_pid;
 	int		org_fd;

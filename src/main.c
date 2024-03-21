@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 03:22:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 04:23:54 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ int	g_state;
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_msh		*msh;
+	t_msh	*msh;
+	int		exit_code;
 
 	(void)argc;
 	(void)argv;
@@ -86,8 +87,8 @@ int	main(int argc, char **argv, char **envp)
 		return (free(msh), EXIT_FAILURE);
 	msh->curr_pid = UNSPECIFIED;
 	msh->env_vars = copy_env_vars(envp);
-	msh->script_name = get_env_var(msh->env_vars, "PWD");
 	increment_shlvl(msh->env_vars);
 	run_minishell(&msh);
-	return (msh->exit_code);
+	exit_code = msh->exit_code;
+	return (cleanup(&msh), exit_code);
 }
