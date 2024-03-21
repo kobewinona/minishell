@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dklimkin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 21:45:46 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/01/16 21:45:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 01:41:24 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	pwd(t_msh **msh)
 	if (curr_dir)
 		ft_putstr_fd(curr_dir, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	(*msh)->exit_code = 0;
+	handle_exit(msh, EXIT_SUCCESS);
 }

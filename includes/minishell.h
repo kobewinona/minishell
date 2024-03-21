@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/15 09:39:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:07:42 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@
 # include <limits.h>
 # include "execution.h"
 # include "parsing.h"
-# include "error.h"
 
 // utils
 bool	is_emptystr(const char *s);
 char	*tokstr(t_types tok);
 void	free_array(char **arr);
-void	collect_exit_code(t_msh **msh, int ext_code_encoded);
-// int		join_values(t_msh **msh, char **value, const char *s, size_t len);
+void	update_exit_code(t_msh **msh, int encoded_exit_code);
 
 #endif

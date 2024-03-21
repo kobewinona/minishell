@@ -6,17 +6,17 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/20 22:23:42 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:02:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_signals(int signum, siginfo_t *info, void *context)
+static void	handle_interrupt(int signum)
 {
-	(void)context;
+	(void)signum;
 	write(STDOUT_FILENO, "\n", 1);
-	if (signum == SIGINT && info->si_pid)
+	if (g_state == IS_IDLE)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -24,20 +24,23 @@ static void	handle_signals(int signum, siginfo_t *info, void *context)
 	}
 }
 
-int	init_signals_handle(t_msh **msh)
+int	setup_signal(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;
 
+	ft_memset(&sa, 0, sizeof(sa));
 	sigemptyset(&sa.sa_mask);
-	sa.sa_sigaction = &handle_signals;
-	sa.sa_flags = SA_SIGINFO;
-	if (sigaction(SIGINT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
-	sa.sa_handler = SIG_DFL;
-	if (sigaction(SIGTERM, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
-	sa.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &sa, NULL) == ERROR)
-		return (handle_err(msh, (t_err){T_SYS_ERR, SIG, NULL}, false), ERROR);
+	sa.sa_handler = handler;
+	return (sigaction(signum, &sa, NULL));
+}
+
+int	init_signals(t_msh **msh)
+{
+	if (setup_signal(SIGINT, handle_interrupt) == ERROR)
+		return (handle_err(msh, SYSTEM, "SIGINT setup failed", 1), ERROR);
+	if (setup_signal(SIGTERM, SIG_DFL) == ERROR)
+		return (handle_err(msh, SYSTEM, "SIGTERM setup failed", 1), ERROR);
+	if (setup_signal(SIGQUIT, SIG_IGN) == ERROR)
+		return (handle_err(msh, SYSTEM, "SIGQUIT setup failed", 1), ERROR);
 	return (SUCCESS);
 }

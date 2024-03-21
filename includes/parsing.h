@@ -6,26 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:55:37 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:09:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:47:40 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 # include "minishell.h"
-
-// error messages
-# define CMD_NOT_FOUND_MSG "command not found"
-# define PREMISSION_MSG "permission denied"
-# define IS_DIR_MSG "is a directory"
-# define SYNTAX_ERR_MSG "syntax error"
-# define UNEXPECTED_EOF_MSH "unexpected enf of file"
-# define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
-# define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
-# define NO_FILE_OR_DIR_MSG "No such file or directory"
-# define EXIT_INVALID_ARG_MSG1 "numeric argument required"
-# define EXPORT_INVALID_ARG_MSG1 "not a valid identifier"
-# define BAD_SUBST_MSG "bad substitution"
 
 typedef struct s_val
 {

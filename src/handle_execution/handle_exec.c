@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:21:01 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:59:41 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static char	*create_cmd_path_str(t_msh **msh, char *env_path, char *cmd_name)
 		temp = ft_strjoin(cmd_dir, "/");
 		cmd_path = ft_strjoin(temp, cmd_name);
 		if (!cmd_path)
-			return (handle_err(msh, (t_err){T_SYS_ERR,
-					MALLOC, NULL}, false), NULL);
+			return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
 		free(temp);
 		if (access(cmd_path, X_OK) == SUCCESS)
 			return (cmd_path);
@@ -44,12 +43,11 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 	char		*env_path;
 
 	if (is_emptystr(argv[0]))
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
+		handle_err(msh, CMD_NOT_FOUND, argv[0], 127);
 	if (stat(argv[0], &path_stat) == SUCCESS)
 	{
 		if (S_ISDIR(path_stat.st_mode))
-			return (handle_err(msh, (t_err){T_CMD_NOT_EXECUTABLE,
-					argv[0], IS_DIR_MSG}, true));
+			return (handle_err(msh, CMD_IS_DIR, argv[0], 126));
 	}
 	if (access(argv[0], F_OK | X_OK) == SUCCESS)
 	{
@@ -58,10 +56,10 @@ static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 	}
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
+		handle_err(msh, CMD_NOT_FOUND, argv[0], 127);
 	(*cmd_path) = create_cmd_path_str(msh, env_path, argv[0]);
 	if ((*cmd_path) == NULL)
-		handle_err(msh, (t_err){T_CMD_NOT_FOUND, argv[0], NULL}, true);
+		handle_err(msh, CMD_NOT_FOUND, argv[0], 127);
 }
 
 static void	exec_ext_cmd(t_msh **msh, char **argv)
@@ -74,36 +72,39 @@ static void	exec_ext_cmd(t_msh **msh, char **argv)
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
 		free(cmd_path);
 		cmd_path = NULL;
-		handle_err(msh, (t_err){T_SYS_ERR, argv[0], argv[1]}, true);
+		handle_err(msh, SYSTEM, argv[0], 2);
 	}
 	free(cmd_path);
 	cmd_path = NULL;
-	handle_err(msh, (t_err){T_CMD_NOT_EXECUTABLE, argv[0], NULL}, true);
+	handle_err(msh, SYSTEM, argv[0], 1);
 }
 
 void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 {
 	int		exit_code;
 
+	g_state = IS_EXEC;
 	exit_code = 0;
 	if ((*msh)->curr_pid != 0)
 	{
 		(*msh)->curr_pid = fork();
 		if ((*msh)->curr_pid == ERROR)
-			return ((void) handle_err(msh, (t_err){T_SYS_ERR,
-					FORK, NULL}, false));
+			return (handle_err(msh, SYSTEM, FORK, 1));
 		if ((*msh)->curr_pid == 0)
+		{
+			if (setup_signal(SIGINT, SIG_DFL) == ERROR)
+				handle_exit(msh, EXIT_FAILURE);
 			exec_ext_cmd(msh, argv);
+		}
 		waitpid((*msh)->curr_pid, &exit_code, 0);
-		collect_exit_code(msh, exit_code);
+		update_exit_code(msh, exit_code);
 	}
 	else
 		exec_ext_cmd(msh, argv);
+	g_state = IS_IDLE;
 }
 
-// @todo builtins leak if they run in a child process
-// (created in pipe handler) and don't cleanup and exit
-int	handle_exec(t_msh **msh, t_exec *cmd)
+void	handle_exec(t_msh **msh, t_exec *cmd)
 {
 	if (cmd->argv[0])
 	{
@@ -124,5 +125,4 @@ int	handle_exec(t_msh **msh, t_exec *cmd)
 		else
 			handle_exec_ext_cmd(msh, cmd->argv);
 	}
-	return ((*msh)->exit_code);
 }

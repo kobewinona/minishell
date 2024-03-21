@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:50:25 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/16 12:50:27 by sliashko         ###   ########.fr       */
+/*   Updated: 2024/03/21 01:41:35 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	unset(char **argv, t_msh **msh)
 		set_var_deleted((*msh)->env_vars, argv[i]);
 		i++;
 	}
-	(*msh)->exit_code = 0;
+	handle_exit(msh, EXIT_SUCCESS);
 }

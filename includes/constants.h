@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 02:30:20 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:08:44 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,26 @@
 # define INPUT_PROMPT "> "
 # define PRG_PROMPT "minishell> "
 
+# define IS_IDLE 1
+# define IS_EXEC 2
+# define IS_HEREDOC 3
+
 // magic numbers
 # define UNSPECIFIED -2
 # define ERROR -1
 # define SUCCESS 0
 # define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
+
+// custom error messages
+# define CMD_NOT_FOUND_MSG "command not found"
+# define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
+# define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
+# define NO_FILE_OR_DIR_MSG "No such file or directory"
+# define EXIT_INVALID_EXPORT_ARG_MSG1 "numeric argument required"
+# define BAD_SUBST_MSG "bad substitution"
+# define INVALID_EXPORT_ARG_MSG "not a valid identifier"
+# define INVALID_EXIT_ARG_MSG "numberic argument required"
+# define TOO_MANY_ARG_MSG "too many arguments"
 
 // command names
 # define ECHO "echo"
@@ -39,8 +54,6 @@
 # define PIPE "pipe"
 # define MALLOC "malloc"
 # define NEWLINE "newline"
-# define SIG "sigaction"
-# define EXPORT "export"
 
 // types
 typedef enum e_types
@@ -61,16 +74,26 @@ typedef enum e_types
 	T_APPEND_STDOUT,
 	T_DOUBLE_QUOTE = 34,
 	T_SINGLE_QUOTE = 39,
-	T_SYS_ERR,
-	T_BAD_REQUEST_ERR = 1,
-	T_BAD_REQUEST_ERR_PERM = 13,
-	T_OTHER_ERR = 2,
-	T_CMD_NOT_FOUND = 127,
-	T_CMD_NOT_EXECUTABLE = 126,
 	T_VAR_EXP = 36,
 	T_SPACE = 32,
 	T_UNDERSCORE = 95,
 	T_QUESTION_MARK = 63,
 }	t_types;
+
+typedef enum e_err
+{
+	SYSTEM,
+	BAD_REQUEST,
+	NO_FILE_OR_DIR = 2,
+	CD_NO_FILE_OR_DIR,
+	PERM_DENIED = 13,
+	CD_PERM_DENIED,
+	CMD_IS_DIR = 21,
+	CMD_NOT_FOUND,
+	UNEXPECTED_TOK,
+	UNEXPECTED_EOF,
+	EXPORT_INVALID_ARG,
+	EXIT_INVALID_ARG,
+}	t_err;
 
 #endif

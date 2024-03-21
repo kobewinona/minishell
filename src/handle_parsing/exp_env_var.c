@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:25:01 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 01:26:22 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 	{
 		new_input = ft_realloc((*ectx->input), (old_size + 1), (new_size + 1));
 		if (!new_input)
-			return (handle_err(msh, (t_err){T_SYS_ERR,
-					MALLOC, NULL}, false), ERROR);
+			return (handle_err(msh, SYSTEM, MALLOC, 1), ERROR);
 		new_input[new_size] = '\0';
 		ectx->input_len = new_size;
 		(*ectx->input) = new_input;
@@ -52,8 +51,7 @@ static int	process_env_var(t_msh **msh, t_ctx *ectx)
 	start = ectx->offset + (ectx->s[ectx->offset] == T_VAR_EXP);
 	end = start;
 	if (!ft_isalnum(ectx->s[end]) && ectx->s[end] != '?')
-		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_EOF_TOK_MSG, &ectx->s[end]}, false), ERROR);
+		return (handle_err(msh, UNEXPECTED_TOK, &ectx->s[end], 2), ERROR);
 	if (ectx->s[end] == '?')
 	{
 		ectx->value = ft_itoa((*msh)->exit_code);
@@ -89,8 +87,7 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	}
 	ectx->index += i + (ectx->s[i] != '\0');
 	ectx->s += i + (ectx->s[i] != '\0');
-	ectx->offset = 0;
-	return (SUCCESS);
+	return (ectx->offset = 0, SUCCESS);
 }
 
 int	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed)

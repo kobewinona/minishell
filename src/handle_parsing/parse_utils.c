@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 12:26:56 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:26:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 01:27:02 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 		if (!argv[index])
 			return (ERROR);
 		if (!argv[index])
-			return (handle_err(msh, (t_err){T_SYS_ERR,
-					MALLOC, NULL}, false), ERROR);
+			return (handle_err(msh, SYSTEM, MALLOC, 1), ERROR);
 		index++;
 	}
 	return (SUCCESS);

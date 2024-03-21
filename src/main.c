@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 05:37:50 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:00:42 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,26 @@ void	cleanup(t_msh **msh)
 	rl_clear_history();
 }
 
-int	run_cmd(t_msh **msh, t_cmd *cmd)
+void	handle_exit(t_msh **msh, int exit_code)
 {
-	int	res;
+	if ((*msh)->curr_pid == 0)
+	{
+		cleanup(msh);
+		exit(exit_code);
+	}
+	(*msh)->exit_code = exit_code;
+}
 
+void	run_cmd(t_msh **msh, t_cmd *cmd)
+{
 	if (!cmd)
-		return (0);
+		return ;
 	if (cmd->type == T_EXEC)
-		res = handle_exec(msh, &(cmd->exec));
+		handle_exec(msh, &(cmd->exec));
 	else if (cmd->type == T_PIPE)
-		res = handle_pipe(msh, &(cmd->pipe));
+		handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == T_REDIR)
-		res = handle_redir(msh, &(cmd->redir));
-	if (!(*msh)->is_parent)
-		exit((*msh)->exit_code);
-	return (res);
+		handle_redir(msh, &(cmd->redir));
 }
 
 static void	run_minishell(t_msh **msh)
@@ -43,6 +48,8 @@ static void	run_minishell(t_msh **msh)
 	while (1)
 	{
 		(*msh)->org_fd = dup(STDIN_FILENO);
+		if ((*msh)->input)
+			free((*msh)->input);
 		(*msh)->input = readline(PRG_PROMPT);
 		if (!(*msh)->input)
 		{
@@ -50,19 +57,20 @@ static void	run_minishell(t_msh **msh)
 			break ;
 		}
 		add_history((*msh)->input);
-		if (parse_cmd(msh) == ERROR)
+		if (parse_cmd(msh) == ERROR || !(*msh)->cmd)
+			continue ;
+		if (prepare_fds(msh, &(*msh)->cmd) == ERROR)
 		{
-			free((*msh)->input);
+			cleanup_cmds(&(*msh)->cmd);
 			continue ;
 		}
-		if (prepare_fds(msh, &(*msh)->cmd) == ERROR)
-			cleanup_cmds(&(*msh)->cmd);
-		(*msh)->exit_code = run_cmd(msh, (*msh)->cmd);
+		run_cmd(msh, (*msh)->cmd);
 		cleanup_cmds(&(*msh)->cmd);
-		free((*msh)->input);
 		close((*msh)->org_fd);
 	}
 }
+
+int	g_state;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -70,15 +78,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	printf("parent pid %d\n", getpid());
+	g_state = IS_IDLE;
 	msh = (t_msh *)malloc(sizeof(t_msh));
 	if (!msh)
 		return (EXIT_FAILURE);
-	memset(msh, 0, sizeof(t_msh));
-	if (init_signals_handle(&msh) == ERROR)
+	ft_memset(msh, 0, sizeof(t_msh));
+	if (init_signals(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
 	msh->curr_pid = UNSPECIFIED;
-	msh->is_parent = true;
 	msh->env_vars = copy_env_vars(envp);
 	msh->script_name = get_env_var(msh->env_vars, "PWD");
 	increment_shlvl(msh->env_vars);

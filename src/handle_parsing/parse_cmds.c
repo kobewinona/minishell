@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:25:58 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 01:26:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	*s = smart_strtok(NULL, "><", tok);
 	arb_fd = get_arb_fd(&input);
 	if (!(*s) || is_emptystr(*s))
-		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, NEWLINE}, false), NULL);
+		return (handle_err(msh, UNEXPECTED_TOK, NEWLINE, 2), NULL);
 	if (prev_tok == T_HEREDOC)
 		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
 				collect_heredoc_input(msh, get_value(msh, s)));
@@ -53,8 +52,9 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 	else
 	{
 		cmd = parse_redir(msh, input, &s, tok);
-		if (s && !is_emptystr(s) && cmd && cmd->redir.subcmd
-			&& cmd->redir.subcmd->type == T_EXEC)
+		if (!cmd)
+			return (NULL);
+		if (s && !is_emptystr(s) && cmd->redir.subcmd->type == T_EXEC)
 		{
 			if (populate_argv(msh, cmd->redir.subcmd->exec.argv, s) == ERROR)
 				return (NULL);
@@ -77,8 +77,7 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 	if (s)
 		cmd = constr_pipe_cmd(msh, cmd, parse_pipe(msh, s, tok));
 	if ((!s || is_emptystr(s)) && prev_tok == T_PIPE)
-		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(prev_tok)}, false), NULL);
+		return (handle_err(msh, UNEXPECTED_TOK, tokstr(prev_tok), 2), NULL);
 	return (cmd);
 }
 
@@ -96,8 +95,7 @@ int	parse_cmd(t_msh **msh)
 	s = NULL;
 	s = smart_strtok((*msh)->input, "|", &tok);
 	if (is_emptystr(s) && tok != T_NO_TOK)
-		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(tok)}, false), ERROR);
+		return (handle_err(msh, UNEXPECTED_TOK, tokstr(tok), 2), ERROR);
 	if (!is_emptystr(s))
 		(*msh)->cmd = parse_pipe(msh, s, &tok);
 	return (SUCCESS);

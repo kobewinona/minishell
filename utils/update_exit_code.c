@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   collect_exit_code.c                                :+:      :+:    :+:   */
+/*   update_exit_code.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 14:14:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 03:12:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:04:23 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	collect_exit_code(t_msh **msh, int ext_code_encoded)
+void	update_exit_code(t_msh **msh, int encoded_exit_code)
 {
-	if (WIFEXITED(ext_code_encoded))
-		(*msh)->exit_code = WEXITSTATUS(ext_code_encoded);
-	else if (WIFSIGNALED(ext_code_encoded))
-		(*msh)->exit_code = 128 + WTERMSIG(ext_code_encoded);
+	if (WIFSIGNALED(encoded_exit_code))
+		(*msh)->exit_code = 128 + WTERMSIG(encoded_exit_code);
+	if (WIFEXITED(encoded_exit_code))
+		(*msh)->exit_code = WEXITSTATUS(encoded_exit_code);
 }

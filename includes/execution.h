@@ -6,13 +6,15 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:58:35 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 03:42:01 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 08:07:37 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 # define EXECUTION_H
 # include "minishell.h"
+
+extern int	g_state;
 
 // structs
 typedef struct s_var_node
@@ -67,19 +69,19 @@ typedef struct s_msh
 	t_var_node	*env_vars;
 	char		*script_name;
 	t_cmd		*cmd;
-	bool		is_parent;
 	int			curr_pid;
 	int			org_fd;
 }	t_msh;
 
 // cleanup
 void		cleanup(t_msh **msh);
+void		handle_exit(t_msh **msh, int exit_code);
 
 // cmd execution
-int			run_cmd(t_msh **msh, t_cmd *cmd);
-int			handle_exec(t_msh **msh, t_exec *cmd);
-int			handle_pipe(t_msh **msh, t_pipe *cmd);
-int			handle_redir(t_msh **msh, t_redir *cmd);
+void		run_cmd(t_msh **msh, t_cmd *cmd);
+void		handle_exec(t_msh **msh, t_exec *cmd);
+void		handle_pipe(t_msh **msh, t_pipe *cmd);
+void		handle_redir(t_msh **msh, t_redir *cmd);
 
 // env
 t_var_node	*create_var_node(char *key_val_str);
@@ -105,6 +107,10 @@ void		exit_cmd(char **argv, t_msh **msh);
 void		env_cmd(char **argv, t_msh **msh);
 
 // signals
-int			init_signals_handle(t_msh **msh);
+int			init_signals(t_msh **msh);
+int			setup_signal(int signum, void (*handler)(int));
+
+// errors
+void		handle_err(t_msh **msh, t_err err, char *ctx, int exit_code);
 
 #endif

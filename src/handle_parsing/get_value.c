@@ -64,8 +64,7 @@ char	*get_value(t_msh **msh, char **s)
 	if (len == ERROR)
 		return (NULL);
 	if (ctx.is_in_quotes)
-		return (handle_err(msh, (t_err){T_OTHER_ERR,
-				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
+		return (handle_err(msh, UNEXPECTED_EOF, tokstr(ctx.end_char), 2), NULL);
 	value = (*s);
 	(*s) += ctx.offset + (value[ctx.len] != '\0');
 	value[ctx.len] = '\0';

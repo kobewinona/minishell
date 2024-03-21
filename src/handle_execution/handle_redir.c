@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 22:22:58 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 03:12:32 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ static int	define_org_fd(t_msh **msh, t_redir *cmd, int *org_fd)
 	else
 		(*org_fd) = dup(STDIN_FILENO);
 	if ((*org_fd) < 0)
-		return (handle_err(msh, (t_err){T_SYS_ERR, DUP, NULL}, false), ERROR);
+		return (handle_err(msh, SYSTEM, DUP, 1), ERROR);
 	return (SUCCESS);
 }
 
-static int	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
+static void	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 {
 	int	res;
 
-	res = UNSPECIFIED;
+	res = SUCCESS;
 	if ((*org_fd) != UNSPECIFIED)
 	{
 		if (cmd->fd[1] > 1)
@@ -48,18 +48,19 @@ static int	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 			res = dup2((*org_fd), STDIN_FILENO);
 	}
 	if (res == ERROR)
-		handle_err(msh, (t_err){T_SYS_ERR, DUP2, NULL}, false);
+		handle_err(msh, SYSTEM, DUP2, 1);
 	close((*org_fd));
-	return (res);
 }
 
-int	handle_redir(t_msh **msh, t_redir *cmd)
+void	handle_redir(t_msh **msh, t_redir *cmd)
 {
 	int	org_fd;
 	int	res;
 
+	if (cmd->fd[0] < 0 || cmd->fd[1] < 0)
+		return ;
 	if (define_org_fd(msh, cmd, &org_fd) == ERROR)
-		return (ERROR);
+		return ;
 	if (cmd->fd[1] > 1)
 		res = dup2(cmd->fd[0], cmd->fd[1]);
 	else if (cmd->type == T_REDIR_STDOUT || cmd->type == T_APPEND_STDOUT)
@@ -69,7 +70,7 @@ int	handle_redir(t_msh **msh, t_redir *cmd)
 	if (res != ERROR)
 		run_cmd(msh, cmd->subcmd);
 	else
-		handle_err(msh, (t_err){T_SYS_ERR, DUP2, NULL}, false);
+		handle_err(msh, SYSTEM, DUP2, 1);
 	close(cmd->fd[0]);
-	return (restore_org_fd(msh, cmd, &org_fd));
+	restore_org_fd(msh, cmd, &org_fd);
 }
