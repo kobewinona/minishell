@@ -70,31 +70,3 @@ char	*get_value(t_msh **msh, char **s)
 	value[ctx.len] = '\0';
 	return (value);
 }
-
-// char	*get_value(t_msh **msh, char **s)
-// {
-// 	t_val	ctx;
-// 	char	*value;
-// 	int		len;
-
-// 	if (!(*s) || is_emptystr(*s))
-// 		return (NULL);
-// 	while (ft_isspace((**s)))
-// 		(*s)++;
-// 	value = ft_strdup((*s));
-// 	if (!value)
-// 		return (handle_err(msh, (t_err){T_SYS_ERR, MALLOC}, false), NULL);
-// 	ctx = (t_val){&value, ft_strlen(value), 0, false, T_SPACE};
-// 	len = extract_value(msh, &ctx);
-// 	if (len == ERROR)
-// 		return (free(value), NULL);
-// 	if (ctx.is_in_quotes)
-// 	{
-// 		free(value);
-// 		return (handle_err(msh, (t_err){T_OTHER_ERR,
-// 				UNEXPECTED_TOK_MSG, tokstr(ctx.end_char)}, false), NULL);
-// 	}
-// 	(*s) += ctx.offset + !!value[ctx.len];
-// 	value[ctx.len] = '\0';
-// 	return (value);
-// }

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_err.c                                       :+:      :+:    :+:   */
+/*   handle_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:20:29 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:15:26 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_custom_err_msg(t_msh **msh, t_err err, char *ctx)
+static void	print_custom_err_msg(t_err err, char *ctx)
 {
 	if (err == CMD_NOT_FOUND)
 		printf("%s: '%s': %s\n", PRG_NAME, ctx, CMD_NOT_FOUND_MSG);
@@ -52,7 +52,7 @@ void	handle_err(t_msh **msh, t_err err, char *ctx, int exit_code)
 		printf("%s: %s: %s\n", PRG_NAME, ctx, strerror(errno));
 	}
 	else
-		print_custom_err_msg(msh, err, ctx);
+		print_custom_err_msg(err, ctx);
 	dup2(STDOUT_FILENO, STDERR_FILENO);
 	close(org_fd);
 	g_state = IS_IDLE;

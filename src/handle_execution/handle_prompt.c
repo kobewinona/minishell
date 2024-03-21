@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:45:29 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 01:02:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:15:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static int	join_values(t_msh **msh, char *value)
 
 int	update_prompt(t_msh **msh, char **argv, int i)
 {
-	char	*temp;
-
 	if ((*msh)->prompt)
 	{
 		if (join_values(msh, argv[i]) == ERROR)

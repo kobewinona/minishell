@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 11:21:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:44:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static bool	is_valid_varname(const char *varname)
 	return (true);
 }
 
-bool	is_var_deleted(t_var_node *env_vars, char *varname)
+bool	is_var_deleted(t_env *env_vars, char *varname)
 {
-	t_var_node	*curr;
+	t_env	*curr;
 
 	curr = env_vars;
 	while (curr)
@@ -42,9 +42,9 @@ bool	is_var_deleted(t_var_node *env_vars, char *varname)
 	return (true);
 }
 
-static void	print_declared_vars(t_var_node *env_vars)
+static void	print_declared_vars(t_env *env_vars)
 {
-	t_var_node	*curr;
+	t_env	*curr;
 
 	curr = env_vars;
 	while (curr)

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:12:03 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 04:16:26 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 # define CONSTANTS_H
 
 # define PRG_NAME "minishell"
-# define INPUT_PROMPT "> "
+
+// @defgroup readline prompts
 # define PRG_PROMPT "minishell> "
+# define INPUT_PROMPT "> "
 
+// @defgroup global state values
 # define IS_IDLE 1
-# define IS_EXEC 2
-# define IS_HEREDOC 3
+# define IS_IN_EXEC 2
+# define IS_IN_HEREDOC 3
 
-// magic numbers
+// @defgroup magic numbers
 # define UNSPECIFIED -2
 # define ERROR -1
 # define SUCCESS 0
 # define RW_R_R_PERM 0644 // -rw-r--r-- permission settings
 
-// custom error messages
+// @defgroup custom error messages
 # define CMD_NOT_FOUND_MSG "command not found"
 # define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
 # define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
@@ -38,7 +41,7 @@
 # define INVALID_EXIT_ARG_MSG "numberic argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
 
-// command names
+// @defgroup builtins' names
 # define ECHO "echo"
 # define CD "cd"
 # define PWD "pwd"
@@ -47,39 +50,50 @@
 # define ENV "env"
 # define EXIT "exit"
 
-// system calls and functions names
+// @defgroup system calls names
 # define FORK "fork"
 # define DUP "dup"
 # define DUP2 "dup2"
 # define PIPE "pipe"
-# define MALLOC "malloc"
-# define NEWLINE "newline"
 
-// types
-typedef enum e_types
+// @defgroup other
+# define MALLOC "malloc"
+
+// @defgroup command types
+
+typedef enum e_cmd_t
+{
+	C_EXEC,
+	C_PIPE,
+	C_REDIR,
+	C_HEREDOC
+}	t_cmd_t;
+
+// @defgroup redirection types
+typedef enum e_redir_t
+{
+	R_STDIN = 1,
+	R_STDOUT = 2,
+	R_APPEND = 3,
+	R_HEREDOC = 4,
+}	t_redir_t;
+
+// @defgroup token types
+typedef enum e_tok
 {
 	T_NO_TOK,
 	T_EXEC,
 	T_PIPE = 124,
-	T_BRACKET_OPEN = 40,
-	T_BRACKET_CLOSE = 41,
-	T_CURLY_OPEN = 123,
-	T_CURLY_CLOSE = 125,
-	T_SQUARE_OPEN = 91,
-	T_SQUARE_CLOSE = 93,
-	T_REDIR,
-	T_HEREDOC,
-	T_REDIR_STDOUT = 62,
-	T_REDIR_STDIN = 60,
-	T_APPEND_STDOUT,
+	T_R_STDIN = 1,
+	T_R_STDOUT = 2,
+	T_R_APPEND = 3,
+	T_R_HEREDOC = 4,
 	T_DOUBLE_QUOTE = 34,
 	T_SINGLE_QUOTE = 39,
-	T_VAR_EXP = 36,
 	T_SPACE = 32,
-	T_UNDERSCORE = 95,
-	T_QUESTION_MARK = 63,
-}	t_types;
+}	t_tok;
 
+// @enum error types
 typedef enum e_err
 {
 	SYSTEM,

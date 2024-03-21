@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:20:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:47:41 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	run_pipe_end(t_msh **msh, t_cmd *cmd, int *pipe_fds, int end)
 {
-	if (cmd->type != T_PIPE)
+	if (cmd->type != C_PIPE)
 	{
 		(*msh)->curr_pid = fork();
 		if ((*msh)->curr_pid == ERROR)
@@ -47,7 +47,7 @@ void	handle_pipe(t_msh **msh, t_pipe *cmd)
 	int	cmd_from_pid;
 	int	cmd_to_pid;
 
-	g_state = IS_EXEC;
+	g_state = IS_IN_EXEC;
 	exit_code = EXIT_SUCCESS;
 	if (pipe(pipe_fds) == ERROR)
 		return (handle_err(msh, SYSTEM, PIPE, 1));
@@ -60,7 +60,7 @@ void	handle_pipe(t_msh **msh, t_pipe *cmd)
 	close(pipe_fds[STDIN_FILENO]);
 	close(pipe_fds[STDOUT_FILENO]);
 	waitpid(cmd_from_pid, NULL, 0);
-	if (cmd->to->type != T_PIPE)
+	if (cmd->to->type != C_PIPE)
 	{
 		waitpid(cmd_to_pid, &exit_code, 0);
 		update_exit_code(msh, exit_code);

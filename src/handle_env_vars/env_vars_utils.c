@@ -6,21 +6,22 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:44:53 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/20 22:19:27 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:03:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // retrieves a value of variable. Return NULL if not found
-char	*get_env_var(t_var_node *head, char *varname)
+char	*get_env_var(t_env *head, char *varname)
 {
-	t_var_node	*curr;
+	t_env	*curr;
 
 	curr = head;
 	while (curr)
 	{
-		if (!(ft_strncmp(varname, curr->name, 1000)) && curr->value_assigned && curr->value)
+		if (!(ft_strncmp(varname, curr->name, 1000))
+			&& curr->value_assigned && curr->value)
 		{
 			return (curr->value);
 		}
@@ -29,11 +30,11 @@ char	*get_env_var(t_var_node *head, char *varname)
 	return ("");
 }
 
-void	set_var_deleted(t_var_node *head, char *varname)
+void	set_var_deleted(t_env *head, char *varname)
 {
-	t_var_node	*curr;
-	t_var_node	*temp;
-	t_var_node	*prev;
+	t_env	*curr;
+	t_env	*temp;
+	t_env	*prev;
 
 	prev = head;
 	curr = head->next;
@@ -55,7 +56,7 @@ void	set_var_deleted(t_var_node *head, char *varname)
 }
 
 // updates value of env VAR or creates a new one
-void	update_var(t_var_node *head, char *varname, char *value)
+void	update_var(t_env *head, char *varname, char *value)
 {
 	char		*key_val_str;
 	char		*substr;
@@ -78,7 +79,7 @@ void	update_var(t_var_node *head, char *varname, char *value)
 	free(key_val_str);
 }
 
-void	increment_shlvl(t_var_node *env_vars)
+void	increment_shlvl(t_env *env_vars)
 {
 	char	*new_shlvl;
 

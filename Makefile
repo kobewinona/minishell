@@ -3,8 +3,7 @@ MACHINE 		:= $(shell uname -m)
 NAME			= minishell
 
 CC				= gcc
-# CFLAGS			= -g -Wall -Wextra -Werror -MMD
-CFLAGS			= -g -MMD
+CFLAGS			= -g -Wall -Wextra -Werror -MMD
 RM				= rm -rf
 
 INCLUDES		= ./includes
@@ -23,13 +22,17 @@ DEPS 			= $(OBJS:.o=.d)
 LIBS			= -L$(LIBFT_DIR) $(LIBFT) -lreadline
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES)
+	@echo "Linking..."
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES)
+	@echo "Build complete."
 
 all: libft $(NAME)
+	@echo "Building $(NAME)..."
 	
 $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
 
 -include $(DEPS)
 

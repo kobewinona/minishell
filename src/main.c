@@ -6,20 +6,11 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 00:31:55 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 03:22:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	cleanup(t_msh **msh)
-{
-	free_envlist((*msh)->env_vars);
-	cleanup_cmds(&(*msh)->cmd);
-	free((*msh)->input);
-	free((*msh));
-	rl_clear_history();
-}
 
 void	handle_exit(t_msh **msh, int exit_code, bool is_safe)
 {
@@ -37,18 +28,17 @@ void	handle_exit(t_msh **msh, int exit_code, bool is_safe)
 		cleanup(msh);
 		exit(exit_code);
 	}
-
 }
 
 void	run_cmd(t_msh **msh, t_cmd *cmd)
 {
 	if (!cmd)
 		return ;
-	if (cmd->type == T_EXEC)
+	if (cmd->type == C_EXEC)
 		handle_exec(msh, &(cmd->exec));
-	else if (cmd->type == T_PIPE)
+	else if (cmd->type == C_PIPE)
 		handle_pipe(msh, &(cmd->pipe));
-	else if (cmd->type == T_REDIR)
+	else if (cmd->type == C_REDIR)
 		handle_redir(msh, &(cmd->redir));
 }
 
@@ -62,7 +52,7 @@ static void	run_minishell(t_msh **msh)
 		put_prompt(msh);
 		if (!(*msh)->input)
 		{
-			printf("\nexit\n");
+			printf("exit\n");
 			return (cleanup(msh));
 		}
 		add_history((*msh)->input);

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 12:24:51 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/22 01:01:30 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:53:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	handle_interrupt(int signum)
 		rl_redisplay();
 		return ;
 	}
-	if (g_state == IS_HEREDOC)
+	if (g_state == IS_IN_HEREDOC)
 		close(STDIN_FILENO);
 }
 

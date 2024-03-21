@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:53:33 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 11:21:17 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:44:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	env_cmd(char **argv, t_msh **msh)
 {
-	t_var_node	*curr;
+	t_env	*curr;
 
 	(void)argv;
 	curr = (*msh)->env_vars;

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   envlist_to_arr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sliashko <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 17:08:52 by sliashko          #+#    #+#             */
-/*   Updated: 2024/02/17 17:08:53 by sliashko         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:22:03 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	len_list(t_var_node *env_vars)
+static int	len_list(t_env *env_vars)
 {
-	t_var_node	*curr_node;
-	int			i;
+	t_env	*curr_node;
+	int		i;
 
 	i = 0;
 	curr_node = env_vars;
@@ -28,13 +28,13 @@ static int	len_list(t_var_node *env_vars)
 	return (i + 1);
 }
 
-char	**envlist_to_arr(t_var_node *env_vars)
-{	
-	int			len;
-	t_var_node	*curr;
-	char		**arr;
-	int			i;
-	char		*substr;
+char	**envlist_to_arr(t_env *env_vars)
+{
+	int		len;
+	t_env	*curr;
+	char	**arr;
+	int		i;
+	char	*substr;
 
 	i = 0;
 	len = len_list(env_vars);
@@ -46,30 +46,13 @@ char	**envlist_to_arr(t_var_node *env_vars)
 	{
 		if (curr->value_assigned && curr->value)
 		{
-			substr =  ft_strjoin(curr->name, "=");
+			substr = ft_strjoin(curr->name, "=");
 			arr[i] = ft_strjoin(substr, curr->value);
 			free(substr);
-
 			i++;
 		}
 		curr = curr->next;
 	}
 	arr[i] = NULL;
 	return (arr);
-}
-
-void	free_envlist(t_var_node *env_vars)
-{
-	t_var_node	*curr;
-	t_var_node	*next;
-
-	curr = env_vars;
-	while (curr)
-	{
-		next = curr->next;
-		free(curr->name);
-		free(curr->value);
-		free(curr);
-		curr = next;
-	}
 }

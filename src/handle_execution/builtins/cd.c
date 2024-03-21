@@ -6,13 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 11:35:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:44:37 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_home_path(char **res_path, char *path, t_var_node *env_vars)
+static void	handle_home_path(char **res_path, char *path, t_env *env_vars)
 {
 	char	*home_path;
 

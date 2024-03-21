@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 03:12:32 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 03:05:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	define_org_fd(t_msh **msh, t_redir *cmd, int *org_fd)
 {
 	(*org_fd) = UNSPECIFIED;
-	if (cmd->type == T_REDIR_STDOUT || cmd->type == T_APPEND_STDOUT)
+	if (cmd->type == R_STDOUT || cmd->type == R_APPEND)
 	{
 		if (cmd->fd[1] > 1)
 			(*org_fd) = dup(cmd->fd[1]);
@@ -40,7 +40,7 @@ static void	restore_org_fd(t_msh **msh, t_redir *cmd, const int *org_fd)
 	{
 		if (cmd->fd[1] > 1)
 			res = dup2((*org_fd), cmd->fd[1]);
-		else if (cmd->type == T_REDIR_STDOUT || cmd->type == T_APPEND_STDOUT)
+		else if (cmd->type == R_STDOUT || cmd->type == R_APPEND)
 			res = dup2((*org_fd), STDOUT_FILENO);
 		else if (cmd->fd[1] == STDERR_FILENO)
 			res = dup2((*org_fd), STDERR_FILENO);
@@ -63,7 +63,7 @@ void	handle_redir(t_msh **msh, t_redir *cmd)
 		return ;
 	if (cmd->fd[1] > 1)
 		res = dup2(cmd->fd[0], cmd->fd[1]);
-	else if (cmd->type == T_REDIR_STDOUT || cmd->type == T_APPEND_STDOUT)
+	else if (cmd->type == R_STDOUT || cmd->type == R_APPEND)
 		res = dup2(cmd->fd[0], STDOUT_FILENO);
 	else
 		res = dup2(cmd->fd[0], STDIN_FILENO);

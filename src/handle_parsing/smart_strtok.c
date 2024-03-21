@@ -6,42 +6,42 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:53:08 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/20 23:44:35 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 04:17:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
-static void	set_curr_tok_type(char **tok, t_types *curr_tok)
+static void	set_curr_tok_type(char **tok, t_tok *curr_tok)
 {
-	if (**tok == '>')
+	if ((**tok) == '>')
 	{
 		if (*(*tok + 1) == '>')
 		{
-			*curr_tok = T_APPEND_STDOUT;
-			**tok = ' ';
+			(*curr_tok) = T_R_APPEND;
+			(**tok) = ' ';
 			(*tok)++;
 			return ;
 		}
-		*curr_tok = T_REDIR_STDOUT;
+		(*curr_tok) = T_R_STDOUT;
 		return ;
 	}
-	if (**tok == '<')
+	if ((**tok) == '<')
 	{
 		if (*(*tok + 1) == '<')
 		{
-			*curr_tok = T_HEREDOC;
-			**tok = ' ';
+			(*curr_tok) = T_R_HEREDOC;
+			(**tok) = ' ';
 			(*tok)++;
 			return ;
 		}
-		*curr_tok = T_REDIR_STDIN;
+		(*curr_tok) = T_R_STDIN;
 		return ;
 	}
-	*curr_tok = T_NO_TOK;
+	(*curr_tok) = T_NO_TOK;
 }
 
-static void	update_end(char *start, char **end, const char *sep, t_types *tok)
+static void	update_end(char *start, char **end, const char *sep, t_tok *tok)
 {
 	bool	is_in_single_quotes;
 	bool	is_in_double_quotes;
@@ -65,31 +65,31 @@ static void	update_end(char *start, char **end, const char *sep, t_types *tok)
 	}
 }
 
-static char	*get_tok(char **stash, const char *sep, t_types *tok)
+static char	*get_tok(char **stash, const char *sep, t_tok *tok)
 {
 	char	*start;
 	char	*end;
 
 	start = *stash;
-	if (*start == '\0')
+	if ((*start) == '\0')
 	{
-		*stash = start;
+		(*stash) = start;
 		return (NULL);
 	}
 	update_end(start, &end, sep, tok);
-	if (*end)
+	if ((*end))
 	{
-		if (*end == '|')
-			*tok = T_PIPE;
-		*end = '\0';
-		*stash = end + 1;
+		if ((*end) == '|')
+			(*tok) = T_PIPE;
+		(*end) = '\0';
+		(*stash) = (end + 1);
 	}
 	else
-		*stash = end;
+		(*stash) = end;
 	return (start);
 }
 
-char	*smart_strtok(char *str, const char *sep, t_types *tok)
+char	*smart_strtok(char *str, const char *sep, t_tok *tok)
 {
 	static char	*pipe_stash;
 	static char	*redir_stash;
@@ -99,7 +99,7 @@ char	*smart_strtok(char *str, const char *sep, t_types *tok)
 		if (str)
 			pipe_stash = str;
 		else
-			*tok = T_NO_TOK;
+			(*tok) = T_NO_TOK;
 		if (!pipe_stash || *pipe_stash == '\0')
 			return (NULL);
 		return (get_tok(&pipe_stash, sep, tok));
@@ -107,7 +107,7 @@ char	*smart_strtok(char *str, const char *sep, t_types *tok)
 	if (str)
 		redir_stash = str;
 	else
-		*tok = T_NO_TOK;
+		(*tok) = T_NO_TOK;
 	if (!redir_stash || *redir_stash == '\0')
 		return (NULL);
 	return (get_tok(&redir_stash, sep, tok));

@@ -6,18 +6,19 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 22:36:59 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 03:00:56 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
-t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok);
+t_cmd	*parse_exec(t_msh **msh, char *input, t_tok *tok);
 
-static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
+static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_tok *tok)
 {
 	t_cmd	*cmd;
-	t_types	prev_tok;
+	t_cmd	*subcmd;
+	t_tok	prev_tok;
 	int		arb_fd;
 
 	cmd = NULL;
@@ -26,21 +27,15 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	*s = smart_strtok(NULL, "><", tok);
 	arb_fd = get_arb_fd(&input);
 	if (!(*s) || is_emptystr(*s))
-		return (handle_err(msh, UNEXPECTED_TOK, NEWLINE, 2), NULL);
-	if (prev_tok == T_HEREDOC)
-		cmd = constr_redir_cmd(msh, prev_tok,
-				parse_exec(msh, input, tok), get_value(msh, s));
-	else
-	{
-		cmd = constr_redir_cmd(msh, prev_tok,
-				parse_exec(msh, input, tok), get_value(msh, s));
-		if (cmd)
-			cmd->redir.fd[1] = arb_fd;
-	}
+		return (handle_err(msh, UNEXPECTED_TOK, "newline", 2), NULL);
+	subcmd = parse_exec(msh, input, tok);
+	cmd = constr_redir_cmd(msh, (t_redir_t)prev_tok, subcmd, get_value(msh, s));
+	if (cmd)
+		cmd->redir.fd[1] = arb_fd;
 	return (cmd);
 }
 
-t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
+t_cmd	*parse_exec(t_msh **msh, char *input, t_tok *tok)
 {
 	t_cmd	*cmd;
 	char	*s;
@@ -54,7 +49,7 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 		cmd = parse_redir(msh, input, &s, tok);
 		if (!cmd)
 			return (NULL);
-		if (s && !is_emptystr(s) && cmd->redir.subcmd->type == T_EXEC)
+		if (s && !is_emptystr(s) && cmd->redir.subcmd->type == C_EXEC)
 		{
 			if (populate_argv(msh, cmd->redir.subcmd->exec.argv, s) == ERROR)
 				return (NULL);
@@ -63,11 +58,11 @@ t_cmd	*parse_exec(t_msh **msh, char *input, t_types *tok)
 	return (cmd);
 }
 
-static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
+static t_cmd	*parse_pipe(t_msh **msh, char *input, t_tok *tok)
 {
 	t_cmd	*cmd;
 	char	*s;
-	t_types	prev_tok;
+	t_tok	prev_tok;
 
 	cmd = NULL;
 	s = NULL;
@@ -83,12 +78,12 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_types *tok)
 
 int	parse_cmd(t_msh **msh)
 {
-	t_types	tok;
+	t_tok	tok;
 	char	*s;
 
 	if (is_emptystr((*msh)->input))
 		return (ERROR);
-	if (exp_env_var(msh, &((*msh)->input), false) == ERROR)
+	if (exp_env_vars(msh, &((*msh)->input), false) == ERROR)
 		return (ERROR);
 	(*msh)->cmd = NULL;
 	tok = T_NO_TOK;

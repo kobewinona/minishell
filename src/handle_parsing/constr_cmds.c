@@ -6,13 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:09:19 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 01:26:10 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 04:18:48 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "minishell.h"
 
-static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
+static t_cmd	*constr_cmd(t_msh **msh, t_cmd_t type)
 {
 	t_cmd	*cmd;
 
@@ -20,15 +20,36 @@ static t_cmd	*constr_cmd(t_msh **msh, t_types cmd_type)
 	if (!cmd)
 		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
 	ft_memset(cmd, 0, sizeof(t_cmd));
-	cmd->type = cmd_type;
+	cmd->type = type;
 	return (cmd);
+}
+
+int	populate_argv(t_msh **msh, char **argv, char *input)
+{
+	int	index;
+
+	if (!input)
+		return (ERROR);
+	index = 0;
+	while (argv && argv[index])
+		index++;
+	while (!is_emptystr(input))
+	{
+		argv[index] = get_value(msh, &input);
+		if (!argv[index])
+			return (ERROR);
+		if (!argv[index])
+			return (handle_err(msh, SYSTEM, MALLOC, 1), ERROR);
+		index++;
+	}
+	return (SUCCESS);
 }
 
 t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 {
 	t_cmd	*cmd;
 
-	cmd = constr_cmd(msh, T_EXEC);
+	cmd = constr_cmd(msh, C_EXEC);
 	if (!cmd)
 		return (NULL);
 	ft_memset(cmd->exec.argv, 0, sizeof(char *));
@@ -37,22 +58,22 @@ t_cmd	*constr_exec_cmd(t_msh **msh, char *input)
 	return (cmd);
 }
 
-t_cmd	*constr_redir_cmd(t_msh **msh, t_types r_type, t_cmd *subcmd, char *f)
+t_cmd	*constr_redir_cmd(t_msh **msh, t_redir_t type, t_cmd *subcmd, char *f)
 {
 	t_cmd	*cmd;
 
 	if (!f || !subcmd)
 		return (NULL);
-	cmd = constr_cmd(msh, T_REDIR);
+	cmd = constr_cmd(msh, C_REDIR);
 	if (!cmd)
 		return (cleanup_cmds(&subcmd), NULL);
-	cmd->redir.type = r_type;
+	cmd->redir.type = type;
 	cmd->redir.subcmd = subcmd;
-	if (r_type == T_REDIR_STDOUT)
+	if (type == R_STDOUT)
 		cmd->redir.mode = O_WRONLY | O_CREAT | O_TRUNC;
-	if (r_type == T_APPEND_STDOUT)
+	if (type == R_APPEND)
 		cmd->redir.mode = O_WRONLY | O_APPEND | O_CREAT;
-	if (r_type == T_REDIR_STDIN || r_type == T_HEREDOC)
+	if (type == R_STDIN || type == R_HEREDOC)
 		cmd->redir.mode = O_RDONLY;
 	cmd->redir.f = f;
 	return (cmd);
@@ -70,7 +91,7 @@ t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2)
 	}
 	if (!cmd2)
 		return (cleanup_cmds(&cmd1), NULL);
-	cmd = constr_cmd(msh, T_PIPE);
+	cmd = constr_cmd(msh, C_PIPE);
 	if (!cmd)
 		return (NULL);
 	cmd->pipe.from = cmd1;

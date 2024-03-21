@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:56:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 01:01:15 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:08:26 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,18 @@ char	*collect_heredoc_input(t_msh **msh, char *eof)
 	char	*heredoc_input;
 
 	if (!eof)
-		return (handle_err(msh, UNEXPECTED_TOK, NEWLINE, 2), NULL);
+		return (handle_err(msh, UNEXPECTED_TOK, "newline", 2), NULL);
 	heredoc_input = ft_strdup("");
 	if (!heredoc_input)
 		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
-	g_state = IS_HEREDOC;
+	g_state = IS_IN_HEREDOC;
 	if (collect_input(msh, &heredoc_input, eof, INPUT_PROMPT) == ERROR)
 	{
 		g_state = IS_IDLE;
 		return (free(heredoc_input), NULL);
 	}
 	g_state = IS_IDLE;
-	if (exp_env_var(msh, &heredoc_input, true) == ERROR)
+	if (exp_env_vars(msh, &heredoc_input, true) == ERROR)
 		return (NULL);
 	return (heredoc_input);
 }

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 22:35:55 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 02:15:36 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static void	handle_print(t_msh **msh, char **argv, int i, bool is_with_newline)
 // @todo update exit handling
 void	echo(char **argv, t_msh **msh)
 {
-	char	*temp;
 	bool	is_with_newline;
 	int		i;
 

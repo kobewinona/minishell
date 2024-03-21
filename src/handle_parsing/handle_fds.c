@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prepare_fd.c                                       :+:      :+:    :+:   */
+/*   handle_fds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 22:40:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/22 03:09:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_arb_fd(char **s)
+{
+	int	fd;
+	int	i;
+
+	fd = UNSPECIFIED;
+	i = (int)ft_strlen(*s) - 1;
+	if ((*s) && !is_emptystr(*s))
+	{
+		while ((*s) && !ft_isspace((*s)[i]))
+			i--;
+		fd = ft_atoi(&(*s)[i]);
+		if (fd > 0)
+			(*s)[i] = '\0';
+	}
+	return (fd);
+}
 
 static int	prepare_fd(t_msh **msh, t_redir *cmd)
 {
@@ -18,7 +36,7 @@ static int	prepare_fd(t_msh **msh, t_redir *cmd)
 	int		prepared_fd;
 	char	*heredoct_input;
 
-	if (cmd->type == T_HEREDOC)
+	if (cmd->type == R_HEREDOC)
 	{
 		heredoct_input = collect_heredoc_input(msh, cmd->f);
 		if (!heredoct_input)
@@ -40,19 +58,19 @@ int	prepare_fds(t_msh **msh, t_cmd **cmd)
 {
 	if (!(*cmd))
 		return (ERROR);
-	if ((*cmd)->type == T_PIPE)
+	if ((*cmd)->type == C_PIPE)
 	{
 		if (prepare_fds(msh, &(*cmd)->pipe.from) == ERROR)
 			return (ERROR);
 		if (prepare_fds(msh, &(*cmd)->pipe.to) == ERROR)
 			return (ERROR);
 	}
-	if ((*cmd)->type == T_REDIR)
+	if ((*cmd)->type == C_REDIR)
 	{
 		(*cmd)->redir.fd[0] = prepare_fd(msh, &(*cmd)->redir);
 		if ((*cmd)->redir.fd[0] == ERROR)
 			return (ERROR);
-		if ((*cmd)->redir.subcmd->type == T_REDIR)
+		if ((*cmd)->redir.subcmd->type == C_REDIR)
 		{
 			if (prepare_fds(msh, &(*cmd)->redir.subcmd))
 				return (ERROR);

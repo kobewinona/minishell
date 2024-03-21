@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exp_env_var.c                                      :+:      :+:    :+:   */
+/*   exp_env_vars.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 01:15:21 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 01:26:22 by dklimkin         ###   ########.fr       */
+/*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
+/*   Updated: 2024/03/22 04:16:29 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	is_eof_input(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[i] && !ft_isspace(s[i]))
+		i--;
+	while (s[i] && ft_isspace(s[i]))
+		i--;
+	return (s[i] == '<' && s[i - 1] && s[i - 1] == '<');
+}
 
 static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 {
@@ -43,15 +55,17 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 
 static int	process_env_var(t_msh **msh, t_ctx *ectx)
 {
-	int	start;
-	int	end;
+	int		start;
+	int		end;
+	char	*err_ctx;
 
-	if (ectx->iseof)
-		return (ectx->iseof = false, ++(ectx->index), ++(ectx->s), SUCCESS);
-	start = ectx->offset + (ectx->s[ectx->offset] == T_VAR_EXP);
+	start = ectx->offset + (ectx->s[ectx->offset] == '$');
 	end = start;
 	if (!ft_isalnum(ectx->s[end]) && ectx->s[end] != '?')
-		return (handle_err(msh, UNEXPECTED_TOK, &ectx->s[end], 2), ERROR);
+	{
+		err_ctx = char_to_str(&ectx->s[end]);
+		return (handle_err(msh, UNEXPECTED_TOK, err_ctx, 2), ERROR);
+	}
 	if (ectx->s[end] == '?')
 	{
 		ectx->value = ft_itoa((*msh)->exit_code);
@@ -75,13 +89,16 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	i = (*ectx->s) == end_char;
 	while (ectx->s[i] && ectx->s[i] != end_char)
 	{
-		if (end_char != T_SINGLE_QUOTE && ectx->s[i] == T_VAR_EXP)
+		if (end_char != T_SINGLE_QUOTE && ectx->s[i] == '$')
 		{
-			ectx->offset = i;
-			ectx->index += i;
-			if (process_env_var(msh, ectx) == ERROR)
-				return (ERROR);
-			i = -1;
+			if (!is_eof_input(&ectx->s[i]))
+			{
+				ectx->offset = i;
+				ectx->index += i;
+				if (process_env_var(msh, ectx) == ERROR)
+					return (ERROR);
+				i = -1;
+			}
 		}
 		i++;
 	}
@@ -90,7 +107,7 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	return (ectx->offset = 0, SUCCESS);
 }
 
-int	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed)
+int	exp_env_vars(t_msh **msh, char **input, bool is_input_enclosed)
 {
 	t_ctx	ectx;
 
@@ -105,7 +122,7 @@ int	exp_env_var(t_msh **msh, char **input, bool is_input_enclosed)
 			if (process_enclosed_input(msh, &ectx, (*ectx.s)) == ERROR)
 				return (ERROR);
 		}
-		if ((*ectx.s) == T_VAR_EXP)
+		if ((*ectx.s) == '$' && !is_eof_input(ectx.s))
 		{
 			if (process_env_var(msh, &ectx) == ERROR)
 				return (ERROR);
