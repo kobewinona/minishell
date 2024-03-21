@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/21 01:26:57 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/21 22:36:59 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_types *tok)
 	if (!(*s) || is_emptystr(*s))
 		return (handle_err(msh, UNEXPECTED_TOK, NEWLINE, 2), NULL);
 	if (prev_tok == T_HEREDOC)
-		cmd = constr_redir_cmd(msh, prev_tok, parse_exec(msh, input, tok),
-				collect_heredoc_input(msh, get_value(msh, s)));
+		cmd = constr_redir_cmd(msh, prev_tok,
+				parse_exec(msh, input, tok), get_value(msh, s));
 	else
 	{
 		cmd = constr_redir_cmd(msh, prev_tok,
