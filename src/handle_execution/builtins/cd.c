@@ -111,5 +111,5 @@ void	cd(char *path, t_msh **msh)
 	update_var((*msh)->env_vars, "PWD", curr_path);
 	free(res_path);
 	free(curr_path);
-	handle_exit(msh, EXIT_SUCCESS, true);
+	handle_exit(msh, (*msh)->exit_code, true);
 }

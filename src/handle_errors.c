@@ -30,8 +30,10 @@ static void	print_custom_err_msg(t_err err, char *ctx)
 		printf("%s: %s: %s\n", PRG_NAME, ctx, strerror(NO_FILE_OR_DIR));
 	if (err == CD_NO_FILE_OR_DIR)
 		printf("%s: cd: %s: %s\n", PRG_NAME, ctx, strerror(NO_FILE_OR_DIR));
-	if (err == EXPORT_INVALID_ARG)
-		printf("%s: export: `%s': %s\n", PRG_NAME, ctx, INVALID_EXPORT_ARG_MSG);
+	if (err == EXPORT_INVALID_IDENTIFIER)
+		printf("%s: export: `%s': %s\n", PRG_NAME, ctx, INVALID_IDENTIFIER_MSG);
+	if (err == UNSET_INVALID_IDENTIFIER)
+		printf("%s: unset: `%s': %s\n", PRG_NAME, ctx, INVALID_IDENTIFIER_MSG);
 	if (err == EXIT_INVALID_ARG)
 		printf("%s: exit: %s: %s\n", PRG_NAME, ctx, INVALID_EXIT_ARG_MSG);
 	if (err == TOO_MANY_ARGS)

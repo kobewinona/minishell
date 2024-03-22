@@ -34,7 +34,7 @@
 # define CMD_NOT_FOUND_MSG "command not found"
 # define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
 # define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
-# define INVALID_EXPORT_ARG_MSG "not a valid identifier"
+# define INVALID_IDENTIFIER_MSG "not a valid identifier"
 # define INVALID_EXIT_ARG_MSG "numeric argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
 # define INVALID_OPTION_MSG "invalid option"
@@ -101,7 +101,8 @@ typedef enum e_err
 	CD_INVALID_OPTION,
 	UNEXPECTED_TOK,
 	UNEXPECTED_EOF,
-	EXPORT_INVALID_ARG,
+	EXPORT_INVALID_IDENTIFIER,
+	UNSET_INVALID_IDENTIFIER,
 	EXIT_INVALID_ARG,
 	TOO_MANY_ARGS,
 }	t_err;

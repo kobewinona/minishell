@@ -27,7 +27,7 @@ void	exit_cmd(char **argv, t_msh **msh)
 {
 	int	exit_code;
 
-	exit_code = 0;
+	exit_code = EXIT_SUCCESS;
 	if (argv[1])
 	{
 		if (!is_number(argv[1]))

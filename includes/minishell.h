@@ -150,7 +150,7 @@ void	handle_redir(t_msh **msh, t_redir *cmd);
 t_env	*create_var_node(char *key_val_str);
 void	append_var_node(t_env **head, char *key_val_str);
 char	*get_env_var(t_env *head, char *varname);
-void	set_var_deleted(t_env *head, char *varname);
+void	set_var_deleted(t_msh **msh, t_env *head, char *varname);
 void	update_var(t_env *head, char *varname, char *value);
 t_env	*copy_env_vars(char **envp);
 char	**envlist_to_arr(t_env *env_vars);

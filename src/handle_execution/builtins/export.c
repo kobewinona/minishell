@@ -69,9 +69,13 @@ void	export(char **argv, t_msh **msh)
 	{
 		var_name = ft_strtok(argv[i], "=");
 		if (!is_valid_varname(var_name))
-			return (handle_err(msh, EXPORT_INVALID_ARG, var_name, 1));
+		{
+			handle_err(msh, EXPORT_INVALID_IDENTIFIER, var_name, 1);
+			i++;
+			continue ;
+		}
 		update_var((*msh)->env_vars, var_name, ft_strtok(NULL, "="));
 		i++;
 	}
-	handle_exit(msh, EXIT_SUCCESS, true);
+	handle_exit(msh, (*msh)->exit_code, true);
 }

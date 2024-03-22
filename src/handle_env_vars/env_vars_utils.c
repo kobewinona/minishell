@@ -30,7 +30,7 @@ char	*get_env_var(t_env *head, char *varname)
 	return ("");
 }
 
-void	set_var_deleted(t_env *head, char *varname)
+void	set_var_deleted(t_msh **msh, t_env *head, char *varname)
 {
 	t_env	*curr;
 	t_env	*temp;
@@ -53,6 +53,7 @@ void	set_var_deleted(t_env *head, char *varname)
 		prev = curr;
 		curr = curr->next;
 	}
+	handle_err(msh, UNSET_INVALID_IDENTIFIER, varname, 1);
 }
 
 // updates value of env VAR or creates a new one
@@ -74,7 +75,6 @@ void	update_var(t_env *head, char *varname, char *value)
 	}
 	else
 		key_val_str = substr;
-	set_var_deleted(head, varname);
 	append_var_node(&head, key_val_str);
 	free(key_val_str);
 }

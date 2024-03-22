@@ -19,8 +19,8 @@ void	unset(char **argv, t_msh **msh)
 	i = 1;
 	while (argv[i])
 	{
-		set_var_deleted((*msh)->env_vars, argv[i]);
+		set_var_deleted(msh, (*msh)->env_vars, argv[i]);
 		i++;
 	}
-	handle_exit(msh, EXIT_SUCCESS, true);
+	handle_exit(msh, (*msh)->exit_code, true);
 }
