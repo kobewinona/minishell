@@ -47,7 +47,6 @@ static void	handle_print(t_msh **msh, char **argv, int i, bool is_with_newline)
 	}
 }
 
-// @todo update exit handling
 void	echo(char **argv, t_msh **msh)
 {
 	bool	is_with_newline;

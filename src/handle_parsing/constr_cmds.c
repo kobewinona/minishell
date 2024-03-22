@@ -28,10 +28,10 @@ int	populate_argv(t_msh **msh, char **argv, char *input)
 {
 	int	index;
 
-	if (!input)
+	if (!argv || !input)
 		return (ERROR);
 	index = 0;
-	while (argv && argv[index])
+	while (argv[index])
 		index++;
 	while (!is_emptystr(input))
 	{

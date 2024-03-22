@@ -109,20 +109,20 @@ void	handle_exec(t_msh **msh, t_exec *cmd)
 	if (cmd->argv[0])
 	{
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
-			echo(cmd->argv, msh);
+			return (echo(cmd->argv, msh));
 		else if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
-			cd(cmd->argv[1], msh);
+			return (cd(cmd->argv[1], msh));
 		else if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
-			pwd(msh);
+			return (pwd(msh));
 		else if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
-			export(cmd->argv, msh);
+			return (export(cmd->argv, msh));
 		else if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
-			unset(cmd->argv, msh);
+			return (unset(cmd->argv, msh));
 		else if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
-			exit_cmd(cmd->argv, msh);
+			return (exit_cmd(cmd->argv, msh));
 		else if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
-			env_cmd(cmd->argv, msh);
+			return (env_cmd(cmd->argv, msh));
 		else
-			handle_exec_ext_cmd(msh, cmd->argv);
+			return (handle_exec_ext_cmd(msh, cmd->argv));
 	}
 }

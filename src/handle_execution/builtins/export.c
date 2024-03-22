@@ -21,7 +21,7 @@ static bool	is_valid_varname(const char *varname)
 	i = 0;
 	while (varname[i])
 	{
-		if (!ft_isalnum(varname[i]) && !(varname[i] == '_'))
+		if (!ft_isalnum(varname[i]) && varname[i] != '_')
 			return (false);
 		i++;
 	}

@@ -13,7 +13,6 @@
 #include "minishell.h"
 
 void	pwd(t_msh **msh)
-
 {
 	char	*curr_dir;
 
