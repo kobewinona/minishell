@@ -13,8 +13,6 @@
 #ifndef CONSTANTS_H
 # define CONSTANTS_H
 
-// echo '$HOME hihi' $TERM " "'term $TERM_PROGRAM'""
-
 # define PRG_NAME "minishell"
 
 // @defgroup readline prompts
@@ -40,7 +38,6 @@
 # define INVALID_EXIT_ARG_MSG "numeric argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
 # define INVALID_OPTION_MSG "invalid option"
-# define AMBIGUOUS_REDIRECT_MSG "ambiguous redirect"
 
 // @defgroup builtins' names
 # define ECHO "echo"
@@ -108,7 +105,6 @@ typedef enum e_err
 	UNSET_INVALID_IDENTIFIER,
 	EXIT_INVALID_ARG,
 	TOO_MANY_ARGS,
-	AMBIG_R,
 }	t_err;
 
 #endif

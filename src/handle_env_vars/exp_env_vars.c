@@ -12,28 +12,16 @@
 
 #include "minishell.h"
 
-static t_tok	get_tok(char *s, char end_char)
+static bool	is_eof_input(char *s)
 {
 	int	i;
 
-	i = 0;
-	while (s[i] && s[i] != end_char)
+	i = -1;
+	while (s[i] && !ft_isspace(s[i]))
 		i--;
 	while (s[i] && ft_isspace(s[i]))
 		i--;
-	if (s[i] == '<')
-	{
-		if (s[i - 1] && s[i - 1] == '<')
-			return (T_R_HEREDOC);
-		return (T_R_STDIN);
-	}
-	if (s[i] == '>')
-	{
-		if (s[i - 1] && s[i - 1] == '>')
-			return (T_R_APPEND);
-		return (T_R_STDOUT);
-	}
-	return (T_NO_TOK);
+	return (s[i] == '<' && s[i - 1] && s[i - 1] == '<');
 }
 
 static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
@@ -88,10 +76,10 @@ static int	process_env_var(t_msh **msh, t_ctx *ectx)
 	while (ectx->s[end] && (ft_isalnum(ectx->s[end]) || ectx->s[end] == '_'))
 		end++;
 	ectx->name = ft_substr(ectx->s, start, end - start);
-	if (!get_tok(ectx->s, T_SPACE) && !is_in_env((*msh)->env_vars, ectx->name))
-		return (free(ectx->name), handle_err(msh, AMBIG_R, ectx->s, 1), ERROR);
 	ectx->value = get_env_var((*msh)->env_vars, ectx->name);
-	return (free(ectx->name), update_input(msh, ectx, end));
+	if (update_input(msh, ectx, end) == ERROR)
+		return (free(ectx->name), ERROR);
+	return (free(ectx->name), SUCCESS);
 }
 
 static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
@@ -103,7 +91,7 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	{
 		if (end_char != T_SINGLE_QUOTE && ectx->s[i] == '$')
 		{
-			if (get_tok(&ectx->s[i], end_char) != T_R_HEREDOC)
+			if (!is_eof_input(&ectx->s[i]))
 			{
 				ectx->offset = i;
 				ectx->index += i;
@@ -128,13 +116,13 @@ int	exp_env_vars(t_msh **msh, char **input, bool is_input_enclosed)
 		return (process_enclosed_input(msh, &ectx, T_SPACE));
 	while ((*ectx.s))
 	{
+		ectx.iseof = ((*ectx.s) == '<' && (*(ectx.s + 1)) == '<') - ectx.iseof;
 		if ((*ectx.s) == T_SINGLE_QUOTE || (*ectx.s) == T_DOUBLE_QUOTE)
 		{
 			if (process_enclosed_input(msh, &ectx, (*ectx.s)) == ERROR)
 				return (ERROR);
-			continue ;
 		}
-		if ((*ectx.s) == '$' && get_tok(ectx.s, T_SPACE) != T_R_HEREDOC)
+		if ((*ectx.s) == '$' && !is_eof_input(ectx.s))
 		{
 			if (process_env_var(msh, &ectx) == ERROR)
 				return (ERROR);

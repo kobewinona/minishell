@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-// @todo too many lines here
 static void	print_custom_err_msg(t_err err, char *ctx)
 {
 	if (err == CMD_NOT_FOUND)
@@ -39,14 +38,6 @@ static void	print_custom_err_msg(t_err err, char *ctx)
 		printf("%s: exit: %s: %s\n", PRG_NAME, ctx, INVALID_EXIT_ARG_MSG);
 	if (err == TOO_MANY_ARGS)
 		printf("%s: %s: %s\n", PRG_NAME, ctx, TOO_MANY_ARGS_MSG);
-	if (err == AMBIG_R)
-		printf("%s: %s: %s\n", PRG_NAME, ctx, AMBIGUOUS_REDIRECT_MSG);
-}
-
-// @todo cut off ctx from the rest of the string before printing
-void	prepare_ctx(t_msh **msh, char **s)
-{
-
 }
 
 void	handle_err(t_msh **msh, t_err err, char *ctx, int exit_code)
