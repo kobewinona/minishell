@@ -78,7 +78,7 @@ struct s_cmd
 	};
 };
 
-// @typedef parsing struct
+// @typedef parsing structs
 typedef struct s_val
 {
 	char	**s;
@@ -97,7 +97,7 @@ typedef struct s_ctx
 	int		index;
 	char	*name;
 	char	*value;
-	bool	iseof;
+	t_tok	tok;
 }	t_ctx;
 
 // @typedef minishell struct
