@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 04:24:00 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 00:31:17 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ typedef struct s_ctx
 	int		index;
 	char	*name;
 	char	*value;
-	bool	iseof;
+	t_tok	tok;
 }	t_ctx;
 
 // @typedef minishell struct

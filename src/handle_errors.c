@@ -6,12 +6,15 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 02:15:26 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 00:53:15 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// @todo add ambiguous redirect error handling here
+// @todo separate into two function for 1 and 2 context messages
+// @todo add function to nullterminate context
 static void	print_custom_err_msg(t_err err, char *ctx)
 {
 	if (err == CMD_NOT_FOUND)

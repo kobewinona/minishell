@@ -6,23 +6,11 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 04:16:29 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 00:47:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static bool	is_eof_input(char *s)
-{
-	int	i;
-
-	i = -1;
-	while (s[i] && !ft_isspace(s[i]))
-		i--;
-	while (s[i] && ft_isspace(s[i]))
-		i--;
-	return (s[i] == '<' && s[i - 1] && s[i - 1] == '<');
-}
 
 static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 {
@@ -53,7 +41,7 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 	return (SUCCESS);
 }
 
-static int	process_env_var(t_msh **msh, t_ctx *ectx)
+static int	exp_env_var(t_msh **msh, t_ctx *ectx)
 {
 	int		start;
 	int		end;
@@ -76,10 +64,36 @@ static int	process_env_var(t_msh **msh, t_ctx *ectx)
 	while (ectx->s[end] && (ft_isalnum(ectx->s[end]) || ectx->s[end] == '_'))
 		end++;
 	ectx->name = ft_substr(ectx->s, start, end - start);
+	if (ectx->tok != T_NO_TOK && !is_in_env((*msh)->env_vars, ectx->name))
+		return (free(ectx->name), handle_err(msh, AMBG_R, ectx->s, 1), ERROR);
 	ectx->value = get_env_var((*msh)->env_vars, ectx->name);
-	if (update_input(msh, ectx, end) == ERROR)
-		return (free(ectx->name), ERROR);
-	return (free(ectx->name), SUCCESS);
+	return (free(ectx->name), update_input(msh, ectx, end));
+}
+
+static int	process_env_var(t_msh **msh, t_ctx *ectx, char end_char)
+{
+	int	i;
+
+	(void)msh;
+	i = 0;
+	if (!ectx->s[i + 1] || ectx->s[i + 1] == T_SPACE)
+		return (++(ectx->index), ++(ectx->s), SUCCESS);
+	while (ectx->s[i] && ectx->s[i] != end_char)
+		i--;
+	while (ectx->s[i] && ft_isspace(ectx->s[i]))
+		i--;
+	if (ectx->s[i] == '<')
+	{
+		ectx->tok = T_R_STDIN;
+		if (ectx->s[i - 1] && ectx->s[i - 1] == '<')
+		{
+			ectx->tok = T_R_HEREDOC;
+			return (++(ectx->s), SUCCESS);
+		}
+	}
+	if (ectx->s[i] == '>')
+		ectx->tok = T_R_STDOUT + (ectx->s[i -1] && ectx->s[i - 1] == '>');
+	return (exp_env_var(msh, ectx));
 }
 
 static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
@@ -91,14 +105,11 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
 	{
 		if (end_char != T_SINGLE_QUOTE && ectx->s[i] == '$')
 		{
-			if (!is_eof_input(&ectx->s[i]))
-			{
-				ectx->offset = i;
-				ectx->index += i;
-				if (process_env_var(msh, ectx) == ERROR)
-					return (ERROR);
-				i = -1;
-			}
+			ectx->offset = i;
+			ectx->index += i;
+			if (process_env_var(msh, ectx, end_char) == ERROR)
+				return (ERROR);
+			i = -1;
 		}
 		i++;
 	}
@@ -116,15 +127,15 @@ int	exp_env_vars(t_msh **msh, char **input, bool is_input_enclosed)
 		return (process_enclosed_input(msh, &ectx, T_SPACE));
 	while ((*ectx.s))
 	{
-		ectx.iseof = ((*ectx.s) == '<' && (*(ectx.s + 1)) == '<') - ectx.iseof;
 		if ((*ectx.s) == T_SINGLE_QUOTE || (*ectx.s) == T_DOUBLE_QUOTE)
 		{
 			if (process_enclosed_input(msh, &ectx, (*ectx.s)) == ERROR)
 				return (ERROR);
+			continue ;
 		}
-		if ((*ectx.s) == '$' && !is_eof_input(ectx.s))
+		if ((*ectx.s) == '$')
 		{
-			if (process_env_var(msh, &ectx) == ERROR)
+			if (process_env_var(msh, &ectx, T_SPACE) == ERROR)
 				return (ERROR);
 			continue ;
 		}

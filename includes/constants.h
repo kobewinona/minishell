@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 04:16:26 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 00:37:20 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef enum e_redir_t
 // @defgroup token types
 typedef enum e_tok
 {
-	T_NO_TOK,
+	T_NO_TOK = 0,
 	T_PIPE = 124,
 	T_R_STDIN = 1,
 	T_R_STDOUT = 2,
@@ -105,6 +105,7 @@ typedef enum e_err
 	UNSET_INVALID_IDENTIFIER,
 	EXIT_INVALID_ARG,
 	TOO_MANY_ARGS,
+	AMBG_R,
 }	t_err;
 
 #endif
