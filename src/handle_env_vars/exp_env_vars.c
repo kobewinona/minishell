@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 00:47:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:39:07 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 
 	len = ft_strlen(ectx->value);
 	old_size = ectx->input_len;
-	new_size = (old_size + (len - (end - ectx->offset)));
+	new_size = (old_size + (len - end));
 	if (new_size > old_size)
 	{
 		new_input = ft_realloc((*ectx->input), (old_size + 1), (new_size + 1));
@@ -32,12 +32,12 @@ static int	update_input(t_msh **msh, t_ctx *ectx, size_t end)
 		ectx->input_len = new_size;
 		(*ectx->input) = new_input;
 	}
-	ectx->s = ((*ectx->input) + ectx->index);
-	move_len = (old_size - ectx->index) - (end - ectx->offset) + 1;
-	ft_memmove((ectx->s + len), ectx->s + (end - ectx->offset), move_len);
+	ectx->s = ((*ectx->input) + ectx->offset);
+	move_len = (old_size - ectx->offset) - end + 1;
+	ft_memmove((ectx->s + len), ectx->s + end, move_len);
 	ft_memcpy(ectx->s, ectx->value, len);
 	ectx->s += len;
-	ectx->index += len;
+	ectx->offset += len;
 	return (SUCCESS);
 }
 
@@ -47,7 +47,9 @@ static int	exp_env_var(t_msh **msh, t_ctx *ectx)
 	int		end;
 	char	*err_ctx;
 
-	start = ectx->offset + (ectx->s[ectx->offset] == '$');
+	if (!ectx->is_in_quotes && ectx->is_redir)
+		return (++(ectx->offset), ++(ectx->s), SUCCESS);
+	start = (*ectx->s) == '$';
 	end = start;
 	if (!ft_isalnum(ectx->s[end]) && ectx->s[end] != '?')
 	{
@@ -64,84 +66,51 @@ static int	exp_env_var(t_msh **msh, t_ctx *ectx)
 	while (ectx->s[end] && (ft_isalnum(ectx->s[end]) || ectx->s[end] == '_'))
 		end++;
 	ectx->name = ft_substr(ectx->s, start, end - start);
-	if (ectx->tok != T_NO_TOK && !is_in_env((*msh)->env_vars, ectx->name))
-		return (free(ectx->name), handle_err(msh, AMBG_R, ectx->s, 1), ERROR);
 	ectx->value = get_env_var((*msh)->env_vars, ectx->name);
 	return (free(ectx->name), update_input(msh, ectx, end));
 }
 
-static int	process_env_var(t_msh **msh, t_ctx *ectx, char end_char)
+static void	process_quotes(t_ctx *ectx, char *c)
 {
-	int	i;
-
-	(void)msh;
-	i = 0;
-	if (!ectx->s[i + 1] || ectx->s[i + 1] == T_SPACE)
-		return (++(ectx->index), ++(ectx->s), SUCCESS);
-	while (ectx->s[i] && ectx->s[i] != end_char)
-		i--;
-	while (ectx->s[i] && ft_isspace(ectx->s[i]))
-		i--;
-	if (ectx->s[i] == '<')
+	if (!ectx->is_in_quotes)
 	{
-		ectx->tok = T_R_STDIN;
-		if (ectx->s[i - 1] && ectx->s[i - 1] == '<')
-		{
-			ectx->tok = T_R_HEREDOC;
-			return (++(ectx->s), SUCCESS);
-		}
+		(ectx->is_in_quotes) = (*c) == T_DOUBLE_QUOTE || (*c) == T_SINGLE_QUOTE;
+		if (ectx->is_in_quotes)
+			ectx->end_char = (*c);
+		return ;
 	}
-	if (ectx->s[i] == '>')
-		ectx->tok = T_R_STDOUT + (ectx->s[i -1] && ectx->s[i - 1] == '>');
-	return (exp_env_var(msh, ectx));
+	if (ectx->is_in_quotes && (*c) == ectx->end_char)
+	{
+		ectx->is_in_quotes = false;
+		ectx->end_char = T_SPACE;
+		ectx->is_redir = false;
+	}
 }
 
-static int	process_enclosed_input(t_msh **msh, t_ctx *ectx, char end_char)
-{
-	int	i;
-
-	i = (*ectx->s) == end_char;
-	while (ectx->s[i] && ectx->s[i] != end_char)
-	{
-		if (end_char != T_SINGLE_QUOTE && ectx->s[i] == '$')
-		{
-			ectx->offset = i;
-			ectx->index += i;
-			if (process_env_var(msh, ectx, end_char) == ERROR)
-				return (ERROR);
-			i = -1;
-		}
-		i++;
-	}
-	ectx->index += i + (ectx->s[i] != '\0');
-	ectx->s += i + (ectx->s[i] != '\0');
-	return (ectx->offset = 0, SUCCESS);
-}
-
-int	exp_env_vars(t_msh **msh, char **input, bool is_input_enclosed)
+int	exp_env_vars(t_msh **msh, char **input)
 {
 	t_ctx	ectx;
 
-	ectx = (t_ctx){input, ft_strlen((*input)), (*input), 0, 0, NULL, NULL, 0};
-	if (is_input_enclosed)
-		return (process_enclosed_input(msh, &ectx, T_SPACE));
+	ectx = (t_ctx){NULL, ft_strlen((*input)), NULL, 0, NULL, NULL, 0, 0, 0};
+	ectx.input = input;
+	ectx.s = (*input);
+	ectx.end_char = T_SPACE;
 	while ((*ectx.s))
 	{
-		if ((*ectx.s) == T_SINGLE_QUOTE || (*ectx.s) == T_DOUBLE_QUOTE)
+		process_quotes(&ectx, &(*ectx.s));
+		if (!ectx.is_redir && !ectx.is_in_quotes)
+			ectx.is_redir = (*ectx.s) == '>' || (*ectx.s) == '<';
+		if ((*ectx.s) == '$' && ectx.end_char != T_SINGLE_QUOTE)
 		{
-			if (process_enclosed_input(msh, &ectx, (*ectx.s)) == ERROR)
+			if (exp_env_var(msh, &ectx) == ERROR)
 				return (ERROR);
-			continue ;
-		}
-		if ((*ectx.s) == '$')
-		{
-			if (process_env_var(msh, &ectx, T_SPACE) == ERROR)
-				return (ERROR);
-			continue ;
+			process_quotes(&ectx, &(*ectx.s));
+			if (ectx.is_redir)
+				ectx.is_redir -= !ectx.is_in_quotes;
 		}
 		if (!(*ectx.s))
 			break ;
-		ectx.index++;
+		ectx.offset++;
 		ectx.s++;
 	}
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:56:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 02:08:26 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:36:16 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*collect_heredoc_input(t_msh **msh, char *eof)
 		return (free(heredoc_input), NULL);
 	}
 	g_state = IS_IDLE;
-	if (exp_env_vars(msh, &heredoc_input, true) == ERROR)
+	if (exp_env_vars(msh, &heredoc_input) == ERROR)
 		return (NULL);
 	return (heredoc_input);
 }

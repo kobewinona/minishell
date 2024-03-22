@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 00:37:20 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:12:04 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define INVALID_EXIT_ARG_MSG "numeric argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
 # define INVALID_OPTION_MSG "invalid option"
+# define AMBIGUOUS_REDIRECT_MSH "ambiguous redirect"
 
 // @defgroup builtins' names
 # define ECHO "echo"
@@ -105,7 +106,7 @@ typedef enum e_err
 	UNSET_INVALID_IDENTIFIER,
 	EXIT_INVALID_ARG,
 	TOO_MANY_ARGS,
-	AMBG_R,
+	AMBGIGUOUS_R,
 }	t_err;
 
 #endif

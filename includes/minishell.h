@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 00:31:17 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:37:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,11 @@ typedef struct s_ctx
 	size_t	input_len;
 	char	*s;
 	int		offset;
-	int		index;
 	char	*name;
 	char	*value;
-	t_tok	tok;
+	char	end_char;
+	bool	is_in_quotes;
+	bool	is_redir;
 }	t_ctx;
 
 // @typedef minishell struct
@@ -124,7 +125,6 @@ void	handle_err(t_msh **msh, t_err err, char *ctx, int exit_code);
 void	handle_exit(t_msh **msh, int exit_code, bool is_safe);
 
 // @defgroup parsing
-int		exp_env_vars(t_msh **msh, char **input, bool is_input_enclosed);
 int		parse_cmd(t_msh **msh);
 char	*smart_strtok(char *str, const char *sep, t_tok *tok);
 int		populate_argv(t_msh **msh, char **argv, char *input);
@@ -147,6 +147,7 @@ void	handle_pipe(t_msh **msh, t_pipe *cmd);
 void	handle_redir(t_msh **msh, t_redir *cmd);
 
 // @defgroup env vars
+int		exp_env_vars(t_msh **msh, char **input);
 t_env	*create_var_node(char *key_val_str);
 void	append_var_node(t_env **head, char *key_val_str);
 char	*get_env_var(t_env *head, char *varname);

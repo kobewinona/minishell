@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 03:00:56 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:36:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	parse_cmd(t_msh **msh)
 
 	if (is_emptystr((*msh)->input))
 		return (ERROR);
-	if (exp_env_vars(msh, &((*msh)->input), false) == ERROR)
+	if (exp_env_vars(msh, &((*msh)->input)) == ERROR)
 		return (ERROR);
 	(*msh)->cmd = NULL;
 	tok = T_NO_TOK;

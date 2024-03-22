@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 03:09:53 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 05:38:02 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,53 @@ int	get_arb_fd(char **s)
 	return (fd);
 }
 
-static int	prepare_fd(t_msh **msh, t_redir *cmd)
+static int	handle_heredoc(t_msh **msh, t_redir *cmd)
 {
 	int		pipe_fds[2];
-	int		prepared_fd;
 	char	*heredoct_input;
 
-	if (cmd->type == R_HEREDOC)
+	heredoct_input = collect_heredoc_input(msh, cmd->f);
+	if (!heredoct_input)
+		return (ERROR);
+	if (pipe(pipe_fds) == ERROR)
+		return (handle_err(msh, SYSTEM, PIPE, 1), ERROR);
+	write(pipe_fds[1], heredoct_input, strlen(heredoct_input));
+	close(pipe_fds[1]);
+	free(heredoct_input);
+	return (pipe_fds[0]);
+}
+
+static char	*prepare_filename(t_msh **msh, char *f)
+{
+	char	*filename;
+
+	filename = ft_strdup(f);
+	if (!filename)
+		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
+	if (f[0] == '$')
 	{
-		heredoct_input = collect_heredoc_input(msh, cmd->f);
-		if (!heredoct_input)
-			return (ERROR);
-		if (pipe(pipe_fds) == ERROR)
-			return (handle_err(msh, SYSTEM, PIPE, 1), ERROR);
-		write(pipe_fds[1], heredoct_input, strlen(heredoct_input));
-		close(pipe_fds[1]);
-		free(heredoct_input);
-		return (pipe_fds[0]);
+		if (!is_in_env((*msh)->env_vars, &f[1]))
+			return (free(filename), handle_err(msh, AMBGIGUOUS_R, f, 1), NULL);
+		if (exp_env_vars(msh, &filename) == ERROR)
+			return (free(filename), NULL);
 	}
-	prepared_fd = open(cmd->f, cmd->mode, RW_R_R_PERM);
+	if (exp_env_vars(msh, &filename) == ERROR)
+		return (free(filename), NULL);
+	return (filename);
+}
+
+static int	prepare_fd(t_msh **msh, t_redir *cmd)
+{
+	int		prepared_fd;
+	char	*filename;
+
+	if (cmd->type == R_HEREDOC)
+		return (handle_heredoc(msh, cmd));
+	filename = prepare_filename(msh, cmd->f);
+	if (!filename)
+		return (ERROR);
+	prepared_fd = open(filename, cmd->mode, RW_R_R_PERM);
+	free(filename);
 	if (prepared_fd < 0)
 		return (handle_err(msh, SYSTEM, cmd->f, 1), ERROR);
 	return (prepared_fd);
