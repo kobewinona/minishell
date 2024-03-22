@@ -3,7 +3,10 @@ MACHINE 		:= $(shell uname -m)
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -g -Wall -Wextra -Werror -MMD
+#CFLAGS			= -g -Wall -Wextra -Werror -MMD
+CFLAGS			= -g -MMD
+override CFLAGS	+= -I/opt/homebrew/opt/readline/include -DRONIN_CL
+override LIBS	+= -L/opt/homebrew/opt/readline/lib -lreadline
 RM				= rm -rf
 
 INCLUDES		= ./includes
@@ -13,17 +16,17 @@ LIBFT_DIR		= ./libs/libft
 LIBS_DIR		= ./libs
 OBJS_DIR		= ./obj
 
-LIBFT			= -lft-$(MACHINE)
+LIBFT			= $(LIBFT_DIR)/libft-$(MACHINE).a
 
 rwildcard		= $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 SRCS			= $(call rwildcard, $(SRCS_DIR)/, *.c) $(call rwildcard, $(UTILS_DIR)/, *.c)
 OBJS 			= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 DEPS 			= $(OBJS:.o=.d)
-LIBS			= -L$(LIBFT_DIR) $(LIBFT) -lreadline
+LIBS			= -L$(LIBFT_DIR) -lreadline
 
 $(NAME): $(OBJS)
 	@echo "Linking..."
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES) $(LIBFT)
 	@echo "Build complete."
 
 all: libft $(NAME)

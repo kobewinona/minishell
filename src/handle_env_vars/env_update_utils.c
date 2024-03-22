@@ -31,7 +31,6 @@ void	update_var_value(t_env *head, char *varname, char *new_val)
 		}
 		curr = curr->next;
 	}
-	return ;
 }
 
 bool	is_in_env(t_env *head, char *varname)

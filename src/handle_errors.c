@@ -20,6 +20,8 @@ static void	print_custom_err_msg(t_err err, char *ctx)
 		printf("%s: %s: %s\n", PRG_NAME, ctx, strerror(err));
 	if (err == CD_PERM_DENIED)
 		printf("%s: cd: %s: %s\n", PRG_NAME, ctx, strerror(PERM_DENIED));
+	if (err == CD_INVALID_OPTION)
+		printf("%s: cd: %s: %s\n", PRG_NAME, ctx, INVALID_OPTION_MSG);
 	if (err == UNEXPECTED_TOK)
 		printf("%s: %s: `%s'\n", PRG_NAME, UNEXPECTED_TOK_MSG, ctx);
 	if (err == UNEXPECTED_EOF)

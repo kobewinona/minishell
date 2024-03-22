@@ -34,12 +34,10 @@
 # define CMD_NOT_FOUND_MSG "command not found"
 # define UNEXPECTED_TOK_MSG "syntax error near unexpected token"
 # define UNEXPECTED_EOF_TOK_MSG "unexpected EOF while looking for matching"
-# define NO_FILE_OR_DIR_MSG "No such file or directory"
-# define EXIT_INVALID_EXPORT_ARG_MSG1 "numeric argument required"
-# define BAD_SUBST_MSG "bad substitution"
 # define INVALID_EXPORT_ARG_MSG "not a valid identifier"
-# define INVALID_EXIT_ARG_MSG "numberic argument required"
+# define INVALID_EXIT_ARG_MSG "numeric argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
+# define INVALID_OPTION_MSG "invalid option"
 
 // @defgroup builtins' names
 # define ECHO "echo"
@@ -60,13 +58,11 @@
 # define MALLOC "malloc"
 
 // @defgroup command types
-
 typedef enum e_cmd_t
 {
 	C_EXEC,
 	C_PIPE,
 	C_REDIR,
-	C_HEREDOC
 }	t_cmd_t;
 
 // @defgroup redirection types
@@ -82,7 +78,6 @@ typedef enum e_redir_t
 typedef enum e_tok
 {
 	T_NO_TOK,
-	T_EXEC,
 	T_PIPE = 124,
 	T_R_STDIN = 1,
 	T_R_STDOUT = 2,
@@ -97,13 +92,13 @@ typedef enum e_tok
 typedef enum e_err
 {
 	SYSTEM,
-	BAD_REQUEST,
 	NO_FILE_OR_DIR = 2,
 	CD_NO_FILE_OR_DIR,
 	PERM_DENIED = 13,
 	CD_PERM_DENIED,
 	CMD_IS_DIR = 21,
 	CMD_NOT_FOUND,
+	CD_INVALID_OPTION,
 	UNEXPECTED_TOK,
 	UNEXPECTED_EOF,
 	EXPORT_INVALID_ARG,

@@ -1,13 +1,10 @@
 #!/bin/bash
 
-GREY_COLOR="\033[90m"
-RED_COLOR="\033[31m"
-MAGENTA_COLOR="\u001b[35m"
+GREY_COLOR="\033[0;90m"
+RED_COLOR="\033[1;31m"
+MAGENTA_COLOR="\033[1;35m"
+GREEN_COLOR="\033[1;32m"
 RESET_COLOR="\033[0m"
-
-BRIGHT_GREEN_COLOR="\u001b[32;1m"
-RESET_BRIGHT_COLOR="\u001b[0m"
-
 
 # Check if the correct number of arguments is provided
 if [ "$#" -lt 1 ]; then
@@ -60,6 +57,6 @@ echo -e "${GREY_COLOR}Program: ${PROGRAM} Arguments: ${ARGUMENTS}${RESET_COLOR}"
 echo -e "${GREY_COLOR}Suppression Files: ${MAGENTA_COLOR}${SUPP_FILES_FOUND[*]}${RESET_COLOR}"
 echo -e "${GREY_COLOR}Flags: ${OTHER_FLAGS}${RESET_COLOR}"
 echo -e "${GREY_COLOR}Logs 🗁  ${LOGS_DIR}/${LOGS_FILE_NAME}${RESET_COLOR}\n"
-echo -e "${BRIGHT_GREEN_COLOR}Running Valgrind 🌪${RESET_BRIGHT_COLOR}\n\n"
+echo -e "${GREEN_COLOR}Running Valgrind 🌪${RESET_BRIGHT_COLOR}\n\n"
 
 valgrind $SUPPRESSION_FLAGS $OTHER_FLAGS "--log-file=${LOGS_DIR}/${LOGS_FILE_NAME}" "${PROGRAM}" "$@"

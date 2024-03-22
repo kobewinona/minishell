@@ -91,4 +91,5 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	exit_code = msh->exit_code;
 	return (cleanup(&msh), exit_code);
+	return (0);
 }
