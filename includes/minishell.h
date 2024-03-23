@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 05:37:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 09:09:44 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ typedef struct s_msh
 	t_env	*env_vars;
 	t_cmd	*cmd;
 	int		curr_pid;
-	int		org_fd;
+	int		org_fds[3];
 	char	*prompt;
 }	t_msh;
 
@@ -151,7 +151,7 @@ int		exp_env_vars(t_msh **msh, char **input);
 t_env	*create_var_node(char *key_val_str);
 void	append_var_node(t_env **head, char *key_val_str);
 char	*get_env_var(t_env *head, char *varname);
-void	set_var_deleted(t_msh **msh, t_env *head, char *varname);
+void	set_var_deleted(t_env *head, char *varname);
 void	update_var(t_env *head, char *varname, char *value);
 t_env	*copy_env_vars(char **envp);
 char	**envlist_to_arr(t_env *env_vars);
@@ -162,7 +162,7 @@ bool	is_in_env(t_env *head, char *varname);
 
 // @defgroup builtins
 void	echo(char **argv, t_msh **msh);
-void	cd(char *path, t_msh **msh);
+void	cd(char **argv, t_msh **msh);
 void	pwd(t_msh **msh);
 void	export(char **argv, t_msh **msh);
 void	unset(char **argv, t_msh **msh);

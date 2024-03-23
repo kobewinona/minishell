@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 03:05:30 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 07:34:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ void	handle_redir(t_msh **msh, t_redir *cmd)
 		handle_err(msh, SYSTEM, DUP2, 1);
 	close(cmd->fd[0]);
 	restore_org_fd(msh, cmd, &org_fd);
+	close(cmd->fd[1]);
 }

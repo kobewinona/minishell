@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 04:23:54 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 07:47:21 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,25 @@ void	run_cmd(t_msh **msh, t_cmd *cmd)
 		handle_redir(msh, &(cmd->redir));
 }
 
+static void	handling_org_fds(t_msh **msh, bool is_start)
+{
+	if (is_start)
+	{
+		(*msh)->org_fds[0] = dup(STDIN_FILENO);
+		(*msh)->org_fds[1] = dup(STDOUT_FILENO);
+		(*msh)->org_fds[2] = dup(STDERR_FILENO);
+		return ;
+	}
+	close((*msh)->org_fds[0]);
+	close((*msh)->org_fds[1]);
+	close((*msh)->org_fds[2]);
+}
+
 static void	run_minishell(t_msh **msh)
 {
 	while (1)
 	{
-		(*msh)->org_fd = dup(STDIN_FILENO);
+		handling_org_fds(msh, true);
 		if ((*msh)->input)
 			free((*msh)->input);
 		put_prompt(msh);
@@ -65,7 +79,7 @@ static void	run_minishell(t_msh **msh)
 		}
 		run_cmd(msh, (*msh)->cmd);
 		cleanup_cmds(&(*msh)->cmd);
-		close((*msh)->org_fd);
+		handling_org_fds(msh, false);
 	}
 }
 

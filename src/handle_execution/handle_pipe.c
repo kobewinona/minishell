@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:03 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 02:47:41 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 07:47:44 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_pipe(t_msh **msh, t_pipe *cmd)
 	{
 		waitpid(cmd_to_pid, &exit_code, 0);
 		update_exit_code(msh, exit_code);
-		dup2((*msh)->org_fd, STDIN_FILENO);
+		dup2((*msh)->org_fds[0], STDIN_FILENO);
 	}
 	g_state = IS_IDLE;
 }

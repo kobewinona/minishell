@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 01:51:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 09:20:43 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,25 +85,24 @@ static char	*process_path(t_msh **msh, char *path)
 	return (res_path);
 }
 
-void	cd(char *path, t_msh **msh)
+void	cd(char **argv, t_msh **msh)
 {
 	char	*res_path;
 	char	*curr_path;
-	char	*deleted_path;
 
+	if (argv[2])
+		return (handle_err(msh, CD_TOO_MANY_ARGS, NULL, 1));
 	curr_path = getcwd(NULL, 0);
-	res_path = process_path(msh, path);
+	res_path = process_path(msh, argv[1]);
 	if (!res_path)
-		res_path = path;
+		res_path = argv[1];
 	if (!is_path_valid(res_path, msh))
 		return ;
 	if (curr_path && !is_emptystr(curr_path))
 		update_var((*msh)->env_vars, "OLDPWD", curr_path);
 	else
-	{
-		deleted_path = get_env_var((*msh)->env_vars, "PWD");
-		update_var((*msh)->env_vars, "OLDPWD", deleted_path);
-	}
+		update_var((*msh)->env_vars, "OLDPWD",
+			get_env_var((*msh)->env_vars, "PWD"));
 	if (chdir(res_path))
 		return (handle_err(msh, SYSTEM, CD, 1));
 	free(curr_path);

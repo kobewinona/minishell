@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 05:39:07 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 07:00:26 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ static int	exp_env_var(t_msh **msh, t_ctx *ectx)
 	int		end;
 	char	*err_ctx;
 
-	if (!ectx->is_in_quotes && ectx->is_redir)
-		return (++(ectx->offset), ++(ectx->s), SUCCESS);
 	start = (*ectx->s) == '$';
 	end = start;
 	if (!ft_isalnum(ectx->s[end]) && ectx->s[end] != '?')
@@ -87,6 +85,21 @@ static void	process_quotes(t_ctx *ectx, char *c)
 	}
 }
 
+static bool	is_expandable(t_ctx ectx, char *s)
+{
+	if ((*s) != '$')
+		return (false);
+	if (ectx.end_char == T_SINGLE_QUOTE)
+		return (false);
+	if (!(*(s + 1)))
+		return (false);
+	if ((*(s + 1)) == ectx.end_char || (*(s + 1)) == T_SPACE)
+		return (false);
+	if (!ectx.is_in_quotes && ectx.is_redir)
+		return (false);
+	return (true);
+}
+
 int	exp_env_vars(t_msh **msh, char **input)
 {
 	t_ctx	ectx;
@@ -100,7 +113,7 @@ int	exp_env_vars(t_msh **msh, char **input)
 		process_quotes(&ectx, &(*ectx.s));
 		if (!ectx.is_redir && !ectx.is_in_quotes)
 			ectx.is_redir = (*ectx.s) == '>' || (*ectx.s) == '<';
-		if ((*ectx.s) == '$' && ectx.end_char != T_SINGLE_QUOTE)
+		if (is_expandable(ectx, ectx.s))
 		{
 			if (exp_env_var(msh, &ectx) == ERROR)
 				return (ERROR);

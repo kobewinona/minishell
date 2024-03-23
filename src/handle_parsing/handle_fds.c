@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 05:38:02 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 07:11:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,19 @@ static char	*prepare_filename(t_msh **msh, char *f)
 {
 	char	*filename;
 
-	filename = ft_strdup(f);
-	if (!filename)
-		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
 	if (f[0] == '$')
 	{
 		if (!is_in_env((*msh)->env_vars, &f[1]))
-			return (free(filename), handle_err(msh, AMBGIGUOUS_R, f, 1), NULL);
+			return (handle_err(msh, AMBGIGUOUS_R, f, 1), NULL);
+	}
+	filename = ft_strdup(f);
+	if (!filename)
+		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
+	if (ft_strchr(f, '$'))
+	{
 		if (exp_env_vars(msh, &filename) == ERROR)
 			return (free(filename), NULL);
 	}
-	if (exp_env_vars(msh, &filename) == ERROR)
-		return (free(filename), NULL);
 	return (filename);
 }
 

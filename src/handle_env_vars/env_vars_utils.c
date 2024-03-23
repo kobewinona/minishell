@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:44:53 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/22 02:03:08 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 08:00:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_env_var(t_env *head, char *varname)
 	return ("");
 }
 
-void	set_var_deleted(t_msh **msh, t_env *head, char *varname)
+void	set_var_deleted(t_env *head, char *varname)
 {
 	t_env	*curr;
 	t_env	*temp;
@@ -53,7 +53,6 @@ void	set_var_deleted(t_msh **msh, t_env *head, char *varname)
 		prev = curr;
 		curr = curr->next;
 	}
-	handle_err(msh, UNSET_INVALID_IDENTIFIER, varname, 1);
 }
 
 // updates value of env VAR or creates a new one

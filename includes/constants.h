@@ -6,14 +6,14 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 05:12:04 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 08:59:54 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONSTANTS_H
 # define CONSTANTS_H
 
-# define PRG_NAME "minishell"
+# define PRG_NAME "minishell: "
 
 // @defgroup readline prompts
 # define PRG_PROMPT "minishell> "
@@ -38,7 +38,7 @@
 # define INVALID_EXIT_ARG_MSG "numeric argument required"
 # define TOO_MANY_ARGS_MSG "too many arguments"
 # define INVALID_OPTION_MSG "invalid option"
-# define AMBIGUOUS_REDIRECT_MSH "ambiguous redirect"
+# define AMBIGUOUS_REDIRECT_MSG "ambiguous redirect"
 
 // @defgroup builtins' names
 # define ECHO "echo"
@@ -94,19 +94,20 @@ typedef enum e_err
 {
 	SYSTEM,
 	NO_FILE_OR_DIR = 2,
-	CD_NO_FILE_OR_DIR,
 	PERM_DENIED = 13,
-	CD_PERM_DENIED,
 	CMD_IS_DIR = 21,
 	CMD_NOT_FOUND,
-	CD_INVALID_OPTION,
 	UNEXPECTED_TOK,
 	UNEXPECTED_EOF,
-	EXPORT_INVALID_IDENTIFIER,
-	UNSET_INVALID_IDENTIFIER,
-	EXIT_INVALID_ARG,
+	UNSET_INVALID_ID,
 	TOO_MANY_ARGS,
 	AMBGIGUOUS_R,
-}	t_err;
+	CD_NO_FILE_OR_DIR = 41,
+	CD_PERM_DENIED = 42,
+	CD_INVALID_OPTION = 43,
+	CD_TOO_MANY_ARGS = 44,
+	EXPORT_INVALID_ID = 51,
+	EXIT_INVALID_ARG = 61,
+} t_err;
 
 #endif

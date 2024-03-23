@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/22 01:44:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 08:56:42 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static bool	is_valid_varname(const char *varname)
 {
 	int	i;
 
+	if (!varname)
+		return (false);
 	if (!(ft_isalpha(varname[0]) || varname[0] == '_'))
 		return (false);
 	i = 0;
@@ -70,7 +72,10 @@ void	export(char **argv, t_msh **msh)
 		var_name = ft_strtok(argv[i], "=");
 		if (!is_valid_varname(var_name))
 		{
-			handle_err(msh, EXPORT_INVALID_IDENTIFIER, var_name, 1);
+			if (!var_name)
+				handle_err(msh, EXPORT_INVALID_ID, "=", 1);
+			else
+				handle_err(msh, EXPORT_INVALID_ID, var_name, 1);
 			i++;
 			continue ;
 		}
