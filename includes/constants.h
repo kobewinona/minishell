@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 12:15:35 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:13:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define TOO_MANY_ARGS_MSG "too many arguments"
 # define INVALID_OPTION_MSG "invalid option"
 # define AMBIGUOUS_REDIRECT_MSG "ambiguous redirect"
+# define NOT_DIR_MSG "Not a directory"
 
 // @defgroup builtins' names
 # define ECHO "echo"
@@ -106,8 +107,9 @@ typedef enum e_err
 	CD_PERM_DENIED = 42,
 	CD_INVALID_OPTION = 43,
 	CD_TOO_MANY_ARGS = 44,
+	CD_NOT_DIR = 45,
 	EXPORT_INVALID_ID = 51,
 	EXIT_INVALID_ARG = 61,
-}	t_err;
+} t_err;
 
 #endif

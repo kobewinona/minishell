@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 09:20:43 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:44:05 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*get_home_path(t_msh **msh, char *path, bool is_strict_home_path)
 		if (!res_path)
 			return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
 	}
-	if (path[1] == '/')
+	else if (path && path[1] == '/')
 	{
 		res_path = ft_strjoin(home_path, (path + 1));
 		if (!res_path)
@@ -50,14 +50,27 @@ static char	*get_back_path(t_msh **msh)
 
 static bool	is_path_valid(char *path, t_msh **msh)
 {
-	if (access(path, F_OK) == 0)
+	struct stat	path_stat;
+	char		*temp;
+	char		*temp_path;
+
+	temp = ft_strdup(path);
+	temp_path = ft_strtok(temp, "/");
+	while (temp_path)
 	{
-		if (access(path, R_OK) == 0)
-			return (true);
-		else
-			return (handle_err(msh, CD_PERM_DENIED, path, 1), false);
+		if (stat(temp_path, &path_stat) == SUCCESS)
+		{
+			if (!S_ISDIR(path_stat.st_mode))
+				return (free(temp), handle_err(msh, CD_NOT_DIR, path, 1), 0);
+		}
+		temp_path = ft_strtok(NULL, "/");
 	}
-	return (handle_err(msh, CD_NO_FILE_OR_DIR, path, 1), false);
+	free(temp);
+	if (access(path, F_OK) != SUCCESS)
+		return (handle_err(msh, CD_NO_FILE_OR_DIR, path, 1), false);
+	if (access(path, R_OK) != SUCCESS)
+		return (handle_err(msh, CD_PERM_DENIED, path, 1), false);
+	return (true);
 }
 
 static char	*process_path(t_msh **msh, char *path)

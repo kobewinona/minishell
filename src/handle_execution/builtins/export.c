@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/23 08:56:42 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 15:53:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static void	print_declared_vars(t_env *env_vars)
 
 void	export(char **argv, t_msh **msh)
 {
+	char	*arg;
 	char	*var_name;
 	int		i;
 
@@ -69,17 +70,18 @@ void	export(char **argv, t_msh **msh)
 	i = 1;
 	while (argv[i])
 	{
+		arg = ft_strdup(argv[i]);
 		var_name = ft_strtok(argv[i], "=");
+		if (!var_name)
+			handle_err(msh, EXPORT_INVALID_ID, "=", 1);
 		if (!is_valid_varname(var_name))
 		{
-			if (!var_name)
-				handle_err(msh, EXPORT_INVALID_ID, "=", 1);
-			else
-				handle_err(msh, EXPORT_INVALID_ID, var_name, 1);
+			handle_err(msh, EXPORT_INVALID_ID, arg, 1);
 			i++;
 			continue ;
 		}
-		update_var((*msh)->env_vars, var_name, ft_strtok(NULL, "="));
+		update_var((*msh)->env_vars, arg, ft_strtok(NULL, "="));
+		free(arg);
 		i++;
 	}
 	handle_exit(msh, (*msh)->exit_code, true);

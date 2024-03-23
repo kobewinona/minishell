@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:03:06 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/23 12:35:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:45:51 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static bool	is_valid_arg(char *s)
 	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
-			return (false);
+		{
+			if (ft_atoi(s) == 0)
+				return (false);
+		}
 		i++;
 	}
 	return (true);
@@ -34,6 +37,8 @@ void	exit_cmd(char **argv, t_msh **msh)
 	exit_code = EXIT_SUCCESS;
 	if (argv[1])
 	{
+		if (!ft_strncmp(argv[1], "--", 2))
+			handle_exit(msh, exit_code, false);
 		if (!is_valid_arg(argv[1]))
 		{
 			handle_err(msh, EXIT_INVALID_ARG, argv[1], 2);
