@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 17:31:44 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:51:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,6 @@ int	exp_env_vars(t_msh **msh, char **input)
 		{
 			if (exp_env_var(msh, &ectx) == ERROR)
 				return (ERROR);
-			// process_quotes(&ectx, &(*ectx.s));
-			// if (ectx.is_redir)
-			// 	ectx.is_redir -= !ectx.is_in_quotes;
 			continue ;
 		}
 		ectx.offset++;

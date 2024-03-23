@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 16:13:53 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:51:56 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ typedef enum e_err
 	CD_NOT_DIR = 45,
 	EXPORT_INVALID_ID = 51,
 	EXIT_INVALID_ARG = 61,
-} t_err;
+}	t_err;
 
 #endif

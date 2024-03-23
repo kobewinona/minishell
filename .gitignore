@@ -20,6 +20,8 @@ obj
 *.lldb
 *.sh
 test
+test_mpanic
+test_lucar
 
 # logs
 logs
