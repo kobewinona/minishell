@@ -23,7 +23,7 @@ OBJS 			= $(SRCS:%.c=$(OBJS_DIR)/%.o)
 DEPS 			= $(OBJS:.o=.d)
 LIBS			= -L$(LIBFT_DIR) -lreadline
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) Makefile
 	@echo "Linking..."
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) -I$(INCLUDES) $(LIBFT)
 	@echo "Build complete."

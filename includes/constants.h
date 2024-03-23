@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 08:59:54 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 12:15:35 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ typedef enum e_err
 	CD_TOO_MANY_ARGS = 44,
 	EXPORT_INVALID_ID = 51,
 	EXIT_INVALID_ARG = 61,
-} t_err;
+}	t_err;
 
 #endif

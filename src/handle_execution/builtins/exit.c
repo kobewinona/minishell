@@ -6,19 +6,22 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:03:06 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/21 11:28:42 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 12:35:39 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_number(char *s)
+static bool	is_valid_arg(char *s)
 {
-	while (*s)
+	int	i;
+
+	i = (*s) == '+' || (*s) == '-';
+	while (s[i])
 	{
-		if (!ft_isdigit(*s))
+		if (!ft_isdigit(s[i]))
 			return (false);
-		s++;
+		i++;
 	}
 	return (true);
 }
@@ -27,21 +30,18 @@ void	exit_cmd(char **argv, t_msh **msh)
 {
 	int	exit_code;
 
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit_code = EXIT_SUCCESS;
 	if (argv[1])
 	{
-		if (!is_number(argv[1]))
+		if (!is_valid_arg(argv[1]))
 		{
-			printf("exit\n");
-			return (handle_err(msh, EXIT_INVALID_ARG, argv[1], 2));
+			handle_err(msh, EXIT_INVALID_ARG, argv[1], 2);
+			handle_exit(msh, 2, false);
 		}
-		if (argv[2] != NULL)
-		{
-			printf("exit\n");
+		if (argv[2])
 			return (handle_err(msh, TOO_MANY_ARGS, EXIT, 1));
-		}
 		exit_code = ft_atoi(argv[1]);
 	}
-	printf("exit\n");
 	handle_exit(msh, exit_code, false);
 }

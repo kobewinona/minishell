@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 09:18:14 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 12:32:33 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static void	print_custom_err_msg(t_err err, char *ctx)
 {
 	ft_putstr_fd(PRG_NAME, STDERR_FILENO);
 	if (err > 60)
-		ft_putstr_fd("exit", STDERR_FILENO);
+		ft_putstr_fd("exit: ", STDERR_FILENO);
 	else if (err > 50)
-		ft_putstr_fd("export", STDERR_FILENO);
+		ft_putstr_fd("export: ", STDERR_FILENO);
 	else if (err > 40)
 	{
 		if (ctx)
