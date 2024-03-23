@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 09:20:33 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 14:52:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,57 +37,57 @@ static char	*create_cmd_path_str(t_msh **msh, char *env_path, char *cmd_name)
 	return (NULL);
 }
 
-static void	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
+static int	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 {
 	struct stat	path_stat;
 	char		*env_path;
 
 	if (is_emptystr(argv[0]))
-		return (handle_err(msh, CMD_NOT_FOUND, argv[0], 127));
-	if (stat(argv[0], &path_stat) == SUCCESS)
+		return (handle_err(msh, CMD_NOT_FOUND, argv[0], 127), SUCCESS);
+	if (ft_strchr(argv[0], '/'))
 	{
-		if (S_ISDIR(path_stat.st_mode))
-			return (handle_err(msh, CMD_IS_DIR, argv[0], 126));
-	}
-	if (access(argv[0], F_OK | X_OK) == SUCCESS)
-	{
-		(*cmd_path) = argv[0];
-		return ;
+		if (stat(argv[0], &path_stat) == SUCCESS)
+		{
+			if (S_ISDIR(path_stat.st_mode))
+				return (handle_err(msh, CMD_IS_DIR, argv[0], 126), ERROR);
+		}
+		if (access(argv[0], F_OK) != SUCCESS)
+			return (handle_err(msh, NO_FILE_OR_DIR, argv[0], 127), ERROR);
+		if (access(argv[0], X_OK) != SUCCESS)
+			return (handle_err(msh, PERM_DENIED, argv[0], 126), ERROR);
 	}
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
-		return (handle_err(msh, CMD_NOT_FOUND, argv[0], 127));
+		return (handle_err(msh, CMD_NOT_FOUND, argv[0], 127), ERROR);
 	(*cmd_path) = create_cmd_path_str(msh, env_path, argv[0]);
-	if ((*cmd_path) == NULL)
-		handle_err(msh, CMD_NOT_FOUND, argv[0], 127);
+	return (SUCCESS);
 }
 
 static void	exec_ext_cmd(t_msh **msh, char **argv)
 {
 	char		*cmd_path;
 
+	if (access(argv[0], F_OK | X_OK) == SUCCESS)
+	{
+		execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
+		return (handle_err(msh, SYSTEM, argv[0], 1));
+	}
 	cmd_path = NULL;
-	get_cmd_path(msh, &cmd_path, argv);
-	if (access(cmd_path, X_OK) == SUCCESS)
+	if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
+		return ;
+	if (cmd_path)
 	{
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
-		if (cmd_path)
-			free(cmd_path);
 		free(cmd_path);
-		cmd_path = NULL;
-		handle_err(msh, SYSTEM, argv[0], 2);
+		return (free(cmd_path), handle_err(msh, SYSTEM, argv[0], 1));
 	}
-	if (cmd_path)
-		free(cmd_path);
-	cmd_path = NULL;
-	handle_err(msh, SYSTEM, argv[0], 1);
+	handle_err(msh, CMD_NOT_FOUND, argv[0], 127);
 }
 
 void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 {
 	int		exit_code;
 
-	g_state = IS_IN_EXEC;
 	exit_code = 0;
 	if ((*msh)->curr_pid != 0)
 	{
@@ -105,13 +105,13 @@ void	handle_exec_ext_cmd(t_msh **msh, char **argv)
 	}
 	else
 		exec_ext_cmd(msh, argv);
-	g_state = IS_IDLE;
 }
 
 void	handle_exec(t_msh **msh, t_exec *cmd)
 {
 	if (cmd->argv[0])
 	{
+		g_state = IS_IN_EXEC;
 		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(cmd->argv[0])))
 			return (echo(cmd->argv, msh));
 		if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(cmd->argv[0])))
@@ -126,6 +126,6 @@ void	handle_exec(t_msh **msh, t_exec *cmd)
 			return (exit_cmd(cmd->argv, msh));
 		if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(cmd->argv[0])))
 			return (env_cmd(cmd->argv, msh));
-		return (handle_exec_ext_cmd(msh, cmd->argv));
+		handle_exec_ext_cmd(msh, cmd->argv);
 	}
 }

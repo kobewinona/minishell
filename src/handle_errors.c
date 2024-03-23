@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 12:32:33 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 12:47:08 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	handle_err(t_msh **msh, t_err err, char *ctx, int exit_code)
 		ft_putstr_fd(ctx, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd("\n\0", STDERR_FILENO);
 	}
 	else
 		print_custom_err_msg(err, ctx);

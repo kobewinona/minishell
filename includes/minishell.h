@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 09:22:47 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 13:25:54 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ typedef struct s_msh
 	t_env	*env_vars;
 	t_cmd	*cmd;
 	int		curr_pid;
-	int		org_fds[3];
+	int		org_stdin;
 	char	*prompt;
 }	t_msh;
 
@@ -137,7 +137,7 @@ t_cmd	*constr_pipe_cmd(t_msh **msh, t_cmd *cmd1, t_cmd *cmd2);
 t_cmd	*constr_redir_cmd(t_msh **msh, t_redir_t type, t_cmd *subcmd, char *f);
 
 // @defgroup fds
-int		prepare_fds(t_msh **msh, t_cmd **cmd);
+void	prepare_fds(t_msh **msh, t_cmd **cmd);
 int		get_arb_fd(char **s);
 
 // @defgroup cmd execution

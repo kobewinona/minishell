@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 12:31:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 14:48:01 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,46 +40,33 @@ void	run_cmd(t_msh **msh, t_cmd *cmd)
 		handle_pipe(msh, &(cmd->pipe));
 	else if (cmd->type == C_REDIR)
 		handle_redir(msh, &(cmd->redir));
-}
-
-static void	handling_org_fds(t_msh **msh, bool is_start)
-{
-	if (is_start)
-	{
-		(*msh)->org_fds[0] = dup(STDIN_FILENO);
-		(*msh)->org_fds[1] = dup(STDOUT_FILENO);
-		(*msh)->org_fds[2] = dup(STDERR_FILENO);
-		return ;
-	}
-	close((*msh)->org_fds[0]);
-	close((*msh)->org_fds[1]);
-	close((*msh)->org_fds[2]);
+	g_state = IS_IDLE;
 }
 
 static void	run_minishell(t_msh **msh)
 {
 	while (1)
 	{
-		handling_org_fds(msh, true);
+		(*msh)->org_stdin = dup(STDIN_FILENO);
 		if ((*msh)->input)
 			free((*msh)->input);
 		put_prompt(msh);
 		if (!(*msh)->input)
 		{
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			return (cleanup(msh));
+			if (isatty(STDIN_FILENO))
+				ft_putstr_fd("exit\n", STDOUT_FILENO);
+			return ;
 		}
 		add_history((*msh)->input);
-		if (parse_cmd(msh) == ERROR || !(*msh)->cmd)
-			continue ;
-		if (prepare_fds(msh, &(*msh)->cmd) == ERROR)
+		if (parse_cmd(msh) == ERROR)
 		{
 			cleanup_cmds(&(*msh)->cmd);
 			continue ;
 		}
+		prepare_fds(msh, &(*msh)->cmd);
 		run_cmd(msh, (*msh)->cmd);
 		cleanup_cmds(&(*msh)->cmd);
-		handling_org_fds(msh, false);
+		close((*msh)->org_stdin);
 	}
 }
 
@@ -105,5 +92,4 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(&msh);
 	exit_code = msh->exit_code;
 	return (cleanup(&msh), exit_code);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 07:11:55 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/23 13:25:24 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,27 +83,21 @@ static int	prepare_fd(t_msh **msh, t_redir *cmd)
 	return (prepared_fd);
 }
 
-int	prepare_fds(t_msh **msh, t_cmd **cmd)
+void	prepare_fds(t_msh **msh, t_cmd **cmd)
 {
 	if (!(*cmd))
-		return (ERROR);
+		return ;
 	if ((*cmd)->type == C_PIPE)
 	{
-		if (prepare_fds(msh, &(*cmd)->pipe.from) == ERROR)
-			return (ERROR);
-		if (prepare_fds(msh, &(*cmd)->pipe.to) == ERROR)
-			return (ERROR);
+		prepare_fds(msh, &(*cmd)->pipe.from);
+		prepare_fds(msh, &(*cmd)->pipe.to);
 	}
 	if ((*cmd)->type == C_REDIR)
 	{
 		(*cmd)->redir.fd[0] = prepare_fd(msh, &(*cmd)->redir);
 		if ((*cmd)->redir.fd[0] == ERROR)
-			return (ERROR);
+			return ;
 		if ((*cmd)->redir.subcmd->type == C_REDIR)
-		{
-			if (prepare_fds(msh, &(*cmd)->redir.subcmd))
-				return (ERROR);
-		}
+			prepare_fds(msh, &(*cmd)->redir.subcmd);
 	}
-	return (SUCCESS);
 }

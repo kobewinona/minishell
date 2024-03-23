@@ -18,6 +18,7 @@ obj
 *.md
 *.supp
 *.lldb
+*.sh
 test
 
 # logs
