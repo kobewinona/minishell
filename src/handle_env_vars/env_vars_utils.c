@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:44:53 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/23 15:52:31 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 11:41:19 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_env_var(t_env *head, char *varname)
 	while (curr)
 	{
 		if (!(ft_strncmp(varname, curr->name, 1000))
-			&& curr->value_assigned && curr->value)
+			&& curr->is_value_assigned && curr->value)
 		{
 			return (curr->value);
 		}
@@ -56,33 +56,27 @@ void	set_var_deleted(t_env *head, char *varname)
 }
 
 // updates value of env VAR or creates a new one
-void	update_var(t_env *head, char *varname, char *value)
+void	update_var(t_env *head, t_evar evar)
 {
-	char	*key_val_str;
-	char	*temp;
-
-	if (is_in_env(head, varname))
-		return (update_var_value(head, varname, value));
-	temp = ft_strjoin(varname, "=");
-	if (!value)
-		key_val_str = ft_strjoin(temp, "=");
-	else
-		key_val_str = ft_strjoin(temp, value);
-	free(temp);
-	append_var_node(&head, key_val_str);
-	free(key_val_str);
+	if (is_in_env(head, evar.name))
+		return (update_var_value(head, evar));
+	append_var_node(&head, evar.name, evar.value);
 }
 
-void	increment_shlvl(t_env *env_vars)
+void	increment_shlvl(t_msh **msh, t_env *env_vars)
 {
-	char	*new_shlvl;
+	t_evar	evar;
 
+	ft_memset(&evar, 0, sizeof(t_evar));
 	if (get_env_var(env_vars, "SHLVL"))
 	{
-		new_shlvl = ft_itoa(ft_atoi(get_env_var(env_vars, "SHLVL")) + 1);
-		update_var(env_vars, "SHLVL", new_shlvl);
-		free(new_shlvl);
+		evar.name = "SHLVL";
+		evar.value = ft_itoa(ft_atoi(get_env_var(env_vars, "SHLVL")) + 1);
+		if (!evar.value)
+			return (handle_err(msh, SYSTEM, MALLOC, 1));
+		update_var(env_vars, evar);
+		return (free(evar.value));
 	}
 	else
-		update_var(env_vars, "SHLVL", "1");
+		update_var(env_vars, (t_evar){"SHLVL", "1", false});
 }

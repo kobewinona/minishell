@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:24:16 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 14:48:01 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 10:30:42 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int	main(int argc, char **argv, char **envp)
 	if (init_signals(&msh) == ERROR)
 		return (free(msh), EXIT_FAILURE);
 	msh->curr_pid = UNSPECIFIED;
-	msh->env_vars = copy_env_vars(envp);
-	increment_shlvl(msh->env_vars);
+	msh->env_vars = copy_env_vars(&msh, envp);
+	increment_shlvl(&msh, msh->env_vars);
 	run_minishell(&msh);
 	exit_code = msh->exit_code;
 	return (cleanup(&msh), exit_code);

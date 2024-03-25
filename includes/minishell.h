@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 13:25:54 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 11:41:05 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ typedef struct s_env
 {
 	char			*name;
 	char			*value;
-	char			*key_val_str;
-	bool			is_numeric;
-	bool			deleted;
-	bool			value_assigned;
+	bool			is_deleted;
+	bool			is_value_assigned;
 	struct s_env	*next;
 }	t_env;
 
@@ -101,6 +99,13 @@ typedef struct s_ctx
 	bool	is_redir;
 }	t_ctx;
 
+typedef struct s_evar
+{
+	char	*name;
+	char	*value;
+	bool	is_to_append;
+}	t_evar;
+
 // @typedef minishell struct
 typedef struct s_msh
 {
@@ -148,16 +153,16 @@ void	handle_redir(t_msh **msh, t_redir *cmd);
 
 // @defgroup env vars
 int		exp_env_vars(t_msh **msh, char **input);
-t_env	*create_var_node(char *key_val_str);
-void	append_var_node(t_env **head, char *key_val_str);
+t_env	*create_var_node(char *name, char *value);
+void	append_var_node(t_env **head, char *name, char *value);
 char	*get_env_var(t_env *head, char *varname);
 void	set_var_deleted(t_env *head, char *varname);
-void	update_var(t_env *head, char *varname, char *value);
-t_env	*copy_env_vars(char **envp);
+void	update_var(t_env *head, t_evar evar);
+t_env	*copy_env_vars(t_msh **msh, char **envp);
 char	**envlist_to_arr(t_env *env_vars);
-void	increment_shlvl(t_env *env_vars);
+void	increment_shlvl(t_msh **msh, t_env *env_vars);
 bool	is_var_deleted(t_env *env_vars, char *varname);
-void	update_var_value(t_env *head, char *varname, char *new_val);
+void	update_var_value(t_env *head, t_evar evar);
 bool	is_in_env(t_env *head, char *varname);
 
 // @defgroup builtins

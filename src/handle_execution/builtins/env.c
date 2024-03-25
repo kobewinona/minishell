@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:53:33 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/22 01:44:39 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 11:42:25 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	env_cmd(char **argv, t_msh **msh)
 	curr = (*msh)->env_vars;
 	while (curr)
 	{
-		if (curr->key_val_str && curr->value_assigned && curr->value)
+		if (curr->is_value_assigned && curr->value)
 			printf("%s=%s\n", curr->name, curr->value);
 		curr = curr->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 16:44:05 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 10:34:21 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,15 @@ void	cd(char **argv, t_msh **msh)
 	if (!is_path_valid(res_path, msh))
 		return ;
 	if (curr_path && !is_emptystr(curr_path))
-		update_var((*msh)->env_vars, "OLDPWD", curr_path);
+		update_var((*msh)->env_vars, (t_evar){"OLDPWD", curr_path, false});
 	else
-		update_var((*msh)->env_vars, "OLDPWD",
-			get_env_var((*msh)->env_vars, "PWD"));
+		update_var((*msh)->env_vars, (t_evar){"OLDPWD",
+			get_env_var((*msh)->env_vars, "PWD"), false});
 	if (chdir(res_path))
 		return (handle_err(msh, SYSTEM, CD, 1));
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
-	update_var((*msh)->env_vars, "PWD", curr_path);
+	update_var((*msh)->env_vars, (t_evar){"OLDPWD", curr_path, false});
 	free(res_path);
 	free(curr_path);
 	handle_exit(msh, (*msh)->exit_code, true);
