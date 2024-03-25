@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 01:19:07 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 16:14:12 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:54:02 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static void	print_tok(char *s)
 	free(tok);
 }
 
-static void	print_msg_and_ctx(char *ctx1, char *ctx2, bool is1tok, bool is2tok)
+static void	print_msg_and_ctx(t_err err, char *ctx1,
+	char *ctx2, bool is1tok, bool is2tok)
 {
 	if (ctx1)
 	{
@@ -68,7 +69,10 @@ static void	print_msg_and_ctx(char *ctx1, char *ctx2, bool is1tok, bool is2tok)
 	}
 	if (ctx2)
 	{
-		ft_putstr_fd(": ", STDERR_FILENO);
+		if (err == UNEXPECTED_EOF || err == UNEXPECTED_TOK)
+			ft_putstr_fd(" ", STDERR_FILENO);
+		else
+			ft_putstr_fd(": ", STDERR_FILENO);
 		if (is2tok)
 			print_tok(ctx2);
 		else
@@ -91,11 +95,11 @@ static void	print_custom_err_msg(t_err err, char *ctx)
 			ft_putstr_fd("cd", STDERR_FILENO);
 	}
 	if (err == UNEXPECTED_TOK || err == UNEXPECTED_EOF)
-		print_msg_and_ctx(get_err_msg(err), ctx, false, true);
+		print_msg_and_ctx(err, get_err_msg(err), ctx, false, true);
 	else if (err == EXPORT_INVALID_ID)
-		print_msg_and_ctx(ctx, get_err_msg(err), true, false);
+		print_msg_and_ctx(err, ctx, get_err_msg(err), true, false);
 	else
-		print_msg_and_ctx(ctx, get_err_msg(err), false, false);
+		print_msg_and_ctx(err, ctx, get_err_msg(err), false, false);
 	ft_putstr_fd("\n\0", STDERR_FILENO);
 }
 

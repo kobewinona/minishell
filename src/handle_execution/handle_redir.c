@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 22:20:11 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 12:44:45 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 19:12:38 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	handle_redir(t_msh **msh, t_redir *cmd)
 	int	org_fd;
 	int	res;
 
-	if (cmd->fd[0] < 0 || cmd->fd[1] < 0)
+	if (cmd->fd[0] < 0 || (cmd->fd[1] < 0 && cmd->fd[1] != UNSPECIFIED))
 		return ;
 	if (define_org_fd(msh, cmd, &org_fd) == ERROR)
 		return ;

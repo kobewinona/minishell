@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 18:44:03 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 19:02:21 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static t_cmd	*parse_pipe(t_msh **msh, char *input, t_tok *tok)
 	cmd = parse_exec(msh, smart_strtok(input, "><", tok), tok);
 	prev_tok = *tok;
 	s = smart_strtok(NULL, "|", tok);
-	if ((!s || is_emptystr(s)) && (*tok) == T_PIPE)
+	if ((!s || is_emptystr(s)) && prev_tok == T_PIPE)
 		return (handle_err(msh, UNEXPECTED_TOK, tokstr(prev_tok), 2), NULL);
 	if (s)
 		cmd = constr_pipe_cmd(msh, cmd, parse_pipe(msh, s, tok));
