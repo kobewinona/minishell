@@ -16,9 +16,7 @@ obj
 *.txt
 *.py
 *.md
-*.supp
 *.lldb
-*.sh
 test
 test_mpanic
 test_lucar
