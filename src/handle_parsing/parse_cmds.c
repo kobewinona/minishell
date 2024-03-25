@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 12:46:09 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:36:57 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,19 @@ static t_cmd	*parse_redir(t_msh **msh, char *input, char **s, t_tok *tok)
 	t_cmd	*cmd;
 	t_cmd	*subcmd;
 	t_tok	prev_tok;
+	char	*err_tok;
 	int		arb_fd;
 
 	cmd = NULL;
 	prev_tok = *tok;
 	arb_fd = UNSPECIFIED;
 	*s = smart_strtok(NULL, "><", tok);
+	err_tok = tokstr((*tok));
+	if ((*tok) == T_NO_TOK)
+		err_tok = "newline";
 	arb_fd = get_arb_fd(&input);
 	if (!(*s) || is_emptystr(*s))
-		return (handle_err(msh, UNEXPECTED_TOK, "newline", 2), NULL);
+		return (handle_err(msh, UNEXPECTED_TOK, err_tok, 2), NULL);
 	subcmd = parse_exec(msh, input, tok);
 	cmd = constr_redir_cmd(msh, (t_redir_t)prev_tok, subcmd, get_value(msh, s));
 	if (cmd)
