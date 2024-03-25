@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 12:57:28 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 14:50:46 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	cd(char **argv, t_msh **msh)
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
 	update_var((*msh)->env_vars, (t_evar){"PWD", curr_path, false});
-	free(res_path);
-	free(curr_path);
-	handle_exit(msh, (*msh)->exit_code, true);
+	return (free(res_path), free(curr_path),
+		handle_exit(msh, (*msh)->exit_code, true));
 }
