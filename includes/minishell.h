@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 18:44:24 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 19:58:30 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,14 @@ typedef struct s_ctx
 	bool	is_in_quotes;
 	bool	is_redir;
 }	t_ctx;
+
+typedef struct s_errctx
+{
+	char	*ctx1;
+	char	*ctx2;
+	bool	is_ctx1_tok;
+	bool	is_ctx2_tok;
+}	t_ectx;
 
 typedef struct s_evar
 {

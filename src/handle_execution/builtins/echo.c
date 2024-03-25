@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 18:24:58 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 19:55:21 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,22 @@ static void	handle_print(t_msh **msh, char **argv, int i, bool is_with_newline)
 void	echo(char **argv, t_msh **msh)
 {
 	bool	is_with_newline;
+	bool	is_reading_flag;
 	int		i;
 
 	i = 1;
 	is_with_newline = true;
+	is_reading_flag = true;
 	while (argv[i])
 	{
-		if (is_valid_n_opt(argv[i]) && i <= 1 && is_with_newline)
+		if (is_valid_n_opt(argv[i]) && is_reading_flag)
 		{
 			is_with_newline = false;
 			i++;
 			continue ;
 		}
 		handle_print(msh, argv, i, is_with_newline);
+		is_reading_flag = false;
 		i++;
 	}
 	if (is_with_newline)
