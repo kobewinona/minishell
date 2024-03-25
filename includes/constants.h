@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 19:53:48 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 17:51:56 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 08:04:14 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # define NOT_DIR_MSG "Not a directory"
 
 // @defgroup builtins' names
-# define ECHO "echo"
+# define ECHO "echo\0"
 # define CD "cd"
 # define PWD "pwd"
 # define EXPORT "export"

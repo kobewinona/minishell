@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 16:45:54 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 08:07:06 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,19 +112,19 @@ void	handle_exec(t_msh **msh, t_exec *cmd)
 	if (cmd->argv[0])
 	{
 		g_state = IS_IN_EXEC;
-		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO)))
+		if (!ft_strncmp(cmd->argv[0], ECHO, ft_strlen(ECHO) + 1))
 			return (echo(cmd->argv, msh));
-		if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD)))
+		if (!ft_strncmp(cmd->argv[0], CD, ft_strlen(CD) + 1))
 			return (cd(cmd->argv, msh));
-		if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD)))
+		if (!ft_strncmp(cmd->argv[0], PWD, ft_strlen(PWD) + 1))
 			return (pwd(msh));
-		if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT)))
+		if (!ft_strncmp(cmd->argv[0], EXPORT, ft_strlen(EXPORT) + 1))
 			return (export(cmd->argv, msh));
-		if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET)))
+		if (!ft_strncmp(cmd->argv[0], UNSET, ft_strlen(UNSET) + 1))
 			return (unset(cmd->argv, msh));
-		if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT)))
+		if (!ft_strncmp(cmd->argv[0], EXIT, ft_strlen(EXIT) + 1))
 			return (exit_cmd(cmd->argv, msh));
-		if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV)))
+		if (!ft_strncmp(cmd->argv[0], ENV, ft_strlen(ENV) + 1))
 			return (env_cmd(cmd->argv, msh));
 		handle_exec_ext_cmd(msh, cmd->argv);
 	}
