@@ -6,11 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 10:45:29 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/22 02:15:46 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:26:25 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_valid_n_opt(char *s);
 
 static int	join_values(t_msh **msh, char *value)
 {

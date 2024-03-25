@@ -6,13 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 11:05:22 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 15:02:36 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:24:58 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_valid_n_opt(char *s)
+bool	is_valid_n_opt(char *s)
 {
 	int	i;
 
@@ -56,7 +56,7 @@ void	echo(char **argv, t_msh **msh)
 	is_with_newline = true;
 	while (argv[i])
 	{
-		if (is_valid_n_opt(argv[i]) && (i == 1 || (i > 1 && !is_with_newline)))
+		if (is_valid_n_opt(argv[i]) && i <= 1 && is_with_newline)
 		{
 			is_with_newline = false;
 			i++;
