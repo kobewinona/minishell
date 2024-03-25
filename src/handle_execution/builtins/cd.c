@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 12:40:32 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 10:34:21 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:57:28 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static char	*process_path(t_msh **msh, char *path)
 	char	*res_path;
 	size_t	path_len;
 
-	if (!path || is_emptystr(path))
+	if (!path)
 		return (get_home_path(msh, path, true));
 	path_len = ft_strlen(path);
 	if (!ft_strncmp(path, "-", path_len))
@@ -90,8 +90,6 @@ static char	*process_path(t_msh **msh, char *path)
 	}
 	if (!ft_strncmp(path, "--", path_len))
 		return (get_home_path(msh, path, true));
-	if (path[0] == '~')
-		return (get_home_path(msh, path, path[1] == '\0'));
 	res_path = ft_strdup(path);
 	if (!res_path)
 		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
@@ -105,6 +103,8 @@ void	cd(char **argv, t_msh **msh)
 
 	if (argv[2])
 		return (handle_err(msh, CD_TOO_MANY_ARGS, NULL, 1));
+	if (argv[1] && argv[1][0] == '\0')
+		return ;
 	curr_path = getcwd(NULL, 0);
 	res_path = process_path(msh, argv[1]);
 	if (!res_path)
@@ -120,7 +120,7 @@ void	cd(char **argv, t_msh **msh)
 		return (handle_err(msh, SYSTEM, CD, 1));
 	free(curr_path);
 	curr_path = getcwd(NULL, 0);
-	update_var((*msh)->env_vars, (t_evar){"OLDPWD", curr_path, false});
+	update_var((*msh)->env_vars, (t_evar){"PWD", curr_path, false});
 	free(res_path);
 	free(curr_path);
 	handle_exit(msh, (*msh)->exit_code, true);

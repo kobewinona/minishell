@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 08:07:06 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:28:58 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ static int	get_cmd_path(t_msh **msh, char **cmd_path, char **argv)
 		}
 		if (access(argv[0], F_OK) != SUCCESS)
 			return (handle_err(msh, NO_FILE_OR_DIR, argv[0], 127), ERROR);
-		if (access(argv[0], X_OK) != SUCCESS)
+		else if (access(argv[0], X_OK) != SUCCESS)
 			return (handle_err(msh, PERM_DENIED, argv[0], 126), ERROR);
+		(*cmd_path) = argv[0];
+		return (SUCCESS);
 	}
 	env_path = get_env_var((*msh)->env_vars, "PATH");
 	if (!env_path)
@@ -67,14 +69,14 @@ static void	exec_ext_cmd(t_msh **msh, char **argv)
 {
 	char		*cmd_path;
 
-	if (access(argv[0], F_OK | X_OK) == SUCCESS)
-	{
-		execve(argv[0], argv, envlist_to_arr((*msh)->env_vars));
-		return (handle_err(msh, SYSTEM, argv[0], 1));
-	}
 	cmd_path = NULL;
 	if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
 		return ;
+	if (access(cmd_path, F_OK | X_OK) == SUCCESS)
+	{
+		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
+		return (handle_err(msh, SYSTEM, cmd_path, 1));
+	}
 	if (cmd_path)
 	{
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));

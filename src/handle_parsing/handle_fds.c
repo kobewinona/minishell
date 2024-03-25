@@ -6,11 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 13:25:24 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:45:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*collect_heredoc_input(t_msh **msh, char *eof);
 
 int	get_arb_fd(char **s)
 {

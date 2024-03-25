@@ -6,11 +6,13 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:51:53 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/23 17:42:15 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 12:46:09 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		populate_argv(t_msh **msh, char **argv, char *input);
 
 t_cmd	*parse_exec(t_msh **msh, char *input, t_tok *tok);
 
