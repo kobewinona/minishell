@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 12:30:32 by sliashko          #+#    #+#             */
-/*   Updated: 2024/03/25 11:45:13 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 13:34:56 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	print_declared_vars(t_env *env_vars)
 	}
 }
 
-static int	process_env_var(t_msh **msh, t_evar *evar, char *s)
+static int	process_env_var(t_evar *evar, char *s)
 {
 	char	*append;
 	char	*sep;
@@ -113,7 +113,7 @@ void	export(char **argv, t_msh **msh)
 			i++;
 			continue ;
 		}
-		if (process_env_var(msh, &evar, argv[i]) == ERROR)
+		if (process_env_var(&evar, argv[i]) == ERROR)
 			return ;
 		update_var((*msh)->env_vars, evar);
 		ft_memset(&evar, 0, sizeof(t_evar));

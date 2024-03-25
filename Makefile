@@ -2,9 +2,8 @@
 MACHINE 		:= $(shell uname -m)
 NAME			= minishell
 
-CC				= gcc
-# CFLAGS			= -g -Wall -Wextra -Werror -MMD
-CFLAGS			= -g -MMD
+CC				= cc
+CFLAGS			= -Wall -Wextra -Werror -MMD
 override CFLAGS	+= -I/opt/homebrew/opt/readline/include -DRONIN_CL
 override LIBS	+= -L/opt/homebrew/opt/readline/lib -lreadline
 RM				= rm -rf

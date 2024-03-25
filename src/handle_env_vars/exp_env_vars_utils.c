@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 12:34:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 13:29:11 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 13:34:33 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	handle_special_chars(t_msh **msh, t_ctx *ectx, int i)
 	}
 	if (ectx->s[i] == '~' && !ectx->is_in_quotes)
 	{
-		if (!ectx->s[i - 1] || (ectx->s[i - 1] && ft_isspace(ectx->s[i - 1]))
-			&& !ectx->s[i + 1] || (ectx->s[i + 1] && ectx->s[i + 1] == '/'))
+		if ((!ectx->s[i - 1] || (ectx->s[i - 1] && ft_isspace(ectx->s[i - 1])))
+			&& (!ectx->s[i + 1] || (ectx->s[i + 1] && ectx->s[i + 1] == '/')))
 		{
 			ectx->value = get_env_var((*msh)->env_vars, "HOME");
 			if (update_input(msh, ectx, ++i) == ERROR)
