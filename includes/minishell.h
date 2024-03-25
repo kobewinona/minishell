@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 14:47:57 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:44:24 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	handle_pipe(t_msh **msh, t_pipe *cmd);
 void	handle_redir(t_msh **msh, t_redir *cmd);
 
 // @defgroup env vars
-int		exp_env_vars(t_msh **msh, char **input);
+int		exp_env_vars(t_msh **msh, char **input, bool is_enclosed_input);
 t_env	*create_var_node(char *name, char *value);
 void	append_var_node(t_env **head, char *name, char *value);
 char	*get_env_var(t_env *head, char *varname);

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 13:25:11 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:46:35 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,20 @@ static int	exp_env_var(t_msh **msh, t_ctx *ectx)
 	return (free(ectx->name), update_input(msh, ectx, end));
 }
 
-int	exp_env_vars(t_msh **msh, char **input)
+static int	process_enclosed_input(t_msh **msh, t_ctx *ectx)
+{
+	while ((*ectx->s))
+	{
+		if (exp_env_var(msh, ectx) == ERROR)
+			return (ERROR);
+		continue ;
+		ectx->offset++;
+		ectx->s++;
+	}
+	return (SUCCESS);
+}
+
+int	exp_env_vars(t_msh **msh, char **input, bool is_enclosed_input)
 {
 	t_ctx	ectx;
 
@@ -77,6 +90,11 @@ int	exp_env_vars(t_msh **msh, char **input)
 	ectx.input = input;
 	ectx.s = (*input);
 	ectx.end_char = T_SPACE;
+	if (is_enclosed_input)
+	{
+		if (process_enclosed_input(msh, &ectx) == ERROR)
+			return (ERROR);
+	}
 	while ((*ectx.s))
 	{
 		process_env_var_quotes(&ectx, &(*ectx.s));

@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:03:42 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 12:45:53 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:43:55 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*prepare_filename(t_msh **msh, char *f)
 		return (handle_err(msh, SYSTEM, MALLOC, 1), NULL);
 	if (ft_strchr(f, '$'))
 	{
-		if (exp_env_vars(msh, &filename) == ERROR)
+		if (exp_env_vars(msh, &filename, false) == ERROR)
 			return (free(filename), NULL);
 	}
 	return (filename);
