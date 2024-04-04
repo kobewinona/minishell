@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 16:11:26 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 12:28:58 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:05:48 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,6 @@ static void	exec_ext_cmd(t_msh **msh, char **argv)
 	cmd_path = NULL;
 	if (get_cmd_path(msh, &cmd_path, argv) == ERROR)
 		return ;
-	if (access(cmd_path, F_OK | X_OK) == SUCCESS)
-	{
-		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));
-		return (handle_err(msh, SYSTEM, cmd_path, 1));
-	}
 	if (cmd_path)
 	{
 		execve(cmd_path, argv, envlist_to_arr((*msh)->env_vars));

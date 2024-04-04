@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 02:03:55 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 18:48:17 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/04/04 17:33:53 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,12 @@ static int	process_enclosed_input(t_msh **msh, t_ctx *ectx)
 {
 	while ((*ectx->s))
 	{
-		if (exp_env_var(msh, ectx) == ERROR)
-			return (ERROR);
-		continue ;
+		if ((*ectx->s) == '$')
+		{
+			if (exp_env_var(msh, ectx) == ERROR)
+				return (ERROR);
+			continue ;
+		}
 		ectx->offset++;
 		ectx->s++;
 	}
