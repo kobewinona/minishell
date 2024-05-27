@@ -6,7 +6,7 @@
 /*   By: dklimkin <dklimkin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:13:52 by dklimkin          #+#    #+#             */
-/*   Updated: 2024/03/25 20:01:22 by dklimkin         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:03:41 by dklimkin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,13 +172,13 @@ void	update_var_value(t_env *head, t_evar evar);
 bool	is_in_env(t_env *head, char *varname);
 
 // @defgroup builtins
-void	echo(char **argv, t_msh **msh);
-void	cd(char **argv, t_msh **msh);
-void	pwd(t_msh **msh);
-void	export(char **argv, t_msh **msh);
-void	unset(char **argv, t_msh **msh);
-void	exit_cmd(char **argv, t_msh **msh);
-void	env_cmd(char **argv, t_msh **msh);
+// void	echo(char **argv, t_msh **msh);
+// void	cd(char **argv, t_msh **msh);
+// void	pwd(t_msh **msh);
+// void	export(char **argv, t_msh **msh);
+// void	unset(char **argv, t_msh **msh);
+// void	exit_cmd(char **argv, t_msh **msh);
+// void	env_cmd(char **argv, t_msh **msh);
 
 // @defgroup signals
 int		init_signals(t_msh **msh);
