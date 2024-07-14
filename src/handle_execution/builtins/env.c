@@ -12,17 +12,15 @@
 
 #include "minishell.h"
 
-void	env_cmd(char **argv, t_msh **msh)
-{
-	t_env	*curr;
+void env_cmd(char **argv, t_msh **msh) {
+  t_env *curr;
 
-	(void)argv;
-	curr = (*msh)->env_vars;
-	while (curr)
-	{
-		if (curr->value)
-			printf("%s=%s\n", curr->name, curr->value);
-		curr = curr->next;
-	}
-	handle_exit(msh, EXIT_SUCCESS, true);
+  (void)argv;
+  curr = (*msh)->env_vars;
+  while (curr) {
+    if (curr->value)
+      printf("%s=%s\n", curr->name, curr->value);
+    curr = curr->next;
+  }
+  handle_exit(msh, EXIT_SUCCESS, true);
 }

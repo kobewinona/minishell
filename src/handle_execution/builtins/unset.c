@@ -12,15 +12,13 @@
 
 #include "minishell.h"
 
-void	unset(char **argv, t_msh **msh)
-{
-	int	i;
+void unset(char **argv, t_msh **msh) {
+  int i;
 
-	i = 1;
-	while (argv[i])
-	{
-		set_var_deleted((*msh)->env_vars, argv[i]);
-		i++;
-	}
-	handle_exit(msh, (*msh)->exit_code, true);
+  i = 1;
+  while (argv[i]) {
+    set_var_deleted((*msh)->env_vars, argv[i]);
+    i++;
+  }
+  handle_exit(msh, (*msh)->exit_code, true);
 }

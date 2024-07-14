@@ -12,41 +12,35 @@
 
 #include "minishell.h"
 
-void	update_var_value(t_env *head, t_evar evar)
-{
-	t_env	*curr;
-	char	*temp;
+void update_var_value(t_env *head, t_evar evar) {
+  t_env *curr;
+  char *temp;
 
-	curr = head;
-	while (curr)
-	{
-		if (!(ft_strncmp(evar.name, curr->name, 5000)))
-		{
-			if (evar.value)
-			{
-				if (evar.is_to_append)
-					temp = ft_strjoin(curr->value, evar.value);
-				else
-					temp = ft_strdup(evar.value);
-				free(curr->value);
-				curr->value = temp;
-			}
-			return ;
-		}
-		curr = curr->next;
-	}
+  curr = head;
+  while (curr) {
+    if (!(ft_strncmp(evar.name, curr->name, 5000))) {
+      if (evar.value) {
+        if (evar.is_to_append)
+          temp = ft_strjoin(curr->value, evar.value);
+        else
+          temp = ft_strdup(evar.value);
+        free(curr->value);
+        curr->value = temp;
+      }
+      return;
+    }
+    curr = curr->next;
+  }
 }
 
-bool	is_in_env(t_env *head, char *varname)
-{
-	t_env	*curr;
+bool is_in_env(t_env *head, char *varname) {
+  t_env *curr;
 
-	curr = head;
-	while (curr)
-	{
-		if (!(ft_strncmp(varname, curr->name, 5000)))
-			return (true);
-		curr = curr->next;
-	}
-	return (false);
+  curr = head;
+  while (curr) {
+    if (!(ft_strncmp(varname, curr->name, 5000)))
+      return (true);
+    curr = curr->next;
+  }
+  return (false);
 }
